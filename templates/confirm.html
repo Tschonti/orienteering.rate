@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Orienteering.rate | {{ _("Confirm email") }}
+{% endblock %}
+{% block body %} 
+		<div class="panel panel-default felso">
+			<div class="panel-body">
+				{% if conf == 0 %}
+					<h2>{{ _(" A confirmation email has been sent to your inbox. Follow the link in the email, and you can start using the site!") }}</h2>
+					<p>{{ _("Okay, maybe you have to wait a bit. Check the spam folder if you can't find it. ") }}</p>
+					<p>{{ _("Didn't get the email?") }} <a href="/resend">{{ _("Resend") }}</a>.</p>
+				{% elif conf == 1%}
+					<h2> {{ _("Your account has been confirmed. Thanks!") }}</h2>
+					<a href="/">{{ _("To the frontpage!") }}</a>
+				{% elif conf == 2%}
+					<h2> {{ _("The confirmation link is invalid or has expired.") }}</h2>
+					<a href="/resend">{{ _("Resend") }}</a>.</p>
+				{% elif conf == 3%}
+					<h2>{{ _(" Account already confirmed.") }}</h2>
+					<a href="/">{{ _("To the frontpage!") }}</a>
+				{% elif conf == 4%}
+					<p>{{ _("Please don't spam emails. You cannot resend the email anymore, please try to activate it with the previous emails. If you didn't get them, delete the account and try again, or contact me at feketesamu(at)gmail(dot)com if you genuenly didn't get the activation emails. Sorry!") }}</p>
+				{% endif %}
+			</div>
+		</div>	
+{% endblock %}

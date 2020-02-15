@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Orienteering.rate | {{ _("My ratings") }}
+{% endblock %}
+{% block body %} 
+		<div class="panel panel-default felso">
+			<div class="panel-body">
+				<h1>{{ _("My ratings") }}</h1>
+				<div style='overflow-x:auto'>
+					<table id="example2" class="display cent" style="width:100%" align="center">
+						<thead>
+							<tr>
+								<th>{{ _("Name") }}</th>
+								<th>{{ _("Classification") }}</th>
+								<th>{{ _("Overall rating") }}</th>
+								<th>{{ _("Terrain rating") }}</th>
+								<th>{{ _("Map and course rating") }}</th>
+								<th>{{ _("Organization rating") }}</th>
+								<th>{{ _("Date and time") }}</th>
+								<th>{{ _("Edit") }}</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for i in sorok %}
+							<tr>
+								<td><a class="bold" href = {{"/event/" + i[0]|string }}>{{i[1]}}</a></td>
+								<td>{{ i[2]}}</td>
+								<td>{{ i[3]}}</td>
+								<td>{{ i[4]}}</td>
+								<td>{{ i[5] }}</td>
+								<td>{{ i[6] }}</td>
+								<td>{{ i[7] }} UTC</td>
+								<td><a href= {{"/event/" + i[0]|string }}><button type="button" class="btn btn-success">{{ _("Edit") }}</button></td>
+							</tr>	
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>	
+{% endblock %}
