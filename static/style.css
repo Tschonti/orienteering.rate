@@ -28,6 +28,9 @@
 	font-style: normal;
 	text-align: center;	
 }
+.hide {
+	display: none;
+}
 .p {
 	padding-left: 8px;
 	padding-right: 8px;
@@ -55,8 +58,13 @@
 
 .cent td, th {
 	text-align: center;
-	font-size: 14px;
-}	
+}
+.fi {
+	text-align: left!important;
+}
+.btn, .btn-sm {
+	font-size: 16px;
+}
 a {
 	color: #218838;
 }

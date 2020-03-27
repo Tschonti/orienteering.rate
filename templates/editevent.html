@@ -341,17 +341,37 @@
 							</div>
 						</div>
 					</div>
-					<select name="eventid" id="hide3">
+					<select name="eventid" class="hide">
 						<option value={{eve.id}}></option>
 					</select>
 					<button class="btn btn-success btn-block" onclick="newf()" type="submit">{{ _("Submit changes") }}</button>
-				</form>
+			</form>
 			<form id="myform" action="/deleteev" method="post">
-				<select name="eventid" id="hide4">
-						<option value={{eve.id}}></option>
-					</select>
-				<button class="btn btn-danger btn-block" onclick="return deletef()" type="submit">{{ _("Delete event") }}</button>
+				<select name="eventid" class="hide">
+					<option value={{eve.id}}></option>
+				</select>
+				<button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#delmodal">{{ _("Delete event") }}</button>
+				<div class="modal fade" id="delmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+					  <div class="modal-content">
+						<div class="modal-header">
+						  <h5 class="modal-title" id="exampleModalLongTitle">{{ _("Delete event") }}</h5>
+						  <button type="button" class="close" data-dismiss="modal" aria-label='{{_("Close") }}'>
+							<span aria-hidden="true">&times;</span>
+						  </button>
+						</div>
+						<div class="modal-body">
+						  {{ _("Are you sure you want to delete this event?")}}
+						</div>
+						<div class="modal-footer">
+						  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Cancel") }}</button>
+						  <button class="btn btn-danger" type="submit">{{ _("Delete event") }}</button>
+						</div>
+					  </div>
+					</div>
+				</div>
 			</form>
 		</div>
 		</div>
 {% endblock %}
+<!--onclick="return deletef()"-->

@@ -15,6 +15,7 @@ from mytoken import generate_confirmation_token, confirm_token
 from imel import send_email
 from flask_mail import Mail, Message
 from flask_babel import Babel, _
+from operator import itemgetter
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -143,10 +144,52 @@ def conf_required():
 
 @babel.localeselector
 def get_locale():
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
+	if not request.cookies.get('lang'):
+		return request.accept_languages.best_match(app.config['LANGUAGES'])
+	else:
+		return request.cookies.get('lang')
+
+@app.route('/en')
+def en():
+	res = make_response(redirect(request.referrer))
+	res.set_cookie('lang', 'en')
+	return res
+
+@app.route('/hu')
+def hu():
+	res = make_response(redirect(request.referrer))
+	res.set_cookie('lang', 'hu')
+	return res	
 	
 @app.route("/", methods=["GET", "POST"])
 def index():
+	if request.cookies.get('use') and not session.get("user"):
+		us = Usersn.query.filter_by(id=request.cookies.get("use")).first()
+		session["user"] = us.id
+		session["usern"] = us.username
+		session["conf"] = us.confirmed
+		flash(_('This site uses cookies to store your login information.'), "warning")
+		session.modified = True
+		return redirect("/")
+	alap = Eventn.query.all()
+	alapl = []
+	for i in alap:
+		ev_link = "/event/" + str(i.id)
+		e_date = datetime.date(i.end_date.year, i.end_date.month, i.end_date.day)
+		alapl.append([i.id, i.name, e_date, ev_link])
+	for i in alapl:
+		ovr_avg = db.session.query(func.avg(Raten.overall_r).label('average')).filter(Raten.eventn_id == i[0])
+		if ovr_avg[0][0] is None:
+			i.append(_("0 (not rated)"))
+		else:
+			i.append(str(round(ovr_avg[0][0], 1)))
+	topev = alapl.copy()
+	recev = alapl.copy()
+	topev.sort(reverse=True, key=itemgetter(4))
+	recev.sort(reverse=True, key=itemgetter(2))
+	for i in recev:
+		i[2] = i[2].strftime("%d/%m/%Y")
+
 	if request.method == "GET":
 		rows = Eventn.query.all()
 		countries = Countryn.query.all()
@@ -163,8 +206,8 @@ def index():
 			else:
 				yourr = -1
 			ev_link = "/event/" + str(i.id)
-			s_date = datetime.date(i.start_date.year, i.start_date.month, i.start_date.day)
-			e_date = datetime.date(i.end_date.year, i.end_date.month, i.end_date.day)
+			s_date = datetime.date(i.start_date.year, i.start_date.month, i.start_date.day).strftime("%d/%m/%Y")
+			e_date = datetime.date(i.end_date.year, i.end_date.month, i.end_date.day).strftime("%d/%m/%Y")
 			events.append([i.id, i.name, s_date, e_date, i.countryn.value, i.location, i.classifn.value, ev_link, yourr])
 		for i in events:
 			ovr_avg = db.session.query(func.avg(Raten.overall_r).label('average')).filter(Raten.eventn_id == i[0])
@@ -173,7 +216,7 @@ def index():
 			else:
 				i.append(str(round(ovr_avg[0][0], 1)))
 		filt = [0, 0, 0]
-		return render_template("index.html", events=events, countries=countries, classes=classes, ages=ages, filt=filt)
+		return render_template("index.html", events=events, countries=countries, classes=classes, ages=ages, filt=filt, topev=topev[:5], recev=recev[:5], requ='get')
 	else:
 		classif = int(request.form.get("classif"))
 		country = int(request.form.get("country"))
@@ -200,8 +243,8 @@ def index():
 			else:
 				yourr = -1
 			ev_link = "/event/" + str(i.id)
-			s_date = datetime.date(i.start_date.year, i.start_date.month, i.start_date.day)
-			e_date = datetime.date(i.end_date.year, i.end_date.month, i.end_date.day)
+			s_date = datetime.date(i.start_date.year, i.start_date.month, i.start_date.day).strftime("%d/%m/%Y")
+			e_date = datetime.date(i.end_date.year, i.end_date.month, i.end_date.day).strftime("%d/%m/%Y")
 			events.append([i.id, i.name, s_date, e_date, i.countryn.value, i.location, i.classifn.value, ev_link, yourr])
 		for i in events:
 			if age == 0:
@@ -213,13 +256,22 @@ def index():
 			else:
 				i.append(str(round(ovr_avg[0][0], 1)))
 		filt = [classif, country, age]
-		return render_template("index.html", events=events, countries=countries, classes=classes, ages=ages, filt=filt)
+		return render_template("index.html", events=events, countries=countries, classes=classes, ages=ages, filt=filt, topev=topev[:5], recev=recev[:5], requ='post')
 	
 @app.route("/register", methods=["GET", "POST"])
 def register():
 	session.clear()
 	if request.method == "GET":
-		return render_template("register.html")
+		if not request.cookies.get('use'):
+			return render_template("register.html")
+		else:
+			us = Usersn.query.filter_by(id=request.cookies.get("use")).first()
+			session["user"] = us.id
+			session["usern"] = us.username
+			session["conf"] = us.confirmed
+			flash(_('This site uses cookies to store your login information.'), "warning")
+			session.modified = True
+			return redirect("/")
 	else:
 		if not request.form.get("username"):
 			return render_template("error.html", err=_("must provide username"))
@@ -271,7 +323,15 @@ def register():
 		session["usern"] = us.username
 		session["confed"]=0
 		session.modified = True
-		return redirect("/confirmed")
+		usid = str(us.id)
+		if request.form.get("remember") is None:
+			res = make_response(redirect("/confirmed"))
+			res.set_cookie('use', "0", max_age=0)
+			return res
+		else:
+			resp = make_response(redirect("/confirmed"))
+			resp.set_cookie('use', usid, max_age=60*60*24*30)
+			return resp
 
 
 @app.route('/confirm/<token>', methods=['GET'])
@@ -395,7 +455,16 @@ def resetform():
 @app.route("/login", methods=["GET", "POST"])
 def login():
 	if request.method == "GET":
-		return render_template("login.html")
+		if not request.cookies.get('use'):
+			return render_template("login.html")
+		else:
+			us = Usersn.query.filter_by(id=request.cookies.get("use")).first()
+			session["user"] = us.id
+			session["usern"] = us.username
+			session["conf"] = us.confirmed
+			flash(_('This site uses cookies to store your login information.'), "warning")
+			session.modified = True
+			return redirect("/")
 	else:
 		session.clear()
 		# Ensure username was submitted
@@ -415,8 +484,15 @@ def login():
 		session["conf"] = us.confirmed
 		flash(_('This site uses cookies to store your login information.'), "warning")
 		session.modified = True
-		# Redirect user to home page
-		return redirect("/")	
+		usid = str(us.id)
+		if request.form.get("remember") is None:
+			res = make_response(redirect('/'))
+			res.set_cookie('use', "0", max_age=0)
+			return res
+		else:
+			resp = make_response(redirect('/'))
+			resp.set_cookie('use', usid, max_age=60*60*24*30)
+			return resp		
 
 @app.route("/logout")
 def logout():
@@ -427,7 +503,9 @@ def logout():
 	session.modified = True
 	flash(_("Logged out"), "success")
 	# Redirect user to login form
-	return redirect("/login")
+	res = make_response(redirect('/login'))
+	res.set_cookie('use', "0", max_age=0)
+	return res
 
 @app.route("/new", methods=["GET", "POST"])
 @login_required
@@ -496,8 +574,8 @@ def event(eventid):
 	if eventc is None:
 		abort(404)
 	rates = Raten.query.filter_by(eventn_id=eventid).all()
-	s_date = datetime.date(eventc.start_date.year, eventc.start_date.month, eventc.start_date.day)
-	e_date = datetime.date(eventc.end_date.year, eventc.end_date.month, eventc.end_date.day)
+	s_date = datetime.date(eventc.start_date.year, eventc.start_date.month, eventc.start_date.day).strftime("%d/%m/%Y")
+	e_date = datetime.date(eventc.end_date.year, eventc.end_date.month, eventc.end_date.day).strftime("%d/%m/%Y")
 	evlist = [eventc.id, eventc.usersn.username, eventc.name, s_date, e_date, eventc.countryn.value, eventc.location, eventc.classifn.value, eventc.link, eventc.org]
 	ratings = []
 	dbcomments = Comment.query.filter_by(eventn_id=eventid).all()
@@ -551,6 +629,7 @@ def event(eventid):
 		myrate.append(usrate.map_course_r)
 		myrate.append(usrate.org_r)
 	return render_template("event.html", evlist=evlist, myrate = myrate, rated = rated, ratings=ratings, comm=comm, mycomm=mycomm, comments=comments)
+
 @app.route("/rate", methods=["POST"])
 @login_required
 def rate():
@@ -892,7 +971,9 @@ def deleteacc():
 	session.pop("usern", None)
 	session.pop("conf", None)
 	session.modified = True
-	return redirect("/")
+	res = make_response(redirect('/'))
+	res.set_cookie('use', "0", max_age=0)
+	return res
 
 @app.route("/allevents", methods=["GET"])
 @login_required

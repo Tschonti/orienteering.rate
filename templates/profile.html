@@ -91,7 +91,26 @@ document.getElementById('uncheck').onchange = function() {
 							<button id="butt" name="butto" class="btn btn-success btn-block" onclick="editprofile()" type="submit">{{ _("Submit changes") }}</button>
 						</form>
 						<form id="myform" action="/deleteacc" method="post">
-							<button class="btn btn-danger btn-block" onclick="return deleteacc()" type="submit">{{ _("Delete account") }}</button>
+							<button class="btn btn-danger btn-block" type="button" data-toggle="modal" data-target="#delmodal">{{ _("Delete account") }}</button>
+							<div class="modal fade" id="delmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+								  <div class="modal-content">
+									<div class="modal-header">
+									  <h5 class="modal-title" id="exampleModalLongTitle">{{ _("Delete account") }}</h5>
+									  <button type="button" class="close" data-dismiss="modal" aria-label='{{_("Close") }}'>
+										<span aria-hidden="true">&times;</span>
+									  </button>
+									</div>
+									<div class="modal-body">
+									  {{ _("Are you sure you want to delete your account? This will also delete all your events and ratings.")}}
+									</div>
+									<div class="modal-footer">
+									  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Cancel") }}</button>
+									  <button class="btn btn-danger" type="submit">{{ _("Delete account") }}</button>
+									</div>
+								  </div>
+								</div>
+							</div>	
 						</form>
 					</div>
 					<div class="col-sm-0 col-lg-4">

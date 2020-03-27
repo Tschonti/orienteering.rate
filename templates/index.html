@@ -3,6 +3,20 @@
 {% block title %}
     Orienteering.rate
 {% endblock %}
+{% block js %}
+	{%if requ == 'post'%}
+	function myFunction(x) {
+		if (x.matches) { 
+			location.href = "#filt2";
+		} else {
+			location.href = "#filt1";
+		}
+	  }
+	var x = window.matchMedia("(max-width: 700px)")
+	myFunction(x)	
+	
+	{%endif%}
+{% endblock %}
 {% block body %} 
 	<div class="panel panel-default felso">
 		<div class="panel-body">
@@ -10,7 +24,59 @@
 			<p> {{ _("Welcome to Orienteering.rate! The goal of this website is to give valuable feedback to the organisers of orienteering events. 
 			Once you've created an account and logged in, you'll be able to rate events that others have created, and even add a comment to explain your rating. 
 			What's more, you can also create events that other people can rate. Please only rate events if you've actually participated in them and keep it civil in the comments.") }}</p>
-			<h2>{{ _("List of events") }}</h2>	
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<h2>{{_("Top rated events")}}</h2>
+					<table class="table table-hover cent">
+						<thead>
+						  <tr>
+							<th scope="col">{{_("Event")}}</th>
+							<th scope="col">{{_("Average rating")}}</th>
+						  </tr>
+						</thead>
+						<tbody>
+						  {% for i in topev %}
+						   <tr>
+							<td class="fi"><a class="bold" href={{i[3]}}>{{i[1]}}</a></td>
+							<td>{{i[4]}}</td>
+						  </tr>
+						  {% endfor %}
+						</tbody>
+					  </table>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-body">		
+					<h2>{{_("Most recent events")}}</h2>
+					<table class="table table-hover cent">
+						<thead>
+						  <tr>
+							<th scope="col">{{_("Event")}}</th>
+							<th scope="col">{{_("Date")}}</th>
+						  </tr>
+						</thead>
+						<tbody>
+						  {% for i in recev %}
+						   <tr>
+							<td class="fi"><a class="bold" href={{i[3]}}>{{i[1]}}</a></td>
+							<td>{{i[2]}}</td>
+						  </tr>
+						  {% endfor %}
+						</tbody>
+					  </table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default" id="filt1">
+		<div class="panel-body">
+			<h2>{{ _("All events") }}</h2>	
 			<p class="bold noma">{{ _("Filter the events and ratings!") }}</h2>
 			<form action="/" method="post">
 				<div class="row">
@@ -44,18 +110,25 @@
 				</div>
 				<button class="btn btn-success bal" type="submit">{{ _("Apply filter") }}</button>
 			</form>
-			<form action="/" method="get">
+			<form action="/" method="post">
+				<select name="age" class="form-control hide">
+					<option value="0">0</option>
+				</select>
+				<select name="classif" class="form-control hide">
+					<option value="0">0</option>
+				</select>
+				<select name="country" class="form-control hide">
+					<option value="0">0</option>
+				</select>
 				<button class="btn btn-danger jobb" type="submit">{{ _("Clear filter") }}</button>
 			</form>
 			<div class="clearfix"></div>
-			<div style='overflow-x:auto'>	
+			<div style='overflow-x:auto' id="filt2">	
 				<table id="example" class="display cent" style="width:100%" align="center">
 					<thead>
 						<tr>
-							<th>{{ _("Name") }}</th>
-							<th>{{ _("Strart date") }}</th>
-							<th>{{ _("End date") }}</th>
-							<th>{{ _("Country") }}</th>
+							<th>{{ _("Event") }}</th>
+							<th>{{ _("Date") }}</th>
 							<th>{{ _("Location") }}</th>
 							<th>{{ _("Average rating") }}</th>
 							<th>{{ _("Classification") }}</th>
@@ -65,11 +138,9 @@
 					<tbody>
 					{% for i in events %}
 						<tr>
-							<td><a class="bold" href={{i[7]}}>{{ i[1] }}</a></td>
-							<td>{{ i[2] }}</td>
-							<td>{{ i[3] }}</td>
-							<td>{{ i[4] }}</td>
-							<td>{{ i[5] }}</td>
+							<td class="fi"><a class="bold" href={{i[7]}}>{{ i[1] }}</a></td>
+							<td>{{ i[2] }}-<br>{{ i[3] }}</td>
+							<td>{{ i[5] }}, {{ i[4] }}</td>
 							<td>{{ i[9] }}</td>
 							<td>{{ i[6] }}</td>
 							<td><a href={{i[7]}}>
@@ -88,6 +159,5 @@
 				</table>
 			</div>
 		</div>
-	</div>	
-
+	</div>
 {% endblock %}

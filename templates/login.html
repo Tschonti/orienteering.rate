@@ -29,6 +29,11 @@
 								<div class="invalid-feedback">
 									{{ _("Incorrect or invalid password.") }}
 								</div>
+							
+								<input class="form-check-input" type="checkbox" value="1" id="defaultCheck1" name="remember">
+								<label class="form-check-label kicsil" for="defaultCheck1">
+								  {{ _("Remember me") }}
+								</label>
 							</div>
 							<div class="forget"><a href="/forgotform">{{ _("Forgot password or username") }}</a></div>
 							<button class="btn btn-success btn-block" onclick="loginf()" type="submit">{{ _("Log In") }}</button>

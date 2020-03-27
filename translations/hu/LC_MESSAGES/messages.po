@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-12-28 20:53+0100\n"
-"PO-Revision-Date: 2019-12-28 20:54+0100\n"
+"POT-Creation-Date: 2020-03-10 18:14+0100\n"
+"PO-Revision-Date: 2020-03-10 18:15+0100\n"
 "Last-Translator: \n"
 "Language: hu\n"
 "Language-Team: hu <LL@li.org>\n"
@@ -14,196 +14,204 @@ msgstr ""
 "Generated-By: Babel 2.7.0\n"
 "X-Generator: Poedit 2.2.4\n"
 
-#: app.py:172 app.py:212
+#: app.py:171 app.py:448 app.py:468
+msgid "This site uses cookies to store your login information."
+msgstr "Ez az oldal sütiket használ a bejelentkezési információk tárolásához."
+
+#: app.py:183 app.py:215 app.py:255
 msgid "0 (not rated)"
 msgstr "0 (nincs értékelve)"
 
-#: app.py:225 app.py:403 app.py:750
+#: app.py:268 app.py:455 app.py:811
 msgid "must provide username"
 msgstr "adj meg egy  felhasználónevet"
 
-#: app.py:227 app.py:333
+#: app.py:270 app.py:376
 msgid "must provide email"
 msgstr "adj meg egy e-mail címet"
 
-#: app.py:229 app.py:376 app.py:406 app.py:755
+#: app.py:272 app.py:419 app.py:458 app.py:816
 msgid "must provide password"
 msgstr "adj meg egy jelszót"
 
-#: app.py:231 app.py:769
+#: app.py:274 app.py:830
 msgid "must provide age group"
 msgstr "add meg a korcsoportodat"
 
-#: app.py:233 app.py:378 app.py:757
+#: app.py:276 app.py:421 app.py:818
 msgid "must confirm password"
 msgstr "erősítsd meg a jelszavadat"
 
-#: app.py:235 app.py:380 app.py:759
+#: app.py:278 app.py:423 app.py:820
 msgid "passwords don't match"
 msgstr "jelszavak nem egyeznek"
 
-#: app.py:237 app.py:254 app.py:382 app.py:388 app.py:761 app.py:767
+#: app.py:280 app.py:297 app.py:425 app.py:431 app.py:822 app.py:828
 msgid "passwords must contain 6-30 characters and at least one number"
 msgstr ""
 "a jelszónak 6-30 karakter hosszúnak kell lennie, és legalább egy számot "
 "tartalmaznia kell"
 
-#: app.py:248 app.py:343
+#: app.py:291 app.py:386
 msgid "invalid email adress (max length: 80)"
 msgstr "érvénytelen e-mail cím (max hosszúság: 80)"
 
-#: app.py:258 app.py:774
+#: app.py:301 app.py:835
 msgid "username already taken"
 msgstr "felhasználónév már használatban"
 
-#: app.py:260
+#: app.py:303
 msgid "email adress already in use"
 msgstr "e-mail cím már használatban"
 
-#: app.py:264
+#: app.py:307
 msgid "Orienteering.rate email confirmation"
 msgstr "Orienteering.rate e-mail megerősítés"
 
-#: app.py:321
+#: app.py:364
 msgid "Orienteering.rate email confirmation (again)"
 msgstr "Orienteering.rate e-mail megerősítés (ismét)"
 
-#: app.py:323
+#: app.py:366
 msgid "Email resent!"
 msgstr "E-mail újraküldve!"
 
-#: app.py:346
+#: app.py:389
 msgid "unused email adress"
 msgstr "nem használt e-mail cím"
 
-#: app.py:350
+#: app.py:393
 msgid "Orienteering.rate password reset"
 msgstr "Orienteering.rate jelszó visszaállítás"
 
-#: app.py:352
+#: app.py:395
 msgid "The email has been sent."
 msgstr "E-mail elküldve."
 
-#: app.py:359
+#: app.py:402
 msgid "Invalid reset link"
 msgstr "Érvénytelen visszaállítási link"
 
-#: app.py:392
+#: app.py:435
 msgid "Password successfully reset!"
 msgstr "Jelszó sikeresen átállítva!"
 
-#: app.py:411
+#: app.py:463
 msgid "invalid username and/or password"
 msgstr "érvénytelen felhasználónév és/vagy jelszó"
 
-#: app.py:416
-msgid "This site uses cookies to store your login information."
-msgstr "Ez az oldal sütiket használ a bejelentkezési információk tárolásához."
-
-#: app.py:428
+#: app.py:487
 msgid "Logged out"
 msgstr "Kijelentkeztél"
 
-#: app.py:441
+#: app.py:502
 msgid "must provide event name"
 msgstr "add meg a verseny nevét"
 
-#: app.py:443 app.py:664
+#: app.py:504 app.py:725
 msgid "must provide organizer"
 msgstr "add meg a verseny rendezőjét"
 
-#: app.py:445
+#: app.py:506
 msgid "must provide start date"
 msgstr "add meg a verseny kezdésének időpontját"
 
-#: app.py:447
+#: app.py:508
 msgid "must provide end date"
 msgstr "add meg a verseny befejezésének időpontját"
 
-#: app.py:449 app.py:670
+#: app.py:510 app.py:731
 msgid "invalid date"
 msgstr "érvénytelen dátum"
 
-#: app.py:451
+#: app.py:512
 msgid "must provide location"
 msgstr "add meg a verseny helyszínét"
 
-#: app.py:453
+#: app.py:514
 msgid "must provide country"
 msgstr "add meg a verseny országát"
 
-#: app.py:455
+#: app.py:516
 msgid "must choose classification"
 msgstr "válaszd ki a verseny típusát"
 
-#: app.py:457
+#: app.py:518
 msgid "must provide external link"
 msgstr "add meg a verseny linkjét"
 
-#: app.py:459 app.py:680
+#: app.py:520 app.py:741
 msgid "invalid event name (max length: 255)"
 msgstr "érvénytelen név (max hosszúság: 255)"
 
-#: app.py:461 app.py:682
+#: app.py:522 app.py:743
 msgid "invalid organizer (max length: 255)"
 msgstr "érvénytelen rendező (max hosszúság: 255)"
 
-#: app.py:463 app.py:684
+#: app.py:524 app.py:745
 msgid "invalid event location (max length: 255)"
 msgstr "érvénytelen helyszín (max hosszúság: 255)"
 
-#: app.py:465 app.py:686
+#: app.py:526 app.py:747
 msgid "invalid event link (max length: 255)"
 msgstr "érvénytelen link (max hosszúság: 255)"
 
-#: app.py:469 app.py:473 app.py:690 app.py:694
+#: app.py:530 app.py:534 app.py:751 app.py:755
 msgid "invalid date format (YYYY-MM-DD)"
 msgstr "érvénytelen dátumformátum (ÉÉÉÉ-HH-NN)"
 
-#: app.py:563 app.py:565 app.py:567 app.py:569 app.py:586 app.py:588 app.py:590
-#: app.py:592
+#: app.py:624 app.py:626 app.py:628 app.py:630 app.py:647 app.py:649 app.py:651
+#: app.py:653
 msgid "must rate the event"
 msgstr "értékeld a versenyt"
 
-#: app.py:572 app.py:602
+#: app.py:633 app.py:663
 msgid "Maximum length of a comment is 1000 characters"
 msgstr "A hozzászólás maximális hossza 1000 karakter"
 
-#: app.py:653 app.py:901 app.py:909
+#: app.py:714 app.py:962 app.py:970
 msgid "403, you don't have permission to view this page."
 msgstr "403, nincs jogosultságod megtekinteni ezt az oldalt."
 
-#: app.py:662
+#: app.py:723
 msgid "Event must have a name"
 msgstr "Add meg a verseny nevét"
 
-#: app.py:666
+#: app.py:727
 msgid "Event must have a start date"
 msgstr "Add meg a verseny kezdő dátumát"
 
-#: app.py:668
+#: app.py:729
 msgid "Event must have an end date"
 msgstr "Add meg a verseny befejező dátumát"
 
-#: app.py:672
+#: app.py:733
 msgid "Event must have a location"
 msgstr "Add meg a verseny helyszínét"
 
-#: app.py:674
+#: app.py:735
 msgid "Event must have a country"
 msgstr "Add meg a verseny országát"
 
-#: app.py:676
+#: app.py:737
 msgid "Event must have a classification"
 msgstr "Add meg a verseny típusát"
 
-#: app.py:678
+#: app.py:739
 msgid "Event must have an external link"
 msgstr "Add meg a verseny linkjét"
 
-#: app.py:777
+#: app.py:838
 msgid "incorrect password"
 msgstr "helytelen jelszó"
+
+#: templates/404.html:9
+msgid " 404 Page not found"
+msgstr " 404 Oldal nem található"
+
+#: templates/404.html:10
+msgid "Back to the frontpage"
+msgstr "Vissza a főoldalra"
 
 #: templates/activate.html:1
 #, python-format
@@ -282,8 +290,7 @@ msgstr "Verseny szerkeztése"
 msgid "Name of the event"
 msgstr "Verseny neve"
 
-#: templates/editevent.html:14 templates/events.html:14 templates/index.html:55
-#: templates/new.html:15 templates/ratings.html:14
+#: templates/editevent.html:14 templates/new.html:15
 msgid "Name"
 msgstr "Név"
 
@@ -327,12 +334,12 @@ msgid "Please provide a valid date."
 msgstr "Kérlek adj meg egy érvényes dátumot."
 
 #: templates/editevent.html:43 templates/event.html:20 templates/events.html:16
-#: templates/index.html:57 templates/new.html:44
+#: templates/new.html:44
 msgid "End date"
 msgstr "Befejezés dátuma"
 
-#: templates/editevent.html:54 templates/events.html:17 templates/index.html:27
-#: templates/index.html:58 templates/new.html:55
+#: templates/editevent.html:54 templates/events.html:17 templates/index.html:93
+#: templates/new.html:55
 msgid "Country"
 msgstr "Ország"
 
@@ -345,7 +352,7 @@ msgid "Please provide a valid country."
 msgstr "Kérlek adj meg egy érvényes országot."
 
 #: templates/editevent.html:308 templates/event.html:23
-#: templates/events.html:18 templates/index.html:59 templates/new.html:309
+#: templates/events.html:18 templates/index.html:132 templates/new.html:309
 msgid "Location"
 msgstr "Helyszín"
 
@@ -354,7 +361,7 @@ msgid "Please provide a valid location. (3-255 characters)"
 msgstr "Kérlek adj meg egy érvényes helyszínt. (3-255 karakter)"
 
 #: templates/editevent.html:319 templates/event.html:26
-#: templates/events.html:19 templates/index.html:61 templates/new.html:320
+#: templates/events.html:19 templates/index.html:134 templates/new.html:320
 #: templates/ratings.html:15
 msgid "Classification"
 msgstr "Típus"
@@ -404,15 +411,30 @@ msgstr "Kérlek adj meg egy érvényes linket. (3-255 karakter)"
 msgid "Submit changes"
 msgstr "Változtatások mentése"
 
-#: templates/editevent.html:353
+#: templates/editevent.html:353 templates/editevent.html:358
+#: templates/editevent.html:368
 msgid "Delete event"
 msgstr "Verseny törlése"
+
+#: templates/editevent.html:359 templates/event.html:417
+#: templates/profile.html:100
+msgid "Close"
+msgstr "Bezár"
+
+#: templates/editevent.html:364
+msgid "Are you sure you want to delete this event?"
+msgstr "Biztosan ki szeretnéd törölni ezt a versenyt?"
+
+#: templates/editevent.html:367 templates/event.html:425
+#: templates/profile.html:108
+msgid "Cancel"
+msgstr "Mégse"
 
 #: templates/error.html:10
 msgid "Back to the previous page"
 msgstr "Vissza az előző oldalra"
 
-#: templates/event.html:32 templates/layout.html:639
+#: templates/event.html:32 templates/layout.html:631
 msgid "Created by"
 msgstr "Készítette"
 
@@ -420,8 +442,8 @@ msgstr "Készítette"
 msgid "Filter the ratings"
 msgstr "Értékelők szűrése"
 
-#: templates/event.html:42 templates/index.html:20 templates/index.html:29
-#: templates/index.html:38
+#: templates/event.html:42 templates/index.html:86 templates/index.html:95
+#: templates/index.html:104
 msgid "All"
 msgstr "Mind"
 
@@ -437,7 +459,7 @@ msgstr "Felnőtt"
 msgid "Master"
 msgstr "Szenior"
 
-#: templates/event.html:49 templates/index.html:45
+#: templates/event.html:49 templates/index.html:111
 msgid "Apply filter"
 msgstr "Szűrő alkalmazása"
 
@@ -446,25 +468,25 @@ msgid "This event hasn't been rated yet. You can be the first!"
 msgstr "Ezt a versenyt még senki se értékelte. Legyél te az első!"
 
 #: templates/event.html:67 templates/event.html:112 templates/event.html:157
-#: templates/event.html:202 templates/event.html:443 templates/ratings.html:16
+#: templates/event.html:202 templates/event.html:462 templates/ratings.html:16
 msgid "Overall rating"
 msgstr "Átfogó értékelés"
 
 #: templates/event.html:76 templates/event.html:121 templates/event.html:166
 #: templates/event.html:211 templates/event.html:274 templates/event.html:351
-#: templates/event.html:443 templates/ratings.html:17
+#: templates/event.html:462 templates/ratings.html:17
 msgid "Terrain rating"
 msgstr "Terep értékelése"
 
 #: templates/event.html:85 templates/event.html:130 templates/event.html:175
 #: templates/event.html:220 templates/event.html:288 templates/event.html:365
-#: templates/event.html:443 templates/ratings.html:18
+#: templates/event.html:462 templates/ratings.html:18
 msgid "Map and course rating"
 msgstr "Térkép és pálya értékelése"
 
 #: templates/event.html:94 templates/event.html:139 templates/event.html:184
 #: templates/event.html:229 templates/event.html:302 templates/event.html:379
-#: templates/event.html:443 templates/ratings.html:19
+#: templates/event.html:462 templates/ratings.html:19
 msgid "Organization rating"
 msgstr "Rendezés értékelése"
 
@@ -478,7 +500,7 @@ msgstr "%(rating)s értékelés alapján."
 msgid "This event hasn't been rated by this age group yet."
 msgstr "Ezt a versenyt még senki se értékelte ebből a korcsoportból."
 
-#: templates/event.html:242 templates/index.html:79
+#: templates/event.html:242 templates/index.html:150
 msgid "Rate it!"
 msgstr "Értékeld!"
 
@@ -526,43 +548,52 @@ msgstr "Átfogó értékelés"
 msgid "Comment mustn't be longer than 1000 characters."
 msgstr "A hozzászólás nem lehet hosszabb 1000 karakternél."
 
-#: templates/event.html:411
+#: templates/event.html:411 templates/event.html:416 templates/event.html:426
 msgid "Remove rating"
 msgstr "Értékelés törlése"
 
-#: templates/event.html:419
+#: templates/event.html:422
+msgid "Are you sure you want to remove this rating?"
+msgstr "Biztosan törölni szeretnéd ezt az értékelést?"
+
+#: templates/event.html:438
 msgid "Comments"
 msgstr "Hozzászólások"
 
-#: templates/event.html:421
+#: templates/event.html:440
 msgid "There are no comments for this event."
 msgstr "Nincsenek hozzászólások ehhez a versenyhez."
 
-#: templates/event.html:432
+#: templates/event.html:451
 msgid "Upvote"
 msgstr "Tetszik"
 
-#: templates/event.html:433
+#: templates/event.html:452
 msgid "Score"
 msgstr "Pont"
 
-#: templates/event.html:434
+#: templates/event.html:453
 msgid "Downvote"
 msgstr "Nem tetszik"
 
-#: templates/event.html:446
+#: templates/event.html:465
 #, python-format
 msgid "Posted at %(time)s UTC"
 msgstr "%(time)s UTC-kor írta"
 
-#: templates/event.html:448
+#: templates/event.html:467
 #, python-format
 msgid "Last edited at %(time)s UTC"
 msgstr "%(time)s UTC-kor szerkesztette utoljára"
 
-#: templates/events.html:4 templates/events.html:9 templates/layout.html:606
+#: templates/events.html:4 templates/events.html:9 templates/layout.html:594
 msgid "My events"
 msgstr "Versenyeim"
+
+#: templates/events.html:14 templates/index.html:37 templates/index.html:60
+#: templates/index.html:130 templates/ratings.html:14
+msgid "Event"
+msgstr "Verseny"
 
 #: templates/events.html:20 templates/events.html:32 templates/ratings.html:21
 #: templates/ratings.html:34
@@ -597,7 +628,7 @@ msgstr "Érvénytelen vagy nem használt e-mail cím."
 msgid "Send email"
 msgstr "E-mail küldése"
 
-#: templates/index.html:10
+#: templates/index.html:24
 msgid ""
 "Welcome to Orienteering.rate! The goal of this website is to give valuable "
 "feedback to the organisers of orienteering events. \n"
@@ -617,97 +648,89 @@ msgstr ""
 "\t\t\t Arra kérünk, csak olyan versenyeket értékelj, amin tényleg részt "
 "vettél, és légy tisztelettudó a hozzászólásaidban."
 
-#: templates/index.html:13
-msgid "List of events"
-msgstr "Versenyek listája"
+#: templates/index.html:33
+msgid "Top rated events"
+msgstr "Legjobbra értékelt versenyek"
 
-#: templates/index.html:14
-msgid "Filter the events and ratings!"
-msgstr "Alkalmazz szűrőket a versenyekre és értékelőkre!"
-
-#: templates/index.html:18
-msgid "Event type"
-msgstr "Verseny típusa"
-
-#: templates/index.html:36
-msgid "Age group of raters"
-msgstr "Értékelők korcsoportja"
-
-#: templates/index.html:48
-msgid "Clear filter"
-msgstr "Szűrő törlése"
-
-#: templates/index.html:56
-msgid "Strart date"
-msgstr "Kezdő dátum"
-
-#: templates/index.html:60
+#: templates/index.html:38 templates/index.html:133
 msgid "Average rating"
 msgstr "Átlagos értékelés"
 
-#: templates/index.html:62
+#: templates/index.html:56
+msgid "Most recent events"
+msgstr "Legfrissebb versenyek"
+
+#: templates/index.html:61 templates/index.html:131
+msgid "Date"
+msgstr "Dátum"
+
+#: templates/index.html:79
+msgid "All events"
+msgstr "Összes verseny"
+
+#: templates/index.html:80
+msgid "Filter the events and ratings!"
+msgstr "Alkalmazz szűrőket a versenyekre és értékelőkre!"
+
+#: templates/index.html:84
+msgid "Event type"
+msgstr "Verseny típusa"
+
+#: templates/index.html:102
+msgid "Age group of raters"
+msgstr "Értékelők korcsoportja"
+
+#: templates/index.html:123
+msgid "Clear filter"
+msgstr "Szűrő törlése"
+
+#: templates/index.html:135
 msgid "My rating"
 msgstr "Értékelésem"
 
-#: templates/index.html:77
+#: templates/index.html:148
 msgid "Log in to rate it!"
 msgstr "Jelentkezz be az értékeléshez!"
 
-#: templates/layout.html:488
-msgid "Are you sure you want to delete this event?"
-msgstr "Biztosan ki szeretnéd törölni ezt a versenyt?"
-
-#: templates/layout.html:491
+#: templates/layout.html:485
 msgid "Are you sure you want to delete this comment?"
 msgstr "Biztosan ki szeretnéd törölni ezt a kommentet?"
 
-#: templates/layout.html:494
-msgid ""
-"Are you sure you want to delete your account? This will also delete all your "
-"events and ratings."
-msgstr ""
-"Biztosan ki szeretnéd törölni a fiókod? Ezzel minden versenyed és "
-"értékelésed is törlődik."
-
-#: templates/layout.html:497
-msgid "Are you sure you want to remove this rating?"
-msgstr "Biztosan ki szeretnéd törölni ezt az értékelést?"
-
-#: templates/layout.html:604
+#: templates/layout.html:592
 msgid "Add new event"
 msgstr "Új verseny"
 
-#: templates/layout.html:605 templates/ratings.html:4 templates/ratings.html:9
+#: templates/layout.html:593 templates/ratings.html:4 templates/ratings.html:9
 msgid "My ratings"
 msgstr "Értékeléseim"
 
-#: templates/layout.html:610
+#: templates/layout.html:600
 #, python-format
 msgid "Logged in as %(username)s"
 msgstr "%(username)s-ként bejelentkezve"
 
-#: templates/layout.html:611
+#: templates/layout.html:601
 msgid "Log Out"
 msgstr "Kijelentkezés"
 
-#: templates/layout.html:615 templates/register.html:4
+#: templates/layout.html:607 templates/register.html:4
 #: templates/register.html:13 templates/register.html:79
 msgid "Register"
 msgstr "Regisztráció"
 
-#: templates/layout.html:616 templates/login.html:4 templates/login.html:34
+#: templates/layout.html:608 templates/login.html:4 templates/login.html:39
 msgid "Log In"
 msgstr "Bejelentkezés"
 
-#: templates/layout.html:627
+#: templates/layout.html:619
 msgid "More info "
 msgstr "Tudj meg többet "
 
-#: templates/layout.html:639
+#: templates/layout.html:631
 msgid "Sámuel Fekete"
 msgstr "Fekete Sámuel"
 
-#: templates/layout.html:639 templates/privacy.html:4
+#: templates/layout.html:631 templates/privacy.html:4
 msgid "Privacy policy"
 msgstr "Adatkezelési irányelvek"
 
@@ -732,7 +755,11 @@ msgstr "Jelszó"
 msgid "Incorrect or invalid password."
 msgstr "Érvénytelen vagy helytelen jelszó."
 
-#: templates/login.html:33
+#: templates/login.html:35
+msgid "Remember me"
+msgstr "Emlékezz rám"
+
+#: templates/login.html:38
 msgid "Forgot password or username"
 msgstr "Elfelejtett jelszó vagy felhasználónév"
 
@@ -756,10 +783,16 @@ msgstr "Sütik"
 msgid ""
 "When you log in, we will set up several session-cookies to save your login "
 "information. If you log out of your account, the login cookies will be "
-"removed."
+"removed. If you checked 'remember me' before logging in, you'll be "
+"automatically logged in for 30 days, or until you log out. Your language "
+"preferences are also stored in cookies. These are deleted when you close the "
+"browser."
 msgstr ""
 "Amikor bejelentkezel, úgynevezett session-sütikben tároljuk a bejelentkezési "
-"információkat. Amikor kijelentkezel, ezek a sütik törlődnek."
+"információkat. Amikor kijelentkezel, ezek a sütik törlődnek. Ha bejelölted "
+"az 'Emlékezz rám' jelölőnégyzetet bejelentkezéskor, akkor automatikusan be "
+"leszel jelentkeztetve 30 napig, vagy amíg ki nem jelentkezel. A nyelvi "
+"beállításaidat is sütikben tároljuk. Ezek a böngésző bezárásával törlődnek."
 
 #: templates/privacy.html:12
 msgid "Who we share your data with"
@@ -880,9 +913,18 @@ msgstr "Jelenlegi jelszavad"
 msgid "Please provide your current password."
 msgstr "Kérlek add meg a jelenlegi jelszavad."
 
-#: templates/profile.html:94
+#: templates/profile.html:94 templates/profile.html:99
+#: templates/profile.html:109
 msgid "Delete account"
 msgstr "Fiók törlése"
+
+#: templates/profile.html:105
+msgid ""
+"Are you sure you want to delete your account? This will also delete all your "
+"events and ratings."
+msgstr ""
+"Biztosan ki szeretnéd törölni a fiókod? Ezzel minden versenyed és "
+"értékelésed is törlődik."
 
 #: templates/ratings.html:20
 msgid "Date and time"
@@ -965,3 +1007,29 @@ msgstr "Jelszó átállítása"
 
 #~ msgid "This event hasn't been rated yet."
 #~ msgstr "Ezt a versenyt még senki se értékelte. Legyél te az első!"
+
+#~ msgid "List of events"
+#~ msgstr "Versenyek listája"
+
+#~ msgid "Strart date"
+#~ msgstr "Kezdő dátum"
+
+#~ msgid ""
+#~ "When you log in, we will set up several session-cookies to save your "
+#~ "login information. If you log out of your account, the login cookies will "
+#~ "be removed."
+#~ msgstr ""
+#~ "Amikor bejelentkezel, úgynevezett session-sütikben tároljuk a "
+#~ "bejelentkezési információkat. Amikor kijelentkezel, ezek a sütik "
+#~ "törlődnek."
+
+#~ msgid ""
+#~ "When you log in, we will set up several session-cookies to save your "
+#~ "login information. If you log out of your account, the login cookies will "
+#~ "be removed. Your language preferences are also stored in cookies. These "
+#~ "are deleted when you close the browser."
+#~ msgstr ""
+#~ "Amikor bejelentkezel, úgynevezett session-sütikben tároljuk a "
+#~ "bejelentkezési információkat. Amikor kijelentkezel, ezek a sütik "
+#~ "törlődnek. A nyelvi beállításaidat is sütikben tároljuk. Ezek a böngésző "
+#~ "bezárásával törlődnek."

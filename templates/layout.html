@@ -18,18 +18,13 @@
 		<title>{% block title %}{%endblock%}</title>
 		<script type="text/javascript">
 			$(document).ready(function() {
-					$("#hide").hide();
-					$("#hide2").hide();
-					$("#hide3").hide();
-					$("#hide4").hide();
-					$("#hide5").hide();
-					$(".hide").hide();
+					{% block js%}{%endblock%}
 					$("#youth").hide();
 					$("#elite").hide();
 					$("#master").hide();
 					$('[data-toggle="tooltip"]').tooltip();
 					$('#example').DataTable({
-						"order": [[ 5, "desc" ]]
+						"order": [[ 3, "desc" ]]
 					} );
 					$('#example2').DataTable({
 						"order": [[ 6, "desc" ]]
@@ -486,18 +481,8 @@
 					});
 				}
 			}
-			
-			function deletef() {
-				return confirm('{{ _("Are you sure you want to delete this event?") }}');
-			}
 			function commd() {
 				return confirm('{{ _("Are you sure you want to delete this comment?") }}');
-			}
-			function deleteacc() {
-				return confirm('{{ _("Are you sure you want to delete your account? This will also delete all your events and ratings.") }}');
-			}
-			function deleterf() {
-				return confirm('{{ _("Are you sure you want to remove this rating?") }}');
 			}
 			function forgotf() {
 				event.preventDefault();
@@ -610,11 +595,15 @@
 							{% if session["user"] == 2 %} <li class="nav-item"><a class="nav-link" href="/allevents">All events </a></li>{% endif%}
 						</ul>
 						<ul class="navbar-nav ml-auto mt-2">
+							<li class="nav-item"><a class="nav-link" href="/en"><img src="../static/en.png"></a></li>
+							<li class="nav-item"><a class="nav-link" href="/hu"><img src="../static/hu.png"></a></li>
 							<li class="nav-item"><a class="nav-link" href="/profile">{{ _("Logged in as %(username)s", username=session['usern'] ) }}</a></li>
 							<li class="nav-item"><a class="nav-link" href="/logout">{{ _("Log Out") }}</a></li>
 						</ul>
 					{% else %}
 						<ul class="navbar-nav ml-auto mt-2">
+							<li class="nav-item"><a class="nav-link" href="/en"><img src="../static/en.png"></a></li>
+							<li class="nav-item"><a class="nav-link" href="/hu"><img src="../static/hu.png"></a></li>
 							<li class="nav-item"><a class="nav-link" href="/register">{{ _("Register") }}</a></li>
 							<li class="nav-item"><a class="nav-link" href="/login">{{ _("Log In") }} </a></li>
 						</ul>
@@ -639,7 +628,7 @@
 				</div>
 			</div>
 			<div class="footer cente">
-				{{ _("Created by") }} <a target="_blank" href="https://www.linkedin.com/in/samuel-fekete/">{{ _("Sámuel Fekete") }}</a>, 2019&nbsp;|&nbsp;<a href="/privacy">{{ _("Privacy policy") }}</a> &nbsp;|&nbsp; <a target="_blank" href="https://github.com/Tschonti/orienteering.rate">GitHub repository</a>
+				{{ _("Created by") }} <a target="_blank" href="https://www.linkedin.com/in/samuel-fekete/">{{ _("Sámuel Fekete") }}</a>, 2019-2020&nbsp;|&nbsp;<a href="/privacy">{{ _("Privacy policy") }}</a> &nbsp;|&nbsp; <a target="_blank" href="https://github.com/Tschonti/orienteering.rate">GitHub repository</a>
 			</div>
 		</div>	
 	</body>

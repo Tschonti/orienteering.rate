@@ -194,7 +194,7 @@
 							{% else %}
 								<div class="col-sm-6 col-lg-3 p">
 									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[3][0] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][0]/5*100 }}% ">
+										<div class="progress-bar " role="progressbar" aria-valuenow= {{ratings[3][0]}} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][0]/5*100 }}% ">
 											<span class="sr-only">{{ ratings[3][0] }}/5</span>
 										</div>
 									</div>
@@ -203,7 +203,7 @@
 								</div>
 								<div class="col-sm-6 col-lg-3 p">
 									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[3][1] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][1]/5*100 }}% ">
+										<div class="progress-bar " role="progressbar" aria-valuenow= {{ratings[3][1]}} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][1]/5*100 }}% ">
 											<span class="sr-only">{{ ratings[3][1] }}/5</span>
 										</div>
 									</div>
@@ -212,7 +212,7 @@
 								</div>
 								<div class="col-sm-6 col-lg-3 p">
 									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[3][2] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][2]/5*100 }}% ">
+										<div class="progress-bar " role="progressbar" aria-valuenow= {{ratings[3][2]}} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][2]/5*100 }}% ">
 											<span class="sr-only">{{ ratings[3][2] }}/5</span>
 										</div>
 									</div>
@@ -221,7 +221,7 @@
 								</div>
 								<div class="col-sm-6 col-lg-3 p">
 									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[3][3] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][3]/5*100 }}% ">
+										<div class="progress-bar " role="progressbar" aria-valuenow={{ratings[3][3]}} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][3]/5*100 }}% ">
 											<span class="sr-only">{{ ratings[3][3] }}/5</span>
 										</div>
 									</div>
@@ -244,7 +244,7 @@
 					<p class="cente"> {{ _("You haven't rated this event yet. What are you waiting for?") }}</p>
 					<form action="/rate" id="ratsubmit" method="post">
 						<div class="form-group f">
-							<select name="eventid" id="hide">
+							<select name="eventid" class="hide">
 								<option value={{evlist[0]}}></option>
 							</select>
 							<div class="row cs">
@@ -321,7 +321,7 @@
 					<p class="cente"> {{ _("You have already rated this event, but you can edit it whenever you want to!") }}</p>
 					<form action="/editrate" id="ratsubmit" method="post">
 						<div class="form-group f">
-							<select name="eventid" id="hide">
+							<select name="eventid" class="hide">
 								<option value={{evlist[0]}}></option>
 							</select>
 							<div class="row cs">
@@ -405,10 +405,29 @@
 						</div>	
 					</form>
 					<form action="/deleter" method="post">
-						<select name="eventid" id="hide5">
+						<select name="eventid" class="hide">
 							<option value={{evlist[0]}}></option>
 						</select>
-						<button class="btn btn-danger jobb" onclick="return deleterf()" type="submit">{{ _("Remove rating") }}</button>
+						<button class="btn btn-danger jobb" type="button" data-toggle="modal" data-target="#delmodal">{{ _("Remove rating") }}</button>
+						<div class="modal fade" id="delmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+							  <div class="modal-content">
+								<div class="modal-header">
+								  <h5 class="modal-title" id="exampleModalLongTitle">{{ _("Remove rating") }}</h5>
+								  <button type="button" class="close" data-dismiss="modal" aria-label='{{_("Close") }}'>
+									<span aria-hidden="true">&times;</span>
+								  </button>
+								</div>
+								<div class="modal-body">
+								  {{ _("Are you sure you want to remove this rating?") }}
+								</div>
+								<div class="modal-footer">
+								  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Cancel") }}</button>
+								  <button class="btn btn-danger" type="submit">{{ _("Remove rating") }}</button>
+								</div>
+							  </div>
+							</div>
+						</div>	
 					</form>
 					<div class="clearfix"></div>		
 				{% endif %}
