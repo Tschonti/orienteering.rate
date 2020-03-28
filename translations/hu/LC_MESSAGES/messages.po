@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-10 18:14+0100\n"
-"PO-Revision-Date: 2020-03-10 18:15+0100\n"
+"POT-Creation-Date: 2020-03-28 12:18+0100\n"
+"PO-Revision-Date: 2020-03-28 12:23+0100\n"
 "Last-Translator: \n"
 "Language: hu\n"
 "Language-Team: hu <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Generated-By: Babel 2.7.0\n"
 "X-Generator: Poedit 2.2.4\n"
 
-#: app.py:171 app.py:448 app.py:468
+#: app.py:171 app.py:272 app.py:465 app.py:485
 msgid "This site uses cookies to store your login information."
 msgstr "Ez az oldal sütiket használ a bejelentkezési információk tárolásához."
 
@@ -22,186 +22,186 @@ msgstr "Ez az oldal sütiket használ a bejelentkezési információk tárolás�
 msgid "0 (not rated)"
 msgstr "0 (nincs értékelve)"
 
-#: app.py:268 app.py:455 app.py:811
+#: app.py:277 app.py:472 app.py:829
 msgid "must provide username"
 msgstr "adj meg egy  felhasználónevet"
 
-#: app.py:270 app.py:376
+#: app.py:279 app.py:393
 msgid "must provide email"
 msgstr "adj meg egy e-mail címet"
 
-#: app.py:272 app.py:419 app.py:458 app.py:816
+#: app.py:281 app.py:436 app.py:475 app.py:834
 msgid "must provide password"
 msgstr "adj meg egy jelszót"
 
-#: app.py:274 app.py:830
+#: app.py:283 app.py:848
 msgid "must provide age group"
 msgstr "add meg a korcsoportodat"
 
-#: app.py:276 app.py:421 app.py:818
+#: app.py:285 app.py:438 app.py:836
 msgid "must confirm password"
 msgstr "erősítsd meg a jelszavadat"
 
-#: app.py:278 app.py:423 app.py:820
+#: app.py:287 app.py:440 app.py:838
 msgid "passwords don't match"
 msgstr "jelszavak nem egyeznek"
 
-#: app.py:280 app.py:297 app.py:425 app.py:431 app.py:822 app.py:828
+#: app.py:289 app.py:306 app.py:442 app.py:448 app.py:840 app.py:846
 msgid "passwords must contain 6-30 characters and at least one number"
 msgstr ""
 "a jelszónak 6-30 karakter hosszúnak kell lennie, és legalább egy számot "
 "tartalmaznia kell"
 
-#: app.py:291 app.py:386
+#: app.py:300 app.py:403
 msgid "invalid email adress (max length: 80)"
 msgstr "érvénytelen e-mail cím (max hosszúság: 80)"
 
-#: app.py:301 app.py:835
+#: app.py:310 app.py:853
 msgid "username already taken"
 msgstr "felhasználónév már használatban"
 
-#: app.py:303
+#: app.py:312
 msgid "email adress already in use"
 msgstr "e-mail cím már használatban"
 
-#: app.py:307
+#: app.py:316
 msgid "Orienteering.rate email confirmation"
 msgstr "Orienteering.rate e-mail megerősítés"
 
-#: app.py:364
+#: app.py:381
 msgid "Orienteering.rate email confirmation (again)"
 msgstr "Orienteering.rate e-mail megerősítés (ismét)"
 
-#: app.py:366
+#: app.py:383
 msgid "Email resent!"
 msgstr "E-mail újraküldve!"
 
-#: app.py:389
+#: app.py:406
 msgid "unused email adress"
 msgstr "nem használt e-mail cím"
 
-#: app.py:393
+#: app.py:410
 msgid "Orienteering.rate password reset"
 msgstr "Orienteering.rate jelszó visszaállítás"
 
-#: app.py:395
+#: app.py:412
 msgid "The email has been sent."
 msgstr "E-mail elküldve."
 
-#: app.py:402
+#: app.py:419
 msgid "Invalid reset link"
 msgstr "Érvénytelen visszaállítási link"
 
-#: app.py:435
+#: app.py:452
 msgid "Password successfully reset!"
 msgstr "Jelszó sikeresen átállítva!"
 
-#: app.py:463
+#: app.py:480
 msgid "invalid username and/or password"
 msgstr "érvénytelen felhasználónév és/vagy jelszó"
 
-#: app.py:487
+#: app.py:504
 msgid "Logged out"
 msgstr "Kijelentkeztél"
 
-#: app.py:502
+#: app.py:519
 msgid "must provide event name"
 msgstr "add meg a verseny nevét"
 
-#: app.py:504 app.py:725
+#: app.py:521 app.py:743
 msgid "must provide organizer"
 msgstr "add meg a verseny rendezőjét"
 
-#: app.py:506
+#: app.py:523
 msgid "must provide start date"
 msgstr "add meg a verseny kezdésének időpontját"
 
-#: app.py:508
+#: app.py:525
 msgid "must provide end date"
 msgstr "add meg a verseny befejezésének időpontját"
 
-#: app.py:510 app.py:731
+#: app.py:527 app.py:749
 msgid "invalid date"
 msgstr "érvénytelen dátum"
 
-#: app.py:512
+#: app.py:529
 msgid "must provide location"
 msgstr "add meg a verseny helyszínét"
 
-#: app.py:514
+#: app.py:531
 msgid "must provide country"
 msgstr "add meg a verseny országát"
 
-#: app.py:516
+#: app.py:533
 msgid "must choose classification"
 msgstr "válaszd ki a verseny típusát"
 
-#: app.py:518
+#: app.py:535
 msgid "must provide external link"
 msgstr "add meg a verseny linkjét"
 
-#: app.py:520 app.py:741
+#: app.py:537 app.py:759
 msgid "invalid event name (max length: 255)"
 msgstr "érvénytelen név (max hosszúság: 255)"
 
-#: app.py:522 app.py:743
+#: app.py:539 app.py:761
 msgid "invalid organizer (max length: 255)"
 msgstr "érvénytelen rendező (max hosszúság: 255)"
 
-#: app.py:524 app.py:745
+#: app.py:541 app.py:763
 msgid "invalid event location (max length: 255)"
 msgstr "érvénytelen helyszín (max hosszúság: 255)"
 
-#: app.py:526 app.py:747
+#: app.py:543 app.py:765
 msgid "invalid event link (max length: 255)"
 msgstr "érvénytelen link (max hosszúság: 255)"
 
-#: app.py:530 app.py:534 app.py:751 app.py:755
+#: app.py:547 app.py:551 app.py:769 app.py:773
 msgid "invalid date format (YYYY-MM-DD)"
 msgstr "érvénytelen dátumformátum (ÉÉÉÉ-HH-NN)"
 
-#: app.py:624 app.py:626 app.py:628 app.py:630 app.py:647 app.py:649 app.py:651
-#: app.py:653
+#: app.py:642 app.py:644 app.py:646 app.py:648 app.py:665 app.py:667 app.py:669
+#: app.py:671
 msgid "must rate the event"
 msgstr "értékeld a versenyt"
 
-#: app.py:633 app.py:663
+#: app.py:651 app.py:681
 msgid "Maximum length of a comment is 1000 characters"
 msgstr "A hozzászólás maximális hossza 1000 karakter"
 
-#: app.py:714 app.py:962 app.py:970
+#: app.py:732 app.py:982 app.py:990
 msgid "403, you don't have permission to view this page."
 msgstr "403, nincs jogosultságod megtekinteni ezt az oldalt."
 
-#: app.py:723
+#: app.py:741
 msgid "Event must have a name"
 msgstr "Add meg a verseny nevét"
 
-#: app.py:727
+#: app.py:745
 msgid "Event must have a start date"
 msgstr "Add meg a verseny kezdő dátumát"
 
-#: app.py:729
+#: app.py:747
 msgid "Event must have an end date"
 msgstr "Add meg a verseny befejező dátumát"
 
-#: app.py:733
+#: app.py:751
 msgid "Event must have a location"
 msgstr "Add meg a verseny helyszínét"
 
-#: app.py:735
+#: app.py:753
 msgid "Event must have a country"
 msgstr "Add meg a verseny országát"
 
-#: app.py:737
+#: app.py:755
 msgid "Event must have a classification"
 msgstr "Add meg a verseny típusát"
 
-#: app.py:739
+#: app.py:757
 msgid "Event must have an external link"
 msgstr "Add meg a verseny linkjét"
 
-#: app.py:838
+#: app.py:856
 msgid "incorrect password"
 msgstr "helytelen jelszó"
 
@@ -209,9 +209,26 @@ msgstr "helytelen jelszó"
 msgid " 404 Page not found"
 msgstr " 404 Oldal nem található"
 
-#: templates/404.html:10
+#: templates/404.html:10 templates/500.html:13
 msgid "Back to the frontpage"
 msgstr "Vissza a főoldalra"
+
+#: templates/500.html:9
+msgid " 500 Internal server error"
+msgstr " 500 Belső szerver hiba"
+
+#: templates/500.html:10
+msgid ""
+"This site is still under development. Unfortunately, you've run into a "
+"server error. \n"
+"                    Please consider contacting the developer, Sámuel Fekete "
+"at feketesamu(at)gmail(dot)com about this error. \n"
+"                    Thank you in advance for helping this site!"
+msgstr ""
+"Ez az oldal még fejlesztés alatt áll. Sajnos egy szerver hibába futottál. \n"
+"Ha ráérsz, jelezd a hibád a fejlesztőnek, Fekete Sámuelnek a "
+"feketesamu(kukac)gmail(pont)com címen. \n"
+"Előre is köszönöm, hogy segíted az oldalt!"
 
 #: templates/activate.html:1
 #, python-format
@@ -714,7 +731,7 @@ msgid "Log Out"
 msgstr "Kijelentkezés"
 
 #: templates/layout.html:607 templates/register.html:4
-#: templates/register.html:13 templates/register.html:79
+#: templates/register.html:13 templates/register.html:83
 msgid "Register"
 msgstr "Regisztráció"
 
@@ -755,7 +772,7 @@ msgstr "Jelszó"
 msgid "Incorrect or invalid password."
 msgstr "Érvénytelen vagy helytelen jelszó."
 
-#: templates/login.html:35
+#: templates/login.html:35 templates/register.html:80
 msgid "Remember me"
 msgstr "Emlékezz rám"
 

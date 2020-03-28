@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-10 18:14+0100\n"
+"POT-Creation-Date: 2020-03-28 12:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
 
-#: app.py:171 app.py:448 app.py:468
+#: app.py:171 app.py:272 app.py:465 app.py:485
 msgid "This site uses cookies to store your login information."
 msgstr ""
 
@@ -25,184 +25,184 @@ msgstr ""
 msgid "0 (not rated)"
 msgstr ""
 
-#: app.py:268 app.py:455 app.py:811
+#: app.py:277 app.py:472 app.py:829
 msgid "must provide username"
 msgstr ""
 
-#: app.py:270 app.py:376
+#: app.py:279 app.py:393
 msgid "must provide email"
 msgstr ""
 
-#: app.py:272 app.py:419 app.py:458 app.py:816
+#: app.py:281 app.py:436 app.py:475 app.py:834
 msgid "must provide password"
 msgstr ""
 
-#: app.py:274 app.py:830
+#: app.py:283 app.py:848
 msgid "must provide age group"
 msgstr ""
 
-#: app.py:276 app.py:421 app.py:818
+#: app.py:285 app.py:438 app.py:836
 msgid "must confirm password"
 msgstr ""
 
-#: app.py:278 app.py:423 app.py:820
+#: app.py:287 app.py:440 app.py:838
 msgid "passwords don't match"
 msgstr ""
 
-#: app.py:280 app.py:297 app.py:425 app.py:431 app.py:822 app.py:828
+#: app.py:289 app.py:306 app.py:442 app.py:448 app.py:840 app.py:846
 msgid "passwords must contain 6-30 characters and at least one number"
 msgstr ""
 
-#: app.py:291 app.py:386
+#: app.py:300 app.py:403
 msgid "invalid email adress (max length: 80)"
 msgstr ""
 
-#: app.py:301 app.py:835
+#: app.py:310 app.py:853
 msgid "username already taken"
 msgstr ""
 
-#: app.py:303
+#: app.py:312
 msgid "email adress already in use"
 msgstr ""
 
-#: app.py:307
+#: app.py:316
 msgid "Orienteering.rate email confirmation"
 msgstr ""
 
-#: app.py:364
+#: app.py:381
 msgid "Orienteering.rate email confirmation (again)"
 msgstr ""
 
-#: app.py:366
+#: app.py:383
 msgid "Email resent!"
 msgstr ""
 
-#: app.py:389
+#: app.py:406
 msgid "unused email adress"
 msgstr ""
 
-#: app.py:393
+#: app.py:410
 msgid "Orienteering.rate password reset"
 msgstr ""
 
-#: app.py:395
+#: app.py:412
 msgid "The email has been sent."
 msgstr ""
 
-#: app.py:402
+#: app.py:419
 msgid "Invalid reset link"
 msgstr ""
 
-#: app.py:435
+#: app.py:452
 msgid "Password successfully reset!"
 msgstr ""
 
-#: app.py:463
+#: app.py:480
 msgid "invalid username and/or password"
 msgstr ""
 
-#: app.py:487
+#: app.py:504
 msgid "Logged out"
 msgstr ""
 
-#: app.py:502
+#: app.py:519
 msgid "must provide event name"
 msgstr ""
 
-#: app.py:504 app.py:725
+#: app.py:521 app.py:743
 msgid "must provide organizer"
 msgstr ""
 
-#: app.py:506
+#: app.py:523
 msgid "must provide start date"
 msgstr ""
 
-#: app.py:508
+#: app.py:525
 msgid "must provide end date"
 msgstr ""
 
-#: app.py:510 app.py:731
+#: app.py:527 app.py:749
 msgid "invalid date"
 msgstr ""
 
-#: app.py:512
+#: app.py:529
 msgid "must provide location"
 msgstr ""
 
-#: app.py:514
+#: app.py:531
 msgid "must provide country"
 msgstr ""
 
-#: app.py:516
+#: app.py:533
 msgid "must choose classification"
 msgstr ""
 
-#: app.py:518
+#: app.py:535
 msgid "must provide external link"
 msgstr ""
 
-#: app.py:520 app.py:741
+#: app.py:537 app.py:759
 msgid "invalid event name (max length: 255)"
 msgstr ""
 
-#: app.py:522 app.py:743
+#: app.py:539 app.py:761
 msgid "invalid organizer (max length: 255)"
 msgstr ""
 
-#: app.py:524 app.py:745
+#: app.py:541 app.py:763
 msgid "invalid event location (max length: 255)"
 msgstr ""
 
-#: app.py:526 app.py:747
+#: app.py:543 app.py:765
 msgid "invalid event link (max length: 255)"
 msgstr ""
 
-#: app.py:530 app.py:534 app.py:751 app.py:755
+#: app.py:547 app.py:551 app.py:769 app.py:773
 msgid "invalid date format (YYYY-MM-DD)"
 msgstr ""
 
-#: app.py:624 app.py:626 app.py:628 app.py:630 app.py:647 app.py:649 app.py:651
-#: app.py:653
+#: app.py:642 app.py:644 app.py:646 app.py:648 app.py:665 app.py:667 app.py:669
+#: app.py:671
 msgid "must rate the event"
 msgstr ""
 
-#: app.py:633 app.py:663
+#: app.py:651 app.py:681
 msgid "Maximum length of a comment is 1000 characters"
 msgstr ""
 
-#: app.py:714 app.py:962 app.py:970
+#: app.py:732 app.py:982 app.py:990
 msgid "403, you don't have permission to view this page."
 msgstr ""
 
-#: app.py:723
+#: app.py:741
 msgid "Event must have a name"
 msgstr ""
 
-#: app.py:727
+#: app.py:745
 msgid "Event must have a start date"
 msgstr ""
 
-#: app.py:729
+#: app.py:747
 msgid "Event must have an end date"
 msgstr ""
 
-#: app.py:733
+#: app.py:751
 msgid "Event must have a location"
 msgstr ""
 
-#: app.py:735
+#: app.py:753
 msgid "Event must have a country"
 msgstr ""
 
-#: app.py:737
+#: app.py:755
 msgid "Event must have a classification"
 msgstr ""
 
-#: app.py:739
+#: app.py:757
 msgid "Event must have an external link"
 msgstr ""
 
-#: app.py:838
+#: app.py:856
 msgid "incorrect password"
 msgstr ""
 
@@ -210,8 +210,21 @@ msgstr ""
 msgid " 404 Page not found"
 msgstr ""
 
-#: templates/404.html:10
+#: templates/404.html:10 templates/500.html:13
 msgid "Back to the frontpage"
+msgstr ""
+
+#: templates/500.html:9
+msgid " 500 Internal server error"
+msgstr ""
+
+#: templates/500.html:10
+msgid ""
+"This site is still under development. Unfortunately, you've run into a "
+"server error. \n"
+"                    Please consider contacting the developer, Sámuel "
+"Fekete at feketesamu(at)gmail(dot)com about this error. \n"
+"                    Thank you in advance for helping this site!"
 msgstr ""
 
 #: templates/activate.html:1
@@ -693,7 +706,7 @@ msgid "Log Out"
 msgstr ""
 
 #: templates/layout.html:607 templates/register.html:4
-#: templates/register.html:13 templates/register.html:79
+#: templates/register.html:13 templates/register.html:83
 msgid "Register"
 msgstr ""
 
@@ -734,7 +747,7 @@ msgstr ""
 msgid "Incorrect or invalid password."
 msgstr ""
 
-#: templates/login.html:35
+#: templates/login.html:35 templates/register.html:80
 msgid "Remember me"
 msgstr ""
 
