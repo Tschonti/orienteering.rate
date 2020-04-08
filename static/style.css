@@ -150,6 +150,9 @@ body {
 }	
 .felso {
 	margin-top: 0rem!important;	
+}
+.felso h3 {
+	font-size: 1.2rem;
 }		
 .rates p {
 	margin: 0px;
@@ -174,7 +177,7 @@ body {
 .bal {
 	margin-right: 0.5rem;
 }
-.also p {
+.also {
 	margin-bottom: 1rem;
 }
 .e {
