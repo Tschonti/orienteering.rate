@@ -10,12 +10,15 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import login_required
 from sqlalchemy.sql import func
+from sqlalchemy import and_
 from operator import itemgetter
 from mytoken import generate_confirmation_token, confirm_token
 from imel import send_email
 from flask_mail import Mail, Message
 from flask_babel import Babel, _
 from operator import itemgetter
+import requests
+import time
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -142,6 +145,56 @@ def conf_required():
 	else:
 		return 1
 
+@app.route("/importapi", methods=['GET'])
+@login_required
+def importapi():
+	if session["user"] != 2:
+		return render_template("error.html", err=_("403 Forbidden. You're not allowed toview this page.")), 403
+	#res = requests.get("https://eventor.orienteering.org/api/events", params={"fromDate": "2020-01-01", "toDate": '2020-03-31'}, headers={"ApiKey": "378a90e9017641ccbd37792431f6bc4b"})
+	""" res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getcompetitions"})
+	if res.status_code != 200:
+		return render_template("error.html", err=res.status_code)
+	data = res.json()
+	#return render_template("results.html", data=data)
+	#return res.text
+	for comp in data["competitions"]:
+		try:
+			comp["multidaystage"]
+		except KeyError:
+			try:
+				datedata = datetime.datetime.strptime(comp["date"], '%Y-%m-%d')
+			except:
+				continue
+			dt=datetime.date(datedata.year, datedata.month, datedata.day)
+			#if dt < datetime.date(2020, 3, 15) and dt > datetime.date(2018, 12, 31):
+				#db.session.add(Eventn(id=comp["id"], name=comp["name"], org=comp["organizer"], usersn_id=51, start_date=comp["date"], 
+				#end_date=comp["date"], location="Unknown", classifn_id=6, link="#", countryn_id=13))
+			db.session.commit()
+	flash("import successful!")
+	return redirect("/") 		
+	evnt = Eventn.query.filter(Eventn.id > 10000)
+	for n in evnt:
+		runners = 0
+		res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclasses", "comp": str(n.id)})
+		if res.status_code != 200:
+			return render_template("error.html", err=res.status_code)
+		datac = res.json()
+		for c in datac["classes"]:
+			res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclassresults", "comp": str(n.id), "class": c["className"]})
+			if res.status_code != 200:
+				return render_template("error.html", err=res.status_code)
+			datar = res.json()
+			runners += len(datar["results"])
+			if runners > 20:
+				break
+			time.sleep(1)
+		if runners < 21:
+			Eventn.query.filter_by(id=n.id).delete()
+		time.sleep(2)
+	db.session.commit()			
+	return redirect("/")"""
+	return redirect("/")	
+	
 @babel.localeselector
 def get_locale():
 	if not request.cookies.get('lang'):
@@ -161,7 +214,7 @@ def hu():
 	res.set_cookie('lang', 'hu')
 	return res	
 	
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def index():
 	if request.cookies.get('use') and not session.get("user"):
 		us = Usersn.query.filter_by(id=request.cookies.get("use")).first()
@@ -171,92 +224,159 @@ def index():
 		flash(_('This site uses cookies to store your login information.'), "warning")
 		session.modified = True
 		return redirect("/")
-	alap = Eventn.query.all()
-	alapl = []
-	for i in alap:
-		ev_link = "/event/" + str(i.id)
-		e_date = datetime.date(i.end_date.year, i.end_date.month, i.end_date.day)
-		alapl.append([i.id, i.name, e_date, ev_link])
-	for i in alapl:
-		ovr_avg = db.session.query(func.avg(Raten.overall_r).label('average')).filter(Raten.eventn_id == i[0])
-		if ovr_avg[0][0] is None:
-			i.append(_("0 (not rated)"))
+	try:
+		age = int(request.args.get('age'))
+	except:
+		age = request.args.get('age')
+	try:
+		classif = int(request.args.get('classif'))
+	except:
+		classif = request.args.get('classif')
+	try:
+		country = int(request.args.get('country'))
+	except:
+		country = request.args.get('country')
+	try:
+		fil = int(request.args.get('fil'))
+	except:
+		fil = request.args.get('fil')
+	rated = db.session.execute("""SELECT eventn.id, eventn.name, eventn.start_date, eventn.end_date, eventn.location, classifn.value, countryn.value, Avg(raten.overall_r) AS ovr_avg
+				FROM countryn INNER JOIN ((agen INNER JOIN usersn ON agen.id = usersn.agen_id) INNER JOIN ((classifn INNER JOIN eventn ON classifn.id = eventn.classifn_id) INNER JOIN raten ON eventn.id = raten.eventn_id) ON usersn.id = raten.usersn_id) ON countryn.id = eventn.countryn_id
+				WHERE (((agen.id)<5))
+				GROUP BY eventn.id, eventn.name, eventn.start_date, eventn.end_date, eventn.location, classifn.value, countryn.value
+				""")
+	unrated = db.session.execute("""SELECT eventn.id, eventn.name, eventn.start_date, eventn.end_date, eventn.location, classifn.value, countryn.value
+				FROM countryn INNER JOIN (classifn INNER JOIN eventn ON classifn.id = eventn.classifn_id) ON countryn.id = eventn.countryn_id
+				WHERE eventn.id NOT IN (
+					SELECT eventn.id
+					FROM eventn INNER JOIN raten ON eventn.id = raten.eventn_id )
+				""")
+	ratd = {}
+	if "user" in session:
+		command = """SELECT eventn.id, raten.overall_r
+				FROM eventn INNER JOIN (usersn INNER JOIN raten ON usersn.id = raten.usersn_id) ON eventn.id = raten.eventn_id
+				WHERE (((usersn.id)= {userid}))"""	
+		myr = db.session.execute(command.format(userid = session["user"]))
+		for i in myr:
+			ratd[str(i[0])] = i[1]
+	evlist = []
+	for row in rated:
+		temp = []
+		for i in row:
+			try:
+				date = datetime.date(i.year, i.month, i.day)
+				temp.append(date)
+			except:
+				try:
+					temp.append(round(i, 1))
+				except:
+					temp.append(i)
+		temp.append("/event/" + str(row[0]))
+		if "user" in session:	
+			if str(row[0]) in ratd:
+				temp.append(ratd[str(row[0])])
+			else:
+				temp.append(0)
 		else:
-			i.append(str(round(ovr_avg[0][0], 1)))
-	topev = alapl.copy()
-	recev = alapl.copy()
-	topev.sort(reverse=True, key=itemgetter(4))
-	recev.sort(reverse=True, key=itemgetter(2))
-	for i in recev:
+			temp.append(-1)
+		evlist.append(temp)
+	evlist.sort(reverse=True, key=itemgetter(7))
+	topev = evlist[:5].copy()
+	for row in unrated:
+		temp = []
+		for i in row:
+			try:
+				date = datetime.date(i.year, i.month, i.day)
+				temp.append(date)
+			except:
+				temp.append(i)
+		temp.append("0 (not rated)")
+		temp.append("/event/" + str(row[0]))
+		temp.append(0)
+		evlist.append(temp)
+	evlist.sort(reverse=True, key=itemgetter(3))
+	recev = evlist[:5].copy()
+	for i in evlist:
 		i[2] = i[2].strftime("%d/%m/%Y")
-
-	if request.method == "GET":
-		rows = Eventn.query.all()
-		countries = Countryn.query.all()
-		classes = Classifn.query.all()
-		ages = Agen.query.all()
-		events = []
-		for i in rows:
-			if "user" in session:
-				rated = Raten.query.filter_by(eventn_id = i.id, usersn_id = session["user"]).first()
-				if rated is None:
-					yourr = 0
-				else:
-					yourr = rated.overall_r
-			else:
-				yourr = -1
-			ev_link = "/event/" + str(i.id)
-			s_date = datetime.date(i.start_date.year, i.start_date.month, i.start_date.day).strftime("%d/%m/%Y")
-			e_date = datetime.date(i.end_date.year, i.end_date.month, i.end_date.day).strftime("%d/%m/%Y")
-			events.append([i.id, i.name, s_date, e_date, i.countryn.value, i.location, i.classifn.value, ev_link, yourr])
-		for i in events:
-			ovr_avg = db.session.query(func.avg(Raten.overall_r).label('average')).filter(Raten.eventn_id == i[0])
-			if ovr_avg[0][0] is None:
-				i.append(_("0 (not rated)"))
-			else:
-				i.append(str(round(ovr_avg[0][0], 1)))
-		filt = [0, 0, 0]
-		return render_template("index.html", events=events, countries=countries, classes=classes, ages=ages, filt=filt, topev=topev[:5], recev=recev[:5], requ='get')
-	else:
-		classif = int(request.form.get("classif"))
-		country = int(request.form.get("country"))
-		age = int(request.form.get("age"))
-		countries = Countryn.query.all()
-		classes = Classifn.query.all()
-		ages = Agen.query.all()
-		if classif == 0 and country == 0:
-			rows = Eventn.query.all()
-		elif classif == 0:
-			rows = Eventn.query.filter_by(countryn_id = country)
-		elif country == 0:
-			rows = Eventn.query.filter_by(classifn_id = classif)
+		i[3] = i[3].strftime("%d/%m/%Y")
+	filt = [0, 0, 0]
+	countries = Countryn.query.order_by(Countryn.value).all()
+	classes = Classifn.query.all()
+	ages = Agen.query.all()
+	if (classif == 0 or classif is None) and (age == 0 or age is None) and (country == 0 or country is None):
+		if fil is None or fil == 0:
+			return render_template("index.html", evlist=evlist, filt=filt, countries= countries, classes=classes, ages=ages, topev = topev, recev = recev, requ='get')
 		else:
-			rows = Eventn.query.filter_by(classifn_id = classif, countryn_id = country)
-		events = []
-		for i in rows:
-			if "user" in session:
-				rated = Raten.query.filter_by(eventn_id = i.id, usersn_id = session["user"]).first()
-				if rated is None:
-					yourr = 0
-				else:
-					yourr = rated.overall_r
+			return render_template("index.html", evlist=evlist, filt=filt, countries= countries, classes=classes, ages=ages, topev = topev, recev = recev, requ='fil')			
+	def fillsql(comman):
+		if (classif == 0 or classif is None) and (age == 0 or age is None):
+			resu = db.session.execute(comman.format(ageid= ">0", classifid= ">0", countryid="=" + str(country)))
+		elif (country == 0 or country is None) and (age == 0 or age is None):
+			resu = db.session.execute(comman.format(ageid= ">0", countryid= ">0", classifid="=" + str(classif)))
+		elif (classif == 0 or classif is None) and (country == 0 or country is None):
+			resu = db.session.execute(comman.format(countryid= ">0", classifid= ">0", ageid="=" + str(age)))
+		elif classif == 0 or classif is None:
+			resu = db.session.execute(comman.format(classifid= ">0", ageid= "=" + str(age), countryid="=" + str(country)))
+		elif country == 0 or country is None:
+			resu = db.session.execute(comman.format(countryid= ">0", ageid= "=" + str(age), classifid="=" + str(classif)))
+		elif age == 0 or age is None:
+			resu = db.session.execute(comman.format(ageid= ">0", classifid= "=" + str(classif), countryid="=" + str(country)))
+		else:
+			resu = db.session.execute(comman.format(ageid= "="+str(age), classifid= "=" + str(classif), countryid="=" + str(country)))
+		return resu
+
+	comm = """SELECT eventn.id, eventn.name, eventn.start_date, eventn.end_date, eventn.location, classifn.value, countryn.value, Avg(raten.overall_r) AS ovr_avg
+				FROM countryn INNER JOIN ((agen INNER JOIN usersn ON agen.id = usersn.agen_id) INNER JOIN ((classifn INNER JOIN eventn ON classifn.id = eventn.classifn_id) INNER JOIN raten ON eventn.id = raten.eventn_id) ON usersn.id = raten.usersn_id) ON countryn.id = eventn.countryn_id
+				WHERE ((agen.id {ageid}) AND (classifn.id {classifid}) AND (countryn.id {countryid}))
+				GROUP BY eventn.id, eventn.name, eventn.start_date, eventn.end_date, eventn.location, classifn.value, countryn.value"""
+	
+	
+	comm2 = """SELECT eventn.id, eventn.name, eventn.start_date, eventn.end_date, eventn.location, classifn.value, countryn.value
+				FROM countryn INNER JOIN (classifn INNER JOIN eventn ON classifn.id = eventn.classifn_id) ON countryn.id = eventn.countryn_id
+				WHERE eventn.id NOT IN (
+					SELECT eventn.id
+					FROM (agen INNER JOIN usersn ON agen.id = usersn.agen_id) INNER JOIN (eventn INNER JOIN raten ON eventn.id = raten.eventn_id) ON usersn.id = raten.usersn_id
+					WHERE (eventn.classifn_id {classifid}) AND (eventn.countryn_id {countryid}) AND (usersn.agen_id {ageid}))
+					 AND (classifn.id {classifid}) AND (countryn.id {countryid})"""
+	
+	rated2 = fillsql(comm)
+	unrated2 = fillsql(comm2)
+
+	evlist = []
+	for row in rated2:
+		temp = []
+		for i in row:
+			try:
+				date = datetime.date(i.year, i.month, i.day)
+				temp.append(date.strftime("%d/%m/%Y"))
+			except:
+				try:
+					temp.append(round(i, 1))
+				except:
+					temp.append(i)
+		temp.append("/event/" + str(row[0]))
+		if "user" in session:	
+			if str(row[0]) in ratd:
+				temp.append(ratd[str(row[0])])
 			else:
-				yourr = -1
-			ev_link = "/event/" + str(i.id)
-			s_date = datetime.date(i.start_date.year, i.start_date.month, i.start_date.day).strftime("%d/%m/%Y")
-			e_date = datetime.date(i.end_date.year, i.end_date.month, i.end_date.day).strftime("%d/%m/%Y")
-			events.append([i.id, i.name, s_date, e_date, i.countryn.value, i.location, i.classifn.value, ev_link, yourr])
-		for i in events:
-			if age == 0:
-				ovr_avg = db.session.query(func.avg(Raten.overall_r)).filter(Raten.eventn_id == i[0])
-			else:
-				ovr_avg = db.session.query(func.avg(Raten.overall_r)).join(Usersn).filter(Raten.eventn_id == i[0], Usersn.agen_id == age)
-			if ovr_avg[0][0] is None:
-				i.append(_("0 (not rated)"))
-			else:
-				i.append(str(round(ovr_avg[0][0], 1)))
-		filt = [classif, country, age]
-		return render_template("index.html", events=events, countries=countries, classes=classes, ages=ages, filt=filt, topev=topev[:5], recev=recev[:5], requ='post')
+				temp.append(0)
+		else:
+			temp.append(-1)
+		evlist.append(temp)
+	for row in unrated2:
+		temp = []
+		for i in row:
+			try:
+				date = datetime.date(i.year, i.month, i.day)
+				temp.append(date.strftime("%d/%m/%Y"))
+			except:
+				temp.append(i)
+		temp.append("0 (not rated)")
+		temp.append("/event/" + str(row[0]))
+		temp.append(0)
+		evlist.append(temp)
+	filt = [classif, country, age]
+	return render_template("index.html", evlist=evlist, filt=filt, countries= countries, classes=classes, ages=ages, topev = topev, recev = recev, requ='fil')			
 	
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -330,9 +450,8 @@ def register():
 			return res
 		else:
 			resp = make_response(redirect("/confirmed"))
-			resp.set_cookie('use', usid, max_age=60*60*24*30)
+			resp.set_cookie('use', usid, max_age=60*60*24*365*2)
 			return resp
-
 
 @app.route('/confirm/<token>', methods=['GET'])
 def confirm_email(token):
@@ -491,7 +610,7 @@ def login():
 			return res
 		else:
 			resp = make_response(redirect('/'))
-			resp.set_cookie('use', usid, max_age=60*60*24*30)
+			resp.set_cookie('use', usid, max_age=60*60*24*365*2)
 			return resp		
 
 @app.route("/logout")
@@ -628,7 +747,33 @@ def event(eventid):
 		myrate.append(usrate.terrain_r)
 		myrate.append(usrate.map_course_r)
 		myrate.append(usrate.org_r)
-	return render_template("event.html", evlist=evlist, myrate = myrate, rated = rated, ratings=ratings, comm=comm, mycomm=mycomm, comments=comments)
+	classlist = []	
+	if int(eventid) > 13000 or int(eventid) == 3:
+		if int(eventid) == 3:
+			res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclasses", "comp": "16654"})
+		else:	
+			res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclasses", "comp": eventid})
+		if res.status_code != 200:
+			return render_template("error.html", err=res.status_code)
+		data = res.json()
+		for i in data["classes"]:
+			classlist.append(i["className"])
+	return render_template("event.html", evlist=evlist, myrate = myrate, rated = rated, ratings=ratings, comm=comm, mycomm=mycomm, comments=comments, classlist=classlist)
+
+@app.route("/results", methods=["POST"])
+@login_required
+def results():
+	event = Eventn.query.get(request.form.get("eventid"))
+	if event is None:
+		abort(404)
+	if event.id == 3:
+		res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclassresults", "unformattedTimes": "false", "comp": "16654", "class": request.form.get("class")})
+	else:	
+		res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclassresults", "unformattedTimes": "false", "comp": request.form.get("eventid"), "class": request.form.get("class")})
+	if res.status_code != 200:
+		return render_template("error.html", err=res.status_code)
+	data = res.json()
+	return render_template("results.html", data=data, classs=request.form.get("class"), event=event.name)
 
 @app.route("/rate", methods=["POST"])
 @login_required
@@ -728,7 +873,7 @@ def editevent(eventid):
 	eve = Eventn.query.filter_by(id = eventid).first()
 	if eve is None:
 		abort(404)
-	if session["user"] != 2 and session["user"] != eve.usersn_id:
+	if session["user"] != 2 and session["user"] != eve.usersn_id and eve.id < 10000:
 		return render_template("error.html", err=_("403, you don't have permission to view this page."))
 	return render_template("editevent.html", eve=eve)
 
@@ -776,13 +921,13 @@ def editnew():
 		db.session.add(Countryn(value=request.form.get("country")))
 		db.session.commit()
 		country = Countryn.query.filter_by(value=request.form.get("country")).first()
-	eevent = Eventn.query.filter_by(usersn_id=session['user'], id = request.form.get("eventid")).first()
+	eevent = Eventn.query.filter_by(id = request.form.get("eventid")).first()
 	eevent.name = request.form.get("name")
 	eevent.start_date = request.form.get("start_date")
 	eevent.end_date = request.form.get("end_date")
-	eevent.country =request.form.get("country")
+	eevent.countryn_id =country.id
 	eevent.location = request.form.get("location")
-	eevent.classif_id = request.form.get("classif")
+	eevent.classifn_id = request.form.get("classif")
 	eevent.link = request.form.get("link")
 	db.session.commit()
 	return redirect(url_for('event', eventid = request.form.get("eventid")))
@@ -793,6 +938,8 @@ def deleteev():
 	if conf_required() == 0:
 		return redirect("/confirmed")
 	evnt = Eventn.query.filter_by(id=request.form.get("eventid")).first()
+	if session["user"] != 2 and evnt.usersn_id != session["user"]:
+		return render_template("error.html", err=_("You're not allowed to delete this event.")), 403
 	c = Eventn.query.filter_by(countryn_id = evnt.countryn_id).all()
 	Raten.query.filter_by(eventn_id = request.form.get("eventid")).delete()
 	comms = Comment.query.filter_by(eventn_id = evnt.id).all()

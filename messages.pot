@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-28 12:18+0100\n"
+"POT-Creation-Date: 2020-04-08 13:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,192 +17,196 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
 
-#: app.py:171 app.py:272 app.py:465 app.py:485
+#: app.py:152
+msgid "403 Forbidden. You're not allowed toview this page."
+msgstr ""
+
+#: app.py:227 app.py:401 app.py:593 app.py:613
 msgid "This site uses cookies to store your login information."
 msgstr ""
 
-#: app.py:183 app.py:215 app.py:255
-msgid "0 (not rated)"
-msgstr ""
-
-#: app.py:277 app.py:472 app.py:829
+#: app.py:406 app.py:600 app.py:985
 msgid "must provide username"
 msgstr ""
 
-#: app.py:279 app.py:393
+#: app.py:408 app.py:521
 msgid "must provide email"
 msgstr ""
 
-#: app.py:281 app.py:436 app.py:475 app.py:834
+#: app.py:410 app.py:564 app.py:603 app.py:990
 msgid "must provide password"
 msgstr ""
 
-#: app.py:283 app.py:848
+#: app.py:412 app.py:1004
 msgid "must provide age group"
 msgstr ""
 
-#: app.py:285 app.py:438 app.py:836
+#: app.py:414 app.py:566 app.py:992
 msgid "must confirm password"
 msgstr ""
 
-#: app.py:287 app.py:440 app.py:838
+#: app.py:416 app.py:568 app.py:994
 msgid "passwords don't match"
 msgstr ""
 
-#: app.py:289 app.py:306 app.py:442 app.py:448 app.py:840 app.py:846
+#: app.py:418 app.py:435 app.py:570 app.py:576 app.py:996 app.py:1002
 msgid "passwords must contain 6-30 characters and at least one number"
 msgstr ""
 
-#: app.py:300 app.py:403
+#: app.py:429 app.py:531
 msgid "invalid email adress (max length: 80)"
 msgstr ""
 
-#: app.py:310 app.py:853
+#: app.py:439 app.py:1009
 msgid "username already taken"
 msgstr ""
 
-#: app.py:312
+#: app.py:441
 msgid "email adress already in use"
 msgstr ""
 
-#: app.py:316
+#: app.py:445
 msgid "Orienteering.rate email confirmation"
 msgstr ""
 
-#: app.py:381
+#: app.py:509
 msgid "Orienteering.rate email confirmation (again)"
 msgstr ""
 
-#: app.py:383
+#: app.py:511
 msgid "Email resent!"
 msgstr ""
 
-#: app.py:406
+#: app.py:534
 msgid "unused email adress"
 msgstr ""
 
-#: app.py:410
+#: app.py:538
 msgid "Orienteering.rate password reset"
 msgstr ""
 
-#: app.py:412
+#: app.py:540
 msgid "The email has been sent."
 msgstr ""
 
-#: app.py:419
+#: app.py:547
 msgid "Invalid reset link"
 msgstr ""
 
-#: app.py:452
+#: app.py:580
 msgid "Password successfully reset!"
 msgstr ""
 
-#: app.py:480
+#: app.py:608
 msgid "invalid username and/or password"
 msgstr ""
 
-#: app.py:504
+#: app.py:632
 msgid "Logged out"
 msgstr ""
 
-#: app.py:519
+#: app.py:647
 msgid "must provide event name"
 msgstr ""
 
-#: app.py:521 app.py:743
+#: app.py:649 app.py:897
 msgid "must provide organizer"
 msgstr ""
 
-#: app.py:523
+#: app.py:651
 msgid "must provide start date"
 msgstr ""
 
-#: app.py:525
+#: app.py:653
 msgid "must provide end date"
 msgstr ""
 
-#: app.py:527 app.py:749
+#: app.py:655 app.py:903
 msgid "invalid date"
 msgstr ""
 
-#: app.py:529
+#: app.py:657
 msgid "must provide location"
 msgstr ""
 
-#: app.py:531
+#: app.py:659
 msgid "must provide country"
 msgstr ""
 
-#: app.py:533
+#: app.py:661
 msgid "must choose classification"
 msgstr ""
 
-#: app.py:535
+#: app.py:663
 msgid "must provide external link"
 msgstr ""
 
-#: app.py:537 app.py:759
+#: app.py:665 app.py:913
 msgid "invalid event name (max length: 255)"
 msgstr ""
 
-#: app.py:539 app.py:761
+#: app.py:667 app.py:915
 msgid "invalid organizer (max length: 255)"
 msgstr ""
 
-#: app.py:541 app.py:763
+#: app.py:669 app.py:917
 msgid "invalid event location (max length: 255)"
 msgstr ""
 
-#: app.py:543 app.py:765
+#: app.py:671 app.py:919
 msgid "invalid event link (max length: 255)"
 msgstr ""
 
-#: app.py:547 app.py:551 app.py:769 app.py:773
+#: app.py:675 app.py:679 app.py:923 app.py:927
 msgid "invalid date format (YYYY-MM-DD)"
 msgstr ""
 
-#: app.py:642 app.py:644 app.py:646 app.py:648 app.py:665 app.py:667 app.py:669
-#: app.py:671
+#: app.py:796 app.py:798 app.py:800 app.py:802 app.py:819 app.py:821 app.py:823
+#: app.py:825
 msgid "must rate the event"
 msgstr ""
 
-#: app.py:651 app.py:681
+#: app.py:805 app.py:835
 msgid "Maximum length of a comment is 1000 characters"
 msgstr ""
 
-#: app.py:732 app.py:982 app.py:990
+#: app.py:886 app.py:1138 app.py:1146
 msgid "403, you don't have permission to view this page."
 msgstr ""
 
-#: app.py:741
+#: app.py:895
 msgid "Event must have a name"
 msgstr ""
 
-#: app.py:745
+#: app.py:899
 msgid "Event must have a start date"
 msgstr ""
 
-#: app.py:747
+#: app.py:901
 msgid "Event must have an end date"
 msgstr ""
 
-#: app.py:751
+#: app.py:905
 msgid "Event must have a location"
 msgstr ""
 
-#: app.py:753
+#: app.py:907
 msgid "Event must have a country"
 msgstr ""
 
-#: app.py:755
+#: app.py:909
 msgid "Event must have a classification"
 msgstr ""
 
-#: app.py:757
+#: app.py:911
 msgid "Event must have an external link"
 msgstr ""
 
-#: app.py:856
+#: app.py:951
+msgid "You're not allowed to delete this event."
+msgstr ""
+
+#: app.py:1012
 msgid "incorrect password"
 msgstr ""
 
@@ -294,7 +298,7 @@ msgstr ""
 msgid "Name of the event"
 msgstr ""
 
-#: templates/editevent.html:14 templates/new.html:15
+#: templates/editevent.html:14 templates/new.html:15 templates/results.html:20
 msgid "Name"
 msgstr ""
 
@@ -356,7 +360,7 @@ msgid "Please provide a valid country."
 msgstr ""
 
 #: templates/editevent.html:308 templates/event.html:23
-#: templates/events.html:18 templates/index.html:132 templates/new.html:309
+#: templates/events.html:18 templates/index.html:126 templates/new.html:309
 msgid "Location"
 msgstr ""
 
@@ -365,7 +369,7 @@ msgid "Please provide a valid location. (3-255 characters)"
 msgstr ""
 
 #: templates/editevent.html:319 templates/event.html:26
-#: templates/events.html:19 templates/index.html:134 templates/new.html:320
+#: templates/events.html:19 templates/index.html:128 templates/new.html:320
 #: templates/ratings.html:15
 msgid "Classification"
 msgstr ""
@@ -410,7 +414,7 @@ msgstr ""
 msgid "Please provide a valid link. (3-255 characters)"
 msgstr ""
 
-#: templates/editevent.html:347 templates/event.html:404
+#: templates/editevent.html:347 templates/event.html:450
 #: templates/profile.html:91
 msgid "Submit changes"
 msgstr ""
@@ -420,7 +424,7 @@ msgstr ""
 msgid "Delete event"
 msgstr ""
 
-#: templates/editevent.html:359 templates/event.html:417
+#: templates/editevent.html:359 templates/event.html:463
 #: templates/profile.html:100
 msgid "Close"
 msgstr ""
@@ -429,7 +433,7 @@ msgstr ""
 msgid "Are you sure you want to delete this event?"
 msgstr ""
 
-#: templates/editevent.html:367 templates/event.html:425
+#: templates/editevent.html:367 templates/event.html:471
 #: templates/profile.html:108
 msgid "Cancel"
 msgstr ""
@@ -438,162 +442,194 @@ msgstr ""
 msgid "Back to the previous page"
 msgstr ""
 
-#: templates/event.html:32 templates/layout.html:631
+#: templates/event.html:30
+msgid "No link available"
+msgstr ""
+
+#: templates/event.html:35
+msgid "This event has been imported from Liveresults API and needs more info"
+msgstr ""
+
+#: templates/event.html:35
+msgid "Edit the event to add more data!"
+msgstr ""
+
+#: templates/event.html:37 templates/layout.html:641
 msgid "Created by"
 msgstr ""
 
-#: templates/event.html:36
+#: templates/event.html:43
+msgid "View the results of each class"
+msgstr ""
+
+#: templates/event.html:54
+msgid "Select class"
+msgstr ""
+
+#: templates/event.html:60
+msgid "Please select a class."
+msgstr ""
+
+#: templates/event.html:64
+msgid "View results"
+msgstr ""
+
+#: templates/event.html:72
+msgid "Results are not available for this event."
+msgstr ""
+
+#: templates/event.html:82
 msgid "Filter the ratings"
 msgstr ""
 
-#: templates/event.html:42 templates/index.html:86 templates/index.html:95
+#: templates/event.html:89 templates/index.html:86 templates/index.html:95
 #: templates/index.html:104
 msgid "All"
 msgstr ""
 
-#: templates/event.html:43 templates/profile.html:71 templates/register.html:68
+#: templates/event.html:90 templates/profile.html:71 templates/register.html:68
 msgid "Youth"
 msgstr ""
 
-#: templates/event.html:44 templates/profile.html:72 templates/register.html:69
+#: templates/event.html:91 templates/profile.html:72 templates/register.html:69
 msgid "Elite"
 msgstr ""
 
-#: templates/event.html:45 templates/profile.html:73 templates/register.html:70
+#: templates/event.html:92 templates/profile.html:73 templates/register.html:70
 msgid "Master"
 msgstr ""
 
-#: templates/event.html:49 templates/index.html:111
+#: templates/event.html:96 templates/index.html:111
 msgid "Apply filter"
 msgstr ""
 
-#: templates/event.html:58
+#: templates/event.html:104
 msgid "This event hasn't been rated yet. You can be the first!"
 msgstr ""
 
-#: templates/event.html:67 templates/event.html:112 templates/event.html:157
-#: templates/event.html:202 templates/event.html:462 templates/ratings.html:16
+#: templates/event.html:113 templates/event.html:158 templates/event.html:203
+#: templates/event.html:248 templates/event.html:508 templates/ratings.html:16
 msgid "Overall rating"
 msgstr ""
 
-#: templates/event.html:76 templates/event.html:121 templates/event.html:166
-#: templates/event.html:211 templates/event.html:274 templates/event.html:351
-#: templates/event.html:462 templates/ratings.html:17
+#: templates/event.html:122 templates/event.html:167 templates/event.html:212
+#: templates/event.html:257 templates/event.html:320 templates/event.html:397
+#: templates/event.html:508 templates/ratings.html:17
 msgid "Terrain rating"
 msgstr ""
 
-#: templates/event.html:85 templates/event.html:130 templates/event.html:175
-#: templates/event.html:220 templates/event.html:288 templates/event.html:365
-#: templates/event.html:462 templates/ratings.html:18
+#: templates/event.html:131 templates/event.html:176 templates/event.html:221
+#: templates/event.html:266 templates/event.html:334 templates/event.html:411
+#: templates/event.html:508 templates/ratings.html:18
 msgid "Map and course rating"
 msgstr ""
 
-#: templates/event.html:94 templates/event.html:139 templates/event.html:184
-#: templates/event.html:229 templates/event.html:302 templates/event.html:379
-#: templates/event.html:462 templates/ratings.html:19
+#: templates/event.html:140 templates/event.html:185 templates/event.html:230
+#: templates/event.html:275 templates/event.html:348 templates/event.html:425
+#: templates/event.html:508 templates/ratings.html:19
 msgid "Organization rating"
 msgstr ""
 
-#: templates/event.html:97 templates/event.html:142 templates/event.html:187
-#: templates/event.html:232
+#: templates/event.html:143 templates/event.html:188 templates/event.html:233
+#: templates/event.html:278
 #, python-format
 msgid "Based on %(rating)s rating(s)."
 msgstr ""
 
-#: templates/event.html:103 templates/event.html:148 templates/event.html:193
+#: templates/event.html:149 templates/event.html:194 templates/event.html:239
 msgid "This event hasn't been rated by this age group yet."
 msgstr ""
 
-#: templates/event.html:242 templates/index.html:150
+#: templates/event.html:288 templates/index.html:144
 msgid "Rate it!"
 msgstr ""
 
-#: templates/event.html:244
+#: templates/event.html:290
 msgid "You haven't rated this event yet. What are you waiting for?"
 msgstr ""
 
-#: templates/event.html:257
+#: templates/event.html:303
 msgid "Overall Rating "
 msgstr ""
 
-#: templates/event.html:257 templates/event.html:260 templates/event.html:334
-#: templates/event.html:337
+#: templates/event.html:303 templates/event.html:306 templates/event.html:380
+#: templates/event.html:383
 msgid ""
 "The overall experience of the event. This rating doesn&#39;t have to be "
 "the average of the other three, some aspects might be more important to "
 "you than to others."
 msgstr ""
 
-#: templates/event.html:313 templates/event.html:391 templates/event.html:396
+#: templates/event.html:359 templates/event.html:437 templates/event.html:442
 msgid "Add a comment (optional)"
 msgstr ""
 
-#: templates/event.html:314 templates/event.html:392 templates/event.html:397
+#: templates/event.html:360 templates/event.html:438 templates/event.html:443
 msgid "Add a comment..."
 msgstr ""
 
-#: templates/event.html:317 templates/new.html:344
+#: templates/event.html:363 templates/new.html:344
 msgid "Submit"
 msgstr ""
 
-#: templates/event.html:321
+#: templates/event.html:367
 msgid ""
 "You have already rated this event, but you can edit it whenever you want "
 "to!"
 msgstr ""
 
-#: templates/event.html:334
+#: templates/event.html:380
 msgid "Overall Rating"
 msgstr ""
 
-#: templates/event.html:399
+#: templates/event.html:445
 msgid "Comment mustn't be longer than 1000 characters."
 msgstr ""
 
-#: templates/event.html:411 templates/event.html:416 templates/event.html:426
+#: templates/event.html:457 templates/event.html:462 templates/event.html:472
 msgid "Remove rating"
 msgstr ""
 
-#: templates/event.html:422
+#: templates/event.html:468
 msgid "Are you sure you want to remove this rating?"
 msgstr ""
 
-#: templates/event.html:438
+#: templates/event.html:484
 msgid "Comments"
 msgstr ""
 
-#: templates/event.html:440
+#: templates/event.html:486
 msgid "There are no comments for this event."
 msgstr ""
 
-#: templates/event.html:451
+#: templates/event.html:497
 msgid "Upvote"
 msgstr ""
 
-#: templates/event.html:452
+#: templates/event.html:498
 msgid "Score"
 msgstr ""
 
-#: templates/event.html:453
+#: templates/event.html:499
 msgid "Downvote"
 msgstr ""
 
-#: templates/event.html:465
+#: templates/event.html:511
 #, python-format
 msgid "Posted at %(time)s UTC"
 msgstr ""
 
-#: templates/event.html:467
+#: templates/event.html:513
 #, python-format
 msgid "Last edited at %(time)s UTC"
 msgstr ""
 
-#: templates/events.html:4 templates/events.html:9 templates/layout.html:594
+#: templates/events.html:4 templates/events.html:9 templates/layout.html:604
 msgid "My events"
 msgstr ""
 
 #: templates/events.html:14 templates/index.html:37 templates/index.html:60
-#: templates/index.html:130 templates/ratings.html:14
+#: templates/index.html:124 templates/ratings.html:14
 msgid "Event"
 msgstr ""
 
@@ -644,7 +680,7 @@ msgstr ""
 msgid "Top rated events"
 msgstr ""
 
-#: templates/index.html:38 templates/index.html:133
+#: templates/index.html:38 templates/index.html:127
 msgid "Average rating"
 msgstr ""
 
@@ -652,7 +688,7 @@ msgstr ""
 msgid "Most recent events"
 msgstr ""
 
-#: templates/index.html:61 templates/index.html:131
+#: templates/index.html:61 templates/index.html:125
 msgid "Date"
 msgstr ""
 
@@ -672,57 +708,57 @@ msgstr ""
 msgid "Age group of raters"
 msgstr ""
 
-#: templates/index.html:123
+#: templates/index.html:117
 msgid "Clear filter"
 msgstr ""
 
-#: templates/index.html:135
+#: templates/index.html:129
 msgid "My rating"
 msgstr ""
 
-#: templates/index.html:148
+#: templates/index.html:142
 msgid "Log in to rate it!"
 msgstr ""
 
-#: templates/layout.html:485
+#: templates/layout.html:496
 msgid "Are you sure you want to delete this comment?"
 msgstr ""
 
-#: templates/layout.html:592
+#: templates/layout.html:602
 msgid "Add new event"
 msgstr ""
 
-#: templates/layout.html:593 templates/ratings.html:4 templates/ratings.html:9
+#: templates/layout.html:603 templates/ratings.html:4 templates/ratings.html:9
 msgid "My ratings"
 msgstr ""
 
-#: templates/layout.html:600
+#: templates/layout.html:610
 #, python-format
 msgid "Logged in as %(username)s"
 msgstr ""
 
-#: templates/layout.html:601
+#: templates/layout.html:611
 msgid "Log Out"
 msgstr ""
 
-#: templates/layout.html:607 templates/register.html:4
+#: templates/layout.html:617 templates/register.html:4
 #: templates/register.html:13 templates/register.html:83
 msgid "Register"
 msgstr ""
 
-#: templates/layout.html:608 templates/login.html:4 templates/login.html:39
+#: templates/layout.html:618 templates/login.html:4 templates/login.html:39
 msgid "Log In"
 msgstr ""
 
-#: templates/layout.html:619
+#: templates/layout.html:629
 msgid "More info "
 msgstr ""
 
-#: templates/layout.html:631
+#: templates/layout.html:641
 msgid "Sámuel Fekete"
 msgstr ""
 
-#: templates/layout.html:631 templates/privacy.html:4
+#: templates/layout.html:641 templates/privacy.html:4
 msgid "Privacy policy"
 msgstr ""
 
@@ -776,7 +812,7 @@ msgid ""
 "When you log in, we will set up several session-cookies to save your "
 "login information. If you log out of your account, the login cookies will"
 " be removed. If you checked 'remember me' before logging in, you'll be "
-"automatically logged in for 30 days, or until you log out. Your language "
+"automatically logged in for 2 years, or until you log out. Your language "
 "preferences are also stored in cookies. These are deleted when you close "
 "the browser."
 msgstr ""
@@ -936,5 +972,33 @@ msgstr ""
 #: templates/resetform.html:4 templates/resetform.html:13
 #: templates/resetform.html:40
 msgid "Reset password"
+msgstr ""
+
+#: templates/results.html:9
+msgid "Results"
+msgstr ""
+
+#: templates/results.html:11
+msgid "There are no results for this class"
+msgstr ""
+
+#: templates/results.html:12 templates/results.html:14
+msgid "Back to the event page"
+msgstr ""
+
+#: templates/results.html:19
+msgid "Place"
+msgstr ""
+
+#: templates/results.html:21
+msgid "Club"
+msgstr ""
+
+#: templates/results.html:22
+msgid "Result"
+msgstr ""
+
+#: templates/results.html:23
+msgid "Difference"
 msgstr ""
 
