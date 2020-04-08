@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Orienteering.rate
+{% endblock %}
+{% block js %}
+	{%if requ == 'fil'%}
+	function myFunction(x) {
+		if (x.matches) { 
+			location.href = "#filt2";
+		} else {
+			location.href = "#filt1";
+		}
+	  }
+	var x = window.matchMedia("(max-width: 700px)")
+	myFunction(x)	
+	
+	{%endif%}
+{% endblock %}
+{% block body %} 
+	<div class="panel panel-default felso">
+		<div class="panel-body">
+			<h1>Orienteering.rate</h1>
+			<p> {{ _("Welcome to Orienteering.rate! The goal of this website is to give valuable feedback to the organisers of orienteering events. 
+			Once you've created an account and logged in, you'll be able to rate events that others have created, and even add a comment to explain your rating. 
+			What's more, you can also create events that other people can rate. Please only rate events if you've actually participated in them and keep it civil in the comments.") }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<h2>{{_("Top rated events")}}</h2>
+					<table class="table table-hover cent">
+						<thead>
+						  <tr>
+							<th scope="col">{{_("Event")}}</th>
+							<th scope="col">{{_("Average rating")}}</th>
+						  </tr>
+						</thead>
+						<tbody>
+						  {% for i in topev %}
+						   <tr>
+							<td class="fi"><a class="bold" href={{i[8]}}>{{i[1]}}</a></td>
+							<td>{{i[7]}}</td>
+						  </tr>
+						  {% endfor %}
+						</tbody>
+					  </table>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-body">		
+					<h2>{{_("Most recent events")}}</h2>
+					<table class="table table-hover cent">
+						<thead>
+						  <tr>
+							<th scope="col">{{_("Event")}}</th>
+							<th scope="col">{{_("Date")}}</th>
+						  </tr>
+						</thead>
+						<tbody>
+						  {% for i in recev %}
+						   <tr>
+							<td class="fi"><a class="bold" href={{i[8]}}>{{i[1]}}</a></td>
+							<td>{{i[2]}}</td>
+						  </tr>
+						  {% endfor %}
+						</tbody>
+					  </table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default" id="filt1">
+		<div class="panel-body">
+			<h2>{{ _("All events") }}</h2>	
+			<p class="bold noma">{{ _("Filter the events and ratings!") }}</h2>
+			<form action="/" method="get">
+				<div class="row">
+					<div class="col-sm-12 col-lg-4">
+						<label>{{ _("Event type") }}</label>
+						<select name="classif" class="form-control">
+							<option value="0" {% if filt[0] == 0 %} selected {% endif%}>{{ _("All") }}</option>
+							{% for i in classes %}
+							<option value="{{i.id}}" {% if filt[0] == i.id %} selected {% endif%} >{{i.value}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="col-sm-12 col-lg-4">
+					<label>{{ _("Country") }}</label>
+						<select name="country" class="form-control">
+							<option value="0" {% if filt[1] == 0 %} selected {% endif%}>{{ _("All") }}</option>
+							{% for i in countries %}
+								<option value="{{i.id}}" {% if filt[1] == i.id %} selected {% endif%} >{{i.value}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="col-sm-12 col-lg-4">
+					<label>{{ _("Age group of raters") }}</label>
+						<select name="age" class="form-control">
+							<option value="0" {% if filt[2] == 0 %} selected {% endif%}>{{ _("All") }}</option>
+							{% for i in ages %}
+							<option value="{{i.id}}" {% if filt[2] == i.id %} selected {% endif%} >{{i.value}}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<button class="btn btn-success bal" type="submit">{{ _("Apply filter") }}</button>
+			</form>
+			<form method="GET" action="/">
+				<select name="fil" class="hide">
+					<option value="1"></option>
+				</select>
+				<button class="btn btn-danger jobb" type="submit">{{ _("Clear filter") }}</button>
+			</form>
+			<div class="clearfix"></div>
+			<div style='overflow-x:auto' id="filt2">	
+				<table id="example" class="display cent" style="width:100%" align="center">
+					<thead>
+						<tr>
+							<th>{{ _("Event") }}</th>
+							<th>{{ _("Date") }}</th>
+							<th>{{ _("Location") }}</th>
+							<th>{{ _("Average rating") }}</th>
+							<th>{{ _("Classification") }}</th>
+							<th>{{ _("My rating") }}</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for i in evlist %}
+						<tr>
+							<td class="fi"><a class="bold" href={{i[8]}}>{{ i[1] }}</a></td>
+							<td>{{ i[2] }}-<br>{{ i[3] }}</td>
+							<td>{{ i[4] }}, {{ i[6] }}</td>
+							<td>{{ i[7] }}</td>
+							<td>{{ i[5] }}</td>
+							<td><a href={{i[8]}}>
+								{% if i[9] == -1 %}
+									<button type="button" class="btn-sm btn-success kicsii">{{ _("Log in to rate it!") }}</button>
+								{% elif i[9] == 0 %}
+									<button type="button" class="btn-sm btn-success">{{ _("Rate it!") }}</button>
+								{% else %}
+								<button type="button" class="btn-sm btn-link">{{ i[9] }}</button>
+								{% endif %}
+							</a>
+							</td>
+						</tr>	
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

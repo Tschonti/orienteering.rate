@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Orienteering.rate | {{ _("User profile") }}
+{% endblock %}
+{% block checkbox%}
+document.getElementById('uncheck').onchange = function() {
+						document.getElementById('valUname').disabled = this.checked;
+					};
+					document.getElementById('pwcheck').onchange = function() {
+						document.getElementById('valPw').disabled = this.checked;
+						document.getElementById('valConf').disabled = this.checked;
+					};
+{%endblock%}					
+{% block body %}
+		<div class="panel panel-default felso">
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-0 col-lg-4">
+					</div>
+					<div class="col-sm-12 col-lg-4">
+						<h1> {{ _("User profile") }} </h1>
+						<form action="/profile" id="editp" method="post" novalidate>
+							<div class="form-group">
+								<input class="form-check-input" type="checkbox" value="1" id="uncheck" name="uncheck">
+								  <label class="form-check-label kicsil" for="uncheck">
+									{{ _("I don't want to change my username.") }}
+								  </label><br>
+								<label for="valUname">{{ _("Username") }}</label><input autocomplete="off" value="{{us.username}}" class="form-control" id="valUname" name="username" placeholder='{{ _("Username") }}' type="text" oninput="changef(this)" required>
+								<div class="valid-feedback">
+									{{ _("Looks good!") }}
+								</div>
+								<div class="invalid-feedback">
+									{{ _("Invalid or taken username (3-30 characters)") }}
+								</div>
+							</div>
+							<p>{{ _("Confirmed account") }}: {% if us.confirmed == 0 %} {{ _("No") }} {% else %} {{ _("Yes ") }}{% endif%} </p>
+							<div class="form-group">
+								<input class="form-check-input" type="checkbox" value="1" id="pwcheck" name="pwcheck">
+								  <label class="form-check-label kicsil" for="pwcheck">
+									{{ _("I don't want to change my password.") }}
+								  </label><br>
+								<label for="valPw">{{ _("New password") }}</label>
+								<div class="row">	
+									<div class="col-10 nopadl">	
+										<input class="form-control" name="npassword" id="valPw" placeholder='{{ _("New password") }}' type="password" oninput="changef(this)" required>
+										<div class="valid-feedback">
+											{{ _("Looks good!") }}
+										</div>
+										<div class="invalid-feedback">
+											{{ _("Please provide a password. (6-30 characters, must contain at least one number)") }}
+										</div>
+									</div>
+									<div class="col-2 nopadr">	
+										<i class="fas fa-question-circle zold" data-toggle="tooltip" data-placement="right" title='{{ _("6-30 characters, must contain at least one number") }}'></i>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="valConf">{{ _("Confirm new password") }}</label><input class="form-control"  id="valConf" name="confirmation" placeholder='{{ _("Confirm password") }}' type="password" oninput="changef(this)" required>
+								<div class="valid-feedback">
+									{{ _("Looks good!") }}
+								</div>
+								<div class="invalid-feedback">
+									{{ _("Passwords don't match.") }}
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="valAge">{{ _("Age group") }}</label><select name="age" id="valAge" class="form-control" onchange="changef(this)" required>
+									<option value="0" disabled >{{ _("Choose your age group") }}</option>
+									<option value="1" {% if us.agen_id == 1 %} selected {% endif%}>{{ _("Youth") }} (-18)</option>
+									<option value="2"{% if us.agen_id == 2 %} selected {% endif%}>{{ _("Elite") }} (19-34)</option>
+									<option value="3"{% if us.agen_id == 3 %} selected {% endif%}>{{ _("Master") }} (35-)</option>
+								</select>
+								<div class="valid-feedback">
+									{{ _("Looks good!") }}
+								</div>
+								<div class="invalid-feedback">
+									{{ _("Please select an age group.") }}
+								</div>
+							</div>
+							<div class="form-group">	
+								<label for="valcPw">{{ _("Current password") }}</label><input class="form-control" name="cpassword" id="valcPw" placeholder='{{ _("Current password") }}' type="password" oninput="changef(this)" required>
+								<div class="valid-feedback">
+									{{ _("Looks good!") }}
+								</div>
+								<div class="invalid-feedback">
+									{{ _("Please provide your current password.") }}
+								</div>
+							</div>
+							<button id="butt" name="butto" class="btn btn-success btn-block" onclick="editprofile()" type="submit">{{ _("Submit changes") }}</button>
+						</form>
+						<form id="myform" action="/deleteacc" method="post">
+							<button class="btn btn-danger btn-block" type="button" data-toggle="modal" data-target="#delmodal">{{ _("Delete account") }}</button>
+							<div class="modal fade" id="delmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+								  <div class="modal-content">
+									<div class="modal-header">
+									  <h5 class="modal-title" id="exampleModalLongTitle">{{ _("Delete account") }}</h5>
+									  <button type="button" class="close" data-dismiss="modal" aria-label='{{_("Close") }}'>
+										<span aria-hidden="true">&times;</span>
+									  </button>
+									</div>
+									<div class="modal-body">
+									  {{ _("Are you sure you want to delete your account? This will also delete all your events and ratings.")}}
+									</div>
+									<div class="modal-footer">
+									  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Cancel") }}</button>
+									  <button class="btn btn-danger" type="submit">{{ _("Delete account") }}</button>
+									</div>
+								  </div>
+								</div>
+							</div>	
+						</form>
+					</div>
+					<div class="col-sm-0 col-lg-4">
+					</div>
+				</div>
+			</div>
+		</div>	
+{% endblock %}

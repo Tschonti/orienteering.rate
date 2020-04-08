@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Orienteering.rate | All events
+{% endblock %}
+{% block body %} 
+		<div class="panel panel-default felso">
+			<div class="panel-body">
+				<h1>All events</h1>
+				<div style='overflow-x:auto'>
+					<table id="example3" class="display cent" style="width:100%" align="center">
+						<thead>
+							<tr>
+                                <th>User ID</th>
+                                <th>Username</th>
+                                <th>{{ _("Name") }}</th>
+								<th>{{ _("Start date") }}</th>
+								<th>{{ _("End date") }}</th>
+								<th>{{ _("Classification") }}</th>					
+								<th>{{ _("Edit") }}</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for i in e %}
+							<tr>
+                                <td>{{i.usersn_id}}</td>
+                                <td>{{i.usersn.username}}</td>
+                                <td><a class="bold" href = {{"/event/" + i.id|string }}>{{i.name}}</a></td>
+								<td>{{ i.start_date}}</td>
+								<td>{{ i.end_date}}</td>
+								<td>{{ i.classifn.value}}</td>
+								<td><a href= {{"/editevent/" + i.id|string }}><button type="button" class="btn-sm btn-success">{{ _("Edit") }}</button></td>
+							</tr>	
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>	
+		</div>		
+{% endblock %}
