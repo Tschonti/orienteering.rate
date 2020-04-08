@@ -26,32 +26,78 @@
 								<p>{{ _("Classification") }}: {{ evlist[7] }} </p>
 							</div>
 							<div class="row e">		
-								<p><a target="_blank" href={{evlist[8]}}>{{ _("External link") }}</a></p>
+								<p>{% if evlist[8] != "#" %}<a target="_blank" href={{evlist[8]}}>{{ _("External link") }}</a>
+									{%else%} <p>{{_("No link available")}}{%endif%}</p>
+								</p>
 							</div>
 							<div class="row e also">
-								<p>{{ _("Created by") }}: {{ evlist[1] }} </p>
+								{% if evlist[0]> 10000 %}
+									<p>{{_("This event has been imported from Liveresults API and needs more info")}}</p> <a href= {{"/editevent/" + evlist[0]|string }}>{{_("Edit the event to add more data!")}}</a>
+								{% else %}
+									<p>{{ _("Created by") }}: {{ evlist[1] }} </p>
+								{% endif %}
 							</div>
+							{% if classlist|length > 0 %}
 							<div class="row">
 								<div class="col-12 cente">	
-									<p>{{ _("Filter the ratings") }}</p>
+									<h3>{{_("View the results of each class")}}</h3>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-6">		
-									<select id="filt" name="age" class="form-control">
-										<option value="0" selected>{{ _("All") }}</option>
-										<option value="1">{{ _("Youth") }} (-18)</option>
-										<option value="2">{{ _("Elite") }} (19-34)</option>
-										<option value="3">{{ _("Master") }} (35-)</option>
+							<form action="/results" id="getresults" method="post">
+							<div class="row">								
+								
+								<div class="col-7">		
+									<select name="eventid" class="hide">
+										<option value={{evlist[0]}}></option>
 									</select>
+									<select name="class" class="form-control" id="resselect" onchange="changef(this)" required>
+										<option value="0" disabled selected>{{ _("Select class") }}</option>
+										{% for i in classlist %}
+											<option value={{i}}>{{i}}</option>
+										{%endfor%}
+									</select>
+									<div class="invalid-feedback">
+										{{ _("Please select a class.") }}
+									</div>
 								</div>
-								<div class="col-6">	
-									<button class="btn btn-success" onclick="filt()" type="submit">{{ _("Apply filter") }}</button>
-								</div>	
-							</div>	
+								<div class="col-5">		
+									<button class="btn btn-success" onclick="ressel()" type="submit">{{ _("View results") }}</button>
+								</div>
+																
+							</div>
+							</form>
+							{%else%}
+							<div class="row">
+								<div class="col-12">	
+									<p>{{_("Results are not available for this event.")}}</p>
+								</div>
+							</div>
+							{% endif%}	
 						</div>
 					</div>
 					<div class="col-sm-12 col-lg-8">
+						{% if ratings[0][0] != 0 %}
+						<div class="row">
+							<div class="col-12 cente">	
+								<h3>{{ _("Filter the ratings") }}</h3>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-0 col-md-3"></div>
+							<div class="col-7 col-md-4">		
+								<select id="filt" name="age" class="form-control">
+									<option value="0" selected>{{ _("All") }}</option>
+									<option value="1">{{ _("Youth") }} (-18)</option>
+									<option value="2">{{ _("Elite") }} (19-34)</option>
+									<option value="3">{{ _("Master") }} (35-)</option>
+								</select>
+							</div>
+							<div class="col-5 col-md-3">	
+								<button class="btn btn-success" onclick="filt()" type="submit">{{ _("Apply filter") }}</button>
+							</div>
+							<div class="col-0 col-md-2"></div>	
+						</div>
+						{%endif%}
 						<div class="rates" id="all">
 							<div class="row">
 							{% if ratings[0][0] == 0 %}
@@ -234,7 +280,7 @@
 							</div>
 						
 					</div>
-				</div>	
+				</div>		
 			</div>	
 		</div>
 		<div class="panel panel-default">

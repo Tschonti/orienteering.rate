@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Orienteering.rate | Results
+{% endblock %}
+{% block body %} 
+		<div class="panel panel-default felso">
+			<div class="panel-body">
+          <h1>{{_("Results")}} - {{event}} - {{classs}}</h1>
+          {% if data["results"]|length == 0 %}
+            <p>{{_("There are no results for this class")}}</p>
+            <a href="javascript:history.back()">{{ _("Back to the event page") }}</a>
+          {%else%}  
+          <a href="javascript:history.back()">{{ _("Back to the event page") }}</a>
+          <div style='overflow-x:auto'>	
+          <table class="table table-hover cent">
+              <thead>
+                <tr>
+                  <th scope="col">{{_("Place")}}</th>
+                  <th scope="col">{{_("Name")}}</th>
+                  <th scope="col">{{_("Club")}}</th>
+                  <th scope="col">{{_("Result")}}</th>
+                  <th scope="col">{{_("Difference")}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {%for r in data["results"] %}
+                  <tr>                  
+                      <td>{{r["place"]}} </td><td>{{r["name"]}} </td><td>{{r["club"]}} </td><td>{{r["result"]}}</td><td>{{r["timeplus"]}}</td>
+                  </tr>
+                  {%endfor%}
+              </tbody>
+          </table>
+          </div>
+          {% endif %}
+			</div>	
+		</div>		
+{% endblock %}

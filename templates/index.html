@@ -4,7 +4,7 @@
     Orienteering.rate
 {% endblock %}
 {% block js %}
-	{%if requ == 'post'%}
+	{%if requ == 'fil'%}
 	function myFunction(x) {
 		if (x.matches) { 
 			location.href = "#filt2";
@@ -41,8 +41,8 @@
 						<tbody>
 						  {% for i in topev %}
 						   <tr>
-							<td class="fi"><a class="bold" href={{i[3]}}>{{i[1]}}</a></td>
-							<td>{{i[4]}}</td>
+							<td class="fi"><a class="bold" href={{i[8]}}>{{i[1]}}</a></td>
+							<td>{{i[7]}}</td>
 						  </tr>
 						  {% endfor %}
 						</tbody>
@@ -64,7 +64,7 @@
 						<tbody>
 						  {% for i in recev %}
 						   <tr>
-							<td class="fi"><a class="bold" href={{i[3]}}>{{i[1]}}</a></td>
+							<td class="fi"><a class="bold" href={{i[8]}}>{{i[1]}}</a></td>
 							<td>{{i[2]}}</td>
 						  </tr>
 						  {% endfor %}
@@ -78,7 +78,7 @@
 		<div class="panel-body">
 			<h2>{{ _("All events") }}</h2>	
 			<p class="bold noma">{{ _("Filter the events and ratings!") }}</h2>
-			<form action="/" method="post">
+			<form action="/" method="get">
 				<div class="row">
 					<div class="col-sm-12 col-lg-4">
 						<label>{{ _("Event type") }}</label>
@@ -110,15 +110,9 @@
 				</div>
 				<button class="btn btn-success bal" type="submit">{{ _("Apply filter") }}</button>
 			</form>
-			<form action="/" method="post">
-				<select name="age" class="form-control hide">
-					<option value="0">0</option>
-				</select>
-				<select name="classif" class="form-control hide">
-					<option value="0">0</option>
-				</select>
-				<select name="country" class="form-control hide">
-					<option value="0">0</option>
+			<form method="GET" action="/">
+				<select name="fil" class="hide">
+					<option value="1"></option>
 				</select>
 				<button class="btn btn-danger jobb" type="submit">{{ _("Clear filter") }}</button>
 			</form>
@@ -136,20 +130,20 @@
 						</tr>
 					</thead>
 					<tbody>
-					{% for i in events %}
+					{% for i in evlist %}
 						<tr>
-							<td class="fi"><a class="bold" href={{i[7]}}>{{ i[1] }}</a></td>
+							<td class="fi"><a class="bold" href={{i[8]}}>{{ i[1] }}</a></td>
 							<td>{{ i[2] }}-<br>{{ i[3] }}</td>
-							<td>{{ i[5] }}, {{ i[4] }}</td>
-							<td>{{ i[9] }}</td>
-							<td>{{ i[6] }}</td>
-							<td><a href={{i[7]}}>
-								{% if i[8] == -1 %}
+							<td>{{ i[4] }}, {{ i[6] }}</td>
+							<td>{{ i[7] }}</td>
+							<td>{{ i[5] }}</td>
+							<td><a href={{i[8]}}>
+								{% if i[9] == -1 %}
 									<button type="button" class="btn-sm btn-success kicsii">{{ _("Log in to rate it!") }}</button>
-								{% elif i[8] == 0 %}
+								{% elif i[9] == 0 %}
 									<button type="button" class="btn-sm btn-success">{{ _("Rate it!") }}</button>
 								{% else %}
-								<button type="button" class="btn-sm btn-link">{{ i[8] }}</button>
+								<button type="button" class="btn-sm btn-link">{{ i[9] }}</button>
 								{% endif %}
 							</a>
 							</td>
