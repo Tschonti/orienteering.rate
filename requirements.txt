@@ -9,3 +9,5 @@ dj-database-url
 flask_sqlalchemy
 flask_script
 config
+Flask-SocketIO
+eventlet

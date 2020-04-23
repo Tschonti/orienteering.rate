@@ -19,6 +19,7 @@ from flask_babel import Babel, _
 from operator import itemgetter
 import requests
 import time
+from flask_socketio import SocketIO, emit
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -52,6 +53,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 mail = Mail(app)
 babel = Babel(app)
+socketio = SocketIO(app)
+
+if __name__ == '__main__':
+    socketio.run(app)
 
 class Usersn(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -224,6 +229,7 @@ def index():
 		flash(_('This site uses cookies to store your login information.'), "warning")
 		session.modified = True
 		return redirect("/")
+	#flash(_('This site is currently under development. Some features may not work properly.'), "danger")
 	try:
 		age = int(request.args.get('age'))
 	except:
@@ -680,6 +686,35 @@ def new():
 			end_date=request.form.get("end_date"), location=request.form.get("location"), classifn_id=request.form.get("classif"), link=request.form.get("link"), countryn_id=country.id).first()
 		return redirect(url_for("event", eventid = eve.id))
 		
+@app.route("/selectage", methods=["POST"])
+def selectage():
+	try:
+		age = int(request.form.get("age"))
+	except:
+		abort(404)
+	eventid = request.form.get("eventid")
+	eventc = Eventn.query.filter_by(id=eventid).first()
+	if eventc is None:
+		abort(404)
+	rates = Raten.query.filter_by(eventn_id=eventid).all()
+	if age == 0:
+		ovr_avg = db.session.query(func.avg(Raten.overall_r)).filter(Raten.eventn_id == eventc.id)
+		tr_avg = db.session.query(func.avg(Raten.terrain_r)).filter(Raten.eventn_id == eventc.id)
+		mcr_avg = db.session.query(func.avg(Raten.map_course_r)).filter(Raten.eventn_id == eventc.id)
+		or_avg = db.session.query(func.avg(Raten.org_r)).filter(Raten.eventn_id == eventc.id)
+		darab = len(rates)
+	else:
+		ovr_avg = db.session.query(func.avg(Raten.overall_r)).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == age)	
+		tr_avg = db.session.query(func.avg(Raten.terrain_r)).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == age)	
+		mcr_avg = db.session.query(func.avg(Raten.map_course_r)).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == age)	
+		or_avg = db.session.query(func.avg(Raten.org_r)).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == age)
+		darab = db.session.query(Raten.overall_r).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == age).count()
+	if ovr_avg[0][0] is None:
+		ratings = [0]
+	else:
+		ratings = [str(round(ovr_avg[0][0], 1)), str(round(tr_avg[0][0], 1)), str(round(mcr_avg[0][0], 1)), str(round(or_avg[0][0], 1)), darab]
+	return json.dumps({'status':'OK', 'ratings':ratings})
+
 @app.route("/event/<eventid>")
 @login_required
 def event(eventid):
@@ -714,24 +749,15 @@ def event(eventid):
 		comrates = Raten.query.filter_by(eventn_id=eventid, usersn_id = i.usersn_id).first()
 		comments.append([i.id, i.usersn.username, i.content, dejttajm.strftime("%Y-%m-%d %H:%M"), i.edited, ratt, vote, comrates.overall_r, comrates.terrain_r, comrates.map_course_r, comrates.org_r])
 	comments.sort(reverse=True, key=itemgetter(5))
-	for i in range(4):
-		darab = 0
-		if i == 0:
-			ovr_avg = db.session.query(func.avg(Raten.overall_r)).filter(Raten.eventn_id == eventc.id)
-			tr_avg = db.session.query(func.avg(Raten.terrain_r)).filter(Raten.eventn_id == eventc.id)
-			mcr_avg = db.session.query(func.avg(Raten.map_course_r)).filter(Raten.eventn_id == eventc.id)
-			or_avg = db.session.query(func.avg(Raten.org_r)).filter(Raten.eventn_id == eventc.id)
-			darab = len(rates)
-		else:
-			ovr_avg = db.session.query(func.avg(Raten.overall_r)).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == i)	
-			tr_avg = db.session.query(func.avg(Raten.terrain_r)).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == i)	
-			mcr_avg = db.session.query(func.avg(Raten.map_course_r)).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == i)	
-			or_avg = db.session.query(func.avg(Raten.org_r)).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == i)
-			darab = db.session.query(Raten.overall_r).join(Usersn).filter(Raten.eventn_id ==eventc.id, Usersn.agen_id == i).count()	
-		if ovr_avg[0][0] is None:
-			ratings.append([0])
-		else:
-			ratings.append([round(ovr_avg[0][0], 1), round(tr_avg[0][0], 1), round(mcr_avg[0][0], 1),round(or_avg[0][0], 1), darab])
+	ovr_avg = db.session.query(func.avg(Raten.overall_r)).filter(Raten.eventn_id == eventc.id)
+	tr_avg = db.session.query(func.avg(Raten.terrain_r)).filter(Raten.eventn_id == eventc.id)
+	mcr_avg = db.session.query(func.avg(Raten.map_course_r)).filter(Raten.eventn_id == eventc.id)
+	or_avg = db.session.query(func.avg(Raten.org_r)).filter(Raten.eventn_id == eventc.id)
+	darab = len(rates)
+	if ovr_avg[0][0] is None:
+		ratings.append([0, 0, 0, 0])
+	else:
+		ratings.append([round(ovr_avg[0][0], 1), round(tr_avg[0][0], 1), round(mcr_avg[0][0], 1),round(or_avg[0][0], 1), darab])
 	usrate = Raten.query.filter_by(usersn_id=session['user'], eventn_id = eventc.id).first()
 	mycomm = Comment.query.filter_by(usersn_id=session['user'], eventn_id = eventc.id).first()
 	if mycomm is None:
@@ -775,68 +801,123 @@ def results():
 	data = res.json()
 	return render_template("results.html", data=data, classs=request.form.get("class"), event=event.name)
 
-@app.route("/rate", methods=["POST"])
-@login_required
-def rate():
-	if conf_required() == 0:
-		return redirect("/confirmed")
-	usrate = Raten.query.filter_by(usersn_id=session['user'], eventn_id = request.form.get("eventid")).first()
+@socketio.on("nrate")
+def nrate(data):
+	try:	
+		eventid = int(data["eventid"])
+		ovr = int(data["ovr"])
+		ter = int(data["ter"])
+		map = int(data["map"])
+		org = int(data["org"])
+		comment = data["comment"].strip()
+		selected = int(data["selected"])
+	except:
+		emit("invalide", {"error": _("invalid rating or event"), "user": session["user"]}, broadcast=True)	
+	usrate = Raten.query.filter_by(usersn_id=session['user'], eventn_id = eventid).first()
 	if usrate is not None:
-		return redirect(url_for('event', eventid = request.form.get("eventid")))
-	if not request.form.get("overall_r"):
-		return render_template("error.html", err=_("must rate the event"))
-	if not request.form.get("terrain_r"):
-		return render_template("error.html", err=_("must rate the event"))
-	if not request.form.get("mc_r"):
-		return render_template("error.html", err=_("must rate the event"))
-	if not request.form.get("org_r"):
-		return render_template("error.html", err=_("must rate the event"))
-	if request.form.get("comment"):
-		if len(request.form.get("comment")) > 1000:
-			return render_template("error.html", err=_("Maximum length of a comment is 1000 characters"))
-		db.session.add(Comment(usersn_id=session["user"], content = request.form.get("comment"), eventn_id=request.form.get("eventid"), edited = 0))
-		com = Comment.query.filter_by(eventn_id = request.form.get("eventid"), usersn_id=session["user"]).first()
-		db.session.add(Commentrate(comment_id = com.id, usersn_id=session["user"], rating = 1))
-	db.session.add(Raten(eventn_id=request.form.get("eventid"), usersn_id=session["user"], overall_r=request.form.get("overall_r"), terrain_r=request.form.get("terrain_r"), map_course_r=request.form.get("mc_r"), org_r=request.form.get("org_r")))
-	db.session.commit()
-	return redirect(url_for('event', eventid = request.form.get("eventid")))
-	
-@app.route("/editrate", methods=["POST"])
-@login_required
-def editrate():
-	if conf_required() == 0:
-		return redirect("/confirmed")
-	if not request.form.get("overall_r"):
-		return render_template("error.html", err=_("must rate the event"))
-	if not request.form.get("terrain_r"):
-		return render_template("error.html", err=_("must rate the event"))
-	if not request.form.get("mc_r"):
-		return render_template("error.html", err=_("must rate the event"))
-	if not request.form.get("org_r"):
-		return render_template("error.html", err=_("must rate the event"))
-	erate = Raten.query.filter_by(usersn_id=session['user'], eventn_id = request.form.get("eventid")).first()
-	erate.overall_r = request.form.get("overall_r")
-	erate.terrain_r = request.form.get("terrain_r")
-	erate.map_course_r = request.form.get("mc_r")
-	erate.org_r =request.form.get("org_r")
-	erate.date_time = datetime.datetime.utcnow()
-	comm = Comment.query.filter_by(usersn_id=session['user'], eventn_id = request.form.get("eventid")).first()
-	if request.form.get("comment"):
-		if len(request.form.get("comment")) > 1000:
-			return render_template("error.html", err=_("Maximum length of a comment is 1000 characters"))
-		if comm is None:
-			db.session.add(Comment(usersn_id=session["user"], content = request.form.get("comment"), eventn_id=request.form.get("eventid"), edited = 0))
-			com = Comment.query.filter_by(eventn_id = request.form.get("eventid"), usersn_id=session["user"]).first()
+		emit("invalide", {"error": "already rated"}, broadcast=True)
+	else:
+		vanecom = 0
+		cid =0
+		cont =0
+		dt = 0
+		edit =0
+		if len(comment)>0:
+			db.session.add(Comment(usersn_id=session["user"], content = comment, eventn_id=eventid, edited = 0))
+			com = Comment.query.filter_by(eventn_id = eventid, usersn_id=session["user"]).first()
 			db.session.add(Commentrate(comment_id = com.id, usersn_id=session["user"], rating = 1))
+			vanecom = 1
+			cid = com.id
+			cont = com.content
+			dt = com.date_time.strftime("%Y-%m-%d %H:%M") + " UTC"
+			edit = com.edited
+		db.session.add(Raten(eventn_id=eventid, usersn_id=session["user"], overall_r=ovr, terrain_r=ter, map_course_r=map, org_r=org))
+		db.session.commit()
+		use = Usersn.query.filter_by(id=session['user']).first()
+		if selected == 0 or selected == use.agen_id:
+			if selected == 0:
+				ovr_avg = db.session.query(func.avg(Raten.overall_r)).filter(Raten.eventn_id == eventid)
+				tr_avg = db.session.query(func.avg(Raten.terrain_r)).filter(Raten.eventn_id == eventid)
+				mcr_avg = db.session.query(func.avg(Raten.map_course_r)).filter(Raten.eventn_id == eventid)
+				or_avg = db.session.query(func.avg(Raten.org_r)).filter(Raten.eventn_id == eventid)
+				darab = db.session.query(Raten.overall_r).filter(Raten.eventn_id ==eventid).count()
+			else:	
+				ovr_avg = db.session.query(func.avg(Raten.overall_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)	
+				tr_avg = db.session.query(func.avg(Raten.terrain_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)	
+				mcr_avg = db.session.query(func.avg(Raten.map_course_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)	
+				or_avg = db.session.query(func.avg(Raten.org_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)
+				darab = db.session.query(Raten.overall_r).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected).count()
+			emit("new rating", {"eventid": eventid, "selected": selected, "user": session["user"], "username": session["usern"], "change": 1, "vanecom": vanecom, "cid": cid, "comment": cont, "dt": dt, "edit": edit, "ovr": str(round(ovr_avg[0][0], 1)), "ter": str(round(tr_avg[0][0], 1)), "map": str(round(mcr_avg[0][0], 1)), "org": str(round(or_avg[0][0], 1)), "darab": darab, "myovr": ovr, "myter": ter, "mymap": map, "myorg": org}, broadcast=True)
 		else:
-			comm.content = request.form.get("comment")
-			comm.date_time = datetime.datetime.utcnow()
-			comm.edited = 1
-	elif comm is not None:
-		Commentrate.query.filter_by(comment_id =comm.id).delete()
-		Comment.query.filter_by(usersn_id=session['user'], eventn_id = request.form.get("eventid")).delete()
-	db.session.commit()
-	return redirect(url_for('event', eventid = request.form.get("eventid")))	
+			emit("new rating", {"eventid": eventid, "selected": selected, "user": session["user"], "username": session["usern"], "change": 0, "vanecom": vanecom, "cid": cid, "comment": cont, "dt": dt, "edit": edit, "myovr": ovr, "myter": ter, "mymap": map, "myorg": org}, broadcast=True)
+	
+@socketio.on("neditrate")
+def neditrate(data):
+	try:	
+		eventid = int(data["eventid"])
+		ovr = int(data["ovr"])
+		ter = int(data["ter"])
+		map = int(data["map"])
+		org = int(data["org"])
+		comment = data["comment"].strip()
+		selected = int(data["selected"])
+	except:
+		emit("invalide", {"error": _("invalid rating or event"), "user": session["user"]}, broadcast=True)
+	usrate = Raten.query.filter_by(usersn_id=session['user'], eventn_id = eventid).first()
+	if usrate is None:
+		emit("invalide", {"error": _("not rated"), "user": session["user"]}, broadcast=True)
+	else:
+		vanecom = 0
+		cid = 0
+		cont = 0
+		dt = 0
+		edit = 0
+		uscomm = Comment.query.filter_by(usersn_id=session['user'], eventn_id = eventid).first()
+		if len(comment)>0:
+			if uscomm is None:
+				db.session.add(Comment(usersn_id=session["user"], content = comment, eventn_id=eventid, edited = 0))
+				uscomm = Comment.query.filter_by(eventn_id = eventid, usersn_id=session["user"]).first()
+				db.session.add(Commentrate(comment_id = uscomm.id, usersn_id=session["user"], rating = 1))
+				vanecom = 1
+			else:
+				uscomm.content = comment
+				uscomm.date_time = datetime.datetime.utcnow()
+				uscomm.edited = 1
+				vanecom = 2
+			cid = uscomm.id
+			cont = uscomm.content
+			dt = uscomm.date_time.strftime("%Y-%m-%d %H:%M") + " UTC"
+			edit = uscomm.edited
+		else:
+			if uscomm is not None:
+				cid = uscomm.id
+				Commentrate.query.filter_by(comment_id =uscomm.id).delete()
+				Comment.query.filter_by(usersn_id=session['user'], eventn_id = eventid).delete()
+				vanecom = 3
+		nuofcomments = db.session.query(Comment.id).filter(Comment.eventn_id == eventid).count()
+		usrate.overall_r = ovr
+		usrate.terrain_r = ter
+		usrate.map_course_r = map
+		usrate.org_r =org
+		usrate.date_time = datetime.datetime.utcnow()
+		db.session.commit()
+		use = Usersn.query.filter_by(id=session['user']).first()
+		if selected == 0 or selected == use.agen_id:
+			if selected == 0:
+				ovr_avg = db.session.query(func.avg(Raten.overall_r)).filter(Raten.eventn_id == eventid)
+				tr_avg = db.session.query(func.avg(Raten.terrain_r)).filter(Raten.eventn_id == eventid)
+				mcr_avg = db.session.query(func.avg(Raten.map_course_r)).filter(Raten.eventn_id == eventid)
+				or_avg = db.session.query(func.avg(Raten.org_r)).filter(Raten.eventn_id == eventid)
+				darab = db.session.query(Raten.overall_r).filter(Raten.eventn_id ==eventid).count()
+			else:	
+				ovr_avg = db.session.query(func.avg(Raten.overall_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)	
+				tr_avg = db.session.query(func.avg(Raten.terrain_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)	
+				mcr_avg = db.session.query(func.avg(Raten.map_course_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)	
+				or_avg = db.session.query(func.avg(Raten.org_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)
+				darab = db.session.query(Raten.overall_r).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected).count()
+			emit("editedrate", {"eventid": eventid, "user": session["user"], "nuofcomments": nuofcomments, "selected": selected, "username": session["usern"], "change": 1, "vanecom": vanecom, "cid": cid, "comment": cont, "dt": dt, "edit": edit, "ovr": str(round(ovr_avg[0][0], 1)), "ter": str(round(tr_avg[0][0], 1)), "map": str(round(mcr_avg[0][0], 1)), "org": str(round(or_avg[0][0], 1)), "darab": darab, "myovr": ovr, "myter": ter, "mymap": map, "myorg": org}, broadcast=True)
+		else:
+			emit("editedrate", {"eventid": eventid, "user": session["user"], "nuofcomments": nuofcomments, "selected": selected, "username": session["usern"], "change": 0, "vanecom": vanecom, "cid": cid, "comment": cont, "dt": dt, "edit": edit, "myovr": ovr, "myter": ter, "mymap": map, "myorg": org}, broadcast=True)
 	
 @app.route("/ratings")
 @login_required
@@ -952,18 +1033,54 @@ def deleteev():
 	db.session.commit()
 	return redirect("/events")
 	
-@app.route("/deleter", methods=["POST"])
-@login_required
-def deleter():
-	if conf_required() == 0:
-		return redirect("/confirmed")
-	Raten.query.filter_by(eventn_id = request.form.get("eventid"), usersn_id = session['user']).delete()
-	comm = Comment.query.filter_by(eventn_id = request.form.get("eventid"), usersn_id = session['user']).first()
+@socketio.on("deleterate")
+def deleterate(data):
+	try:	
+		eventid = int(data["eventid"])
+		selected = int(data["selected"])
+	except:
+		emit("invalide", {"error": _("invalid rating or event"), "user": session["user"]}, broadcast=True)	
+	Raten.query.filter_by(eventn_id = eventid, usersn_id = session['user']).delete()
+	comm = Comment.query.filter_by(eventn_id = eventid, usersn_id = session['user']).first()
+	vanecom = 0
+	comid = 0
+	darab = 0
 	if comm is not None:
 		Commentrate.query.filter_by(comment_id = comm.id).delete()
-		Comment.query.filter_by(eventn_id = request.form.get("eventid"), usersn_id = session['user']).delete()
+		Comment.query.filter_by(eventn_id = eventid, usersn_id = session['user']).delete()
+		vanecom = 1
+		comid = comm.id
 	db.session.commit()
-	return redirect(url_for('event', eventid = request.form.get("eventid")))
+	nuofcomments = db.session.query(Comment.id).filter(Comment.eventn_id == eventid).count()
+	use = Usersn.query.filter_by(id=session['user']).first()
+	if selected == 0 or selected == use.agen_id:
+		if selected == 0:
+			darab = db.session.query(Raten.overall_r).filter(Raten.eventn_id ==eventid).count()
+			if darab > 0:
+				ovr_avg = db.session.query(func.avg(Raten.overall_r)).filter(Raten.eventn_id == eventid)
+				tr_avg = db.session.query(func.avg(Raten.terrain_r)).filter(Raten.eventn_id == eventid)
+				mcr_avg = db.session.query(func.avg(Raten.map_course_r)).filter(Raten.eventn_id == eventid)
+				or_avg = db.session.query(func.avg(Raten.org_r)).filter(Raten.eventn_id == eventid)			
+		else:	
+			darab = db.session.query(Raten.overall_r).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected).count()
+			if darab > 0:
+				ovr_avg = db.session.query(func.avg(Raten.overall_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)	
+				tr_avg = db.session.query(func.avg(Raten.terrain_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)	
+				mcr_avg = db.session.query(func.avg(Raten.map_course_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)	
+				or_avg = db.session.query(func.avg(Raten.org_r)).join(Usersn).filter(Raten.eventn_id ==eventid, Usersn.agen_id == selected)				
+		if darab > 0:
+			ovr= str(round(ovr_avg[0][0], 1))
+			ter= str(round(tr_avg[0][0], 1))
+			map= str(round(mcr_avg[0][0], 1))
+			org= str(round(or_avg[0][0], 1))
+		else:
+			ovr= "0"
+			ter= "0"
+			map= "0"
+			org= "0"
+		emit("deletedr", {'user': session["user"], "selected": selected, 'eventid': eventid, "nuofcomments": nuofcomments, "vanecom": vanecom, "comid": comid, "change": 1, "ovr": ovr, "ter": ter, "map": map, "org": org, "darab": darab}, broadcast = True)
+	else:
+		emit("deletedr", {'user': session["user"], "selected": selected, 'eventid': eventid, "nuofcomments": nuofcomments, "vanecom": vanecom, "comid": comid, "change": 0, "darab": darab}, broadcast=True)
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required

@@ -3,6 +3,310 @@
 {% block title %}
     Orienteering.rate | {{ evlist[2] }}
 {% endblock %}
+{% block temp%}
+{% raw -%}
+<script id="mycomment" type="text/x-handlebars-template">
+    <div id="{{concat 'f' commid}}" class="row comm">
+        <div class="col-1 vote">
+            <div class="row v">
+                <div class="col r">
+                    <form id="{{concat 'votef' commid}}">
+                        <select name="commentid" class="hide">
+                            <option value={{commid}}></option>
+                        </select>
+                        <i onclick="upvote('{{commid}}')" id="{{concat 'up' commid}}" class="fas fa-chevron-circle-up zold" {%- endraw %} title='{{ _("Upvote") }}' {% raw -%}></i>
+                        <div class="mobo {{concat 'rat' commid}}" {%- endraw %} title='{{ _("Score") }}' {% raw -%}>1</div>
+                        <i onclick="downvote('{{commid}}')" id="{{concat 'down' commid}}" class="fas fa-chevron-circle-down szurke" {%- endraw %} title='{{ _("Downvote") }}' {% raw -%}></i>
+                    </form>	
+                </div>
+                <div class="col fl">								
+                    <div class="gep {{concat 'rat' commid}}">1</div>
+                </div>
+            </div>		
+        </div>
+        <div class="col-10">
+            <label class="small text-secondary">{{usern}}</label><label class="small text-secondary">&nbsp;<span id="{{concat 'ovr' commid}}">{{ovr}}</span><i class="fas fa-star text-secondary" {%- endraw %} title='{{ _("Overall rating") }}'{% raw -%}></i>&nbsp;<span id="{{concat 'ter' commid}}">{{ter}}</span><i class="fas fa-mountain text-secondary" {%- endraw %} title='{{ _("Terrain rating") }}' {% raw -%}>&nbsp;</i><span id="{{concat 'map' commid}}">{{map}}</span><i class="fas fa-map text-secondary" {%- endraw %} title='{{ _("Map and course rating") }}' {% raw -%}></i>&nbsp;<span id="{{concat 'org' commid}}">{{org}}</span><i class="fas fa-lightbulb text-secondary" {%- endraw %} title='{{ _("Organization rating") }}' {% raw -%}></i></label>
+            <p id="{{concat 'com' commid}}"> {{ content }} </p> 
+            {{#if edited}}
+				<label id="{{concat 'lab' commid}}" class="small text-secondary">{%- endraw %} {{ _("Last edited at ")}} {% raw -%} {{dt}}</label>	
+            {{else}}
+				<label id="{{concat 'lab' commid}}" class="small text-secondary"> {%- endraw %}{{ _("Posted at ")}} {% raw -%} {{dt}} </label>
+            {{/if}}	
+        </div>
+    </div>
+</script>
+<script id="othercomment" type="text/x-handlebars-template">
+    <div id="{{concat 'f' commid}}" class="row comm">
+        <div class="col-1 vote">
+            <div class="row v">
+                <div class="col r">
+                    <form id="{{concat 'votef' commid}}">
+                        <select name="commentid" class="hide">
+                            <option value={{commid}}></option>
+                        </select>
+                        <i onclick="upvote('{{commid}}')" id="{{concat 'up' commid}}" class="fas fa-chevron-circle-up szurke" {%- endraw %} title='{{ _("Upvote") }}' {% raw -%}></i>
+                        <div class="mobo {{concat 'rat' commid}}" {%- endraw %} title='{{ _("Score") }}' {% raw -%}>1</div>
+                        <i onclick="downvote('{{commid}}')" id="{{concat 'down' commid}}" class="fas fa-chevron-circle-down szurke" {%- endraw %} title='{{ _("Downvote") }}' {% raw -%}></i>
+                    </form>	
+                </div>
+                <div class="col fl">								
+                    <div class="gep {{concat 'rat' commid}}">1</div>
+                </div>
+            </div>		
+        </div>
+        <div class="col-10">
+            <label class="small text-secondary">{{usern}}</label><label class="small text-secondary">&nbsp;<span id="{{concat 'ovr' commid}}">{{ovr}}</span><i class="fas fa-star text-secondary" {%- endraw %} title='{{ _("Overall rating") }}'{% raw -%}></i>&nbsp;<span id="{{concat 'ter' commid}}">{{ter}}</span><i class="fas fa-mountain text-secondary" {%- endraw %} title='{{ _("Terrain rating") }}' {% raw -%}>&nbsp;</i><span id="{{concat 'map' commid}}">{{map}}</span><i class="fas fa-map text-secondary" {%- endraw %} title='{{ _("Map and course rating") }}' {% raw -%}></i>&nbsp;<span id="{{concat 'org' commid}}">{{org}}</span><i class="fas fa-lightbulb text-secondary" {%- endraw %} title='{{ _("Organization rating") }}' {% raw -%}></i></label>
+            <p id="{{concat 'com' commid}}"> {{ content }} </p> 
+            {{#if edited}}
+				<label id="{{concat 'lab' commid}}" class="small text-secondary">{%- endraw %} {{ _("Last edited at ")}} {% raw -%} {{dt}}</label>	
+            {{else}}
+				<label id="{{concat 'lab' commid}}" class="small text-secondary"> {%- endraw %}{{ _("Posted at ")}} {% raw -%} {{dt}} </label>
+            {{/if}}	
+        </div>
+    </div>
+</script>
+{%- endraw %}
+{%endblock%}
+
+{% block js%}
+const mycom_template = Handlebars.compile(document.querySelector('#mycomment').innerHTML);
+const othercom_template = Handlebars.compile(document.querySelector('#othercomment').innerHTML);
+
+function add_comment(commid, content, usern, ovr, ter, map, org, dt, edited, usid) {
+	if (usid == {{session["user"]}}){
+		var comment = mycom_template({'commid': commid, 'content': content, 'usern': usern, 'ovr': ovr, 'ter': ter, 'map': map, 'org': org, 'dt': dt, 'edited': edited});
+	} else {
+		var comment = othercom_template({'commid': commid, 'content': content, 'usern': usern, 'ovr': ovr, 'ter': ter, 'map': map, 'org': org, 'dt': dt, 'edited': edited});
+	}
+	document.querySelector('#comments').innerHTML += comment;
+	document.getElementById("nocomment").classList.add("hide");
+}
+Handlebars.registerHelper( 'concat', function(first, second) {
+    return first + second;
+});
+
+function selage(){	
+	document.getElementById("selectage").onsubmit = () => {
+		event.preventDefault();
+		localStorage.setItem("ageg", document.getElementById("filt").value);
+		$.ajax({
+			url: '/selectage',
+			data: $('#selectage').serialize(),
+			type: 'POST',
+			success: function(response){
+				var resp=JSON.parse(response);
+				if (resp.ratings[0] === 0) {
+					document.getElementById("notrated").classList.remove("hide");
+					document.getElementById("notrated").innerHTML = "{{ _('This event hasn\'t been rated by this age group yet.') }}";
+					document.getElementById("bars").classList.add("hide");
+					//document.getElementById("nofratings").classList.add("hide");
+				} else {
+					document.getElementById("notrated").classList.add("hide");
+					document.getElementById("bars").classList.remove("hide");
+					//document.getElementById("nofratings").classList.remove("hide");
+					document.getElementById("ovr").style.height = "" + parseFloat(resp.ratings[0])/5*100 +"%";
+					document.getElementById("ovr").setAttribute("aria-valuenow", resp.ratings[0]);
+					document.getElementById("ovrp").innerHTML = "" + resp.ratings[0] +"/5";
+					document.getElementById("ovrsr").innerHTML = "" + resp.ratings[0] +"/5";
+					document.getElementById("ter").style.height = "" + parseFloat(resp.ratings[1])/5*100 +"%";
+					document.getElementById("ter").setAttribute("aria-valuenow", resp.ratings[1]);
+					document.getElementById("terp").innerHTML ="" + resp.ratings[1] +"/5";
+					document.getElementById("tersr").innerHTML ="" + resp.ratings[1] +"/5";
+					document.getElementById("map").style.height = "" + parseFloat(resp.ratings[2])/5*100 +"%";
+					document.getElementById("map").setAttribute("aria-valuenow", resp.ratings[2]);
+					document.getElementById("mapp").innerHTML ="" + resp.ratings[2] +"/5";
+					document.getElementById("mapsr").innerHTML ="" + resp.ratings[2] +"/5";
+					document.getElementById("org").style.height = "" + parseFloat(resp.ratings[3])/5*100 +"%";
+					document.getElementById("org").setAttribute("aria-valuenow", resp.ratings[3]);
+					document.getElementById("orgp").innerHTML = "" + resp.ratings[3] +"/5";
+					document.getElementById("orgsr").innerHTML = "" + resp.ratings[3] +"/5";
+					document.getElementById("nofratings2").innerHTML = resp.ratings[4];
+				}
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});	
+	}
+}	
+
+document.addEventListener('DOMContentLoaded', () => {
+	localStorage.setItem("ageg", 0)
+	if (document.getElementById("selectage")) {
+		selage();
+	}
+	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+    socket.on('connect', () => {
+		document.getElementById("ratesubmit").onclick = () => {	
+			if (document.getElementById("ratsubmit")) {
+			document.getElementById("ratsubmit").onsubmit = () => {
+				event.preventDefault();
+				var comment = document.getElementById("comment");
+				if (comment.value.length > 1000) {
+					comment.classList.remove('is-valid');
+					comment.classList.add('is-invalid');
+				} else {
+					comment.classList.remove('is-invalid');
+					comment.classList.add('is-valid');
+					socket.emit("nrate", {"eventid": "{{evlist[0]}}", "ovr": document.getElementById("ovrr").value, "ter": document.getElementById("terr").value, "map": document.getElementById("mapr").value, "org": document.getElementById("orgr").value, "selected": localStorage.getItem("ageg"), "comment": document.getElementById("comment").value});
+				}
+			}} else {
+				document.getElementById("ratchange").onsubmit = () => {
+					event.preventDefault();
+					var comment = document.getElementById("comment");
+					if (comment.value.length > 1000) {
+						comment.classList.remove('is-valid');
+						comment.classList.add('is-invalid');
+					} else {
+						comment.classList.remove('is-invalid');
+						comment.classList.add('is-valid');
+						socket.emit("neditrate", {"eventid": "{{evlist[0]}}", "ovr": document.getElementById("ovrr").value, "ter": document.getElementById("terr").value, "map": document.getElementById("mapr").value, "org": document.getElementById("orgr").value, "selected": localStorage.getItem("ageg"), "comment": document.getElementById("comment").value});
+					}
+				}	
+			}
+		}
+		document.getElementById('deleteee').onclick = () => {
+			event.preventDefault();
+			socket.emit("deleterate", {"eventid": "{{evlist[0]}}", "selected": localStorage.getItem("ageg")})
+		}	
+    });
+    socket.on("deletedr", data => {
+        if (data.user == {{session["user"]}} && data.eventid == {{evlist[0]}}) {
+            document.querySelectorAll(".har").forEach(inp => {
+                inp.value = "3"
+            });
+            document.getElementById("comment").value = "";
+            document.getElementById("ratesubmit").innerHTML = '{{ _("Submit") }}';
+            document.getElementById("ratchange").setAttribute("id", "ratsubmit");
+            document.getElementById("infop").innerHTML ="{{ _('You haven\'t rated this event yet. What are you waiting for?') }}";
+			document.getElementById("deleteb").classList.add('hide');
+		}
+		console.log(localStorage.getItem("ageg"))
+        if (data.change == 1 && data.eventid == {{evlist[0]}} && data.selected == localStorage.getItem("ageg")) {
+            if (data.darab == 0) {
+				document.getElementById("notrated").classList.remove("hide");
+				if (localStorage.getItem("ageg") == 0) {
+					document.getElementById("notrated").innerHTML = "{{ _('This event hasn\'t been rated yet. You can be the first!') }}";
+					document.getElementById("ageselect").classList.add("hide");
+				} else {
+					document.getElementById("notrated").innerHTML = "{{ _('This event hasn\'t been rated by this age group yet.') }}";
+				}
+                document.getElementById("bars").classList.add("hide");
+            } else {
+                document.getElementById("ovr").style.height = "" + parseFloat(data.ovr)/5*100 +"%";
+                document.getElementById("ovr").setAttribute("aria-valuenow", data.ovr);
+                document.getElementById("ovrp").innerHTML = "" + data.ovr +"/5";
+                document.getElementById("ovrsr").innerHTML = "" + data.ovr +"/5";
+                document.getElementById("ter").style.height = "" + parseFloat(data.ter)/5*100 +"%";
+                document.getElementById("ter").setAttribute("aria-valuenow", data.ter);
+                document.getElementById("terp").innerHTML ="" + data.ter +"/5";
+                document.getElementById("tersr").innerHTML ="" + data.ter +"/5";
+                document.getElementById("map").style.height = "" + parseFloat(data.map)/5*100 +"%";
+                document.getElementById("map").setAttribute("aria-valuenow", data.map);
+                document.getElementById("mapp").innerHTML ="" + data.map +"/5";
+                document.getElementById("mapsr").innerHTML ="" + data.map +"/5";
+                document.getElementById("org").style.height = "" + parseFloat(data.org)/5*100 +"%";
+                document.getElementById("org").setAttribute("aria-valuenow", data.org);
+                document.getElementById("orgp").innerHTML = "" + data.org +"/5";
+                document.getElementById("orgsr").innerHTML = "" + data.org +"/5";
+                document.getElementById("nofratings2").innerHTML = data.darab;
+            }
+        }
+        if (data.eventid == {{evlist[0]}} && data.vanecom == 1) {
+			document.getElementById("f".concat(data.comid)).remove();
+			if (data.nuofcomments == 0) {
+				document.getElementById("nocomment").classList.remove("hide");
+			}   
+        }   
+    })
+    socket.on('invalide', data => {
+        if (data.user == {{session["user"]}}) {
+			alert(data.error);
+			document.getElementById("comment").classList.remove('is-valid');
+		}
+    });
+    socket.on('new rating', data => {
+        if (data.change == 1 && data.eventid == {{evlist[0]}} && data.selected == localStorage.getItem("ageg")) {
+			document.getElementById("notrated").classList.add("hide");
+            document.getElementById("bars").classList.remove("hide");
+            document.getElementById("ageselect").classList.remove("hide");
+            document.getElementById("ovr").style.height = "" + parseFloat(data.ovr)/5*100 +"%";
+            document.getElementById("ovr").setAttribute("aria-valuenow", data.ovr);
+            document.getElementById("ovrp").innerHTML = "" + data.ovr +"/5";
+            document.getElementById("ovrsr").innerHTML = "" + data.ovr +"/5";
+            document.getElementById("ter").style.height = "" + parseFloat(data.ter)/5*100 +"%";
+            document.getElementById("ter").setAttribute("aria-valuenow", data.ter);
+            document.getElementById("terp").innerHTML ="" + data.ter +"/5";
+            document.getElementById("tersr").innerHTML ="" + data.ter +"/5";
+            document.getElementById("map").style.height = "" + parseFloat(data.map)/5*100 +"%";
+            document.getElementById("map").setAttribute("aria-valuenow", data.map);
+            document.getElementById("mapp").innerHTML ="" + data.map +"/5";
+            document.getElementById("mapsr").innerHTML ="" + data.map +"/5";
+            document.getElementById("org").style.height = "" + parseFloat(data.org)/5*100 +"%";
+            document.getElementById("org").setAttribute("aria-valuenow", data.org);
+            document.getElementById("orgp").innerHTML = "" + data.org +"/5";
+            document.getElementById("orgsr").innerHTML = "" + data.org +"/5";
+            document.getElementById("nofratings2").innerHTML = data.darab;
+		}
+		if (data.eventid == {{evlist[0]}} && data.vanecom == 1) {
+            add_comment(data.cid, data.comment, data.username, data.myovr, data.myter, data.mymap, data.myorg, data.dt, data.edit, data.user)
+		}
+        if (data.user == {{session["user"]}} && data.eventid == {{evlist[0]}}) {    
+            document.getElementById("ratesubmit").innerHTML = '{{ _("Submit changes") }}';
+            document.getElementById("ratsubmit").setAttribute("id", "ratchange");
+            document.getElementById("infop").innerHTML = '{{ _("You have already rated this event, but you can edit it whenever you want to!") }}';
+			document.getElementById("comment").classList.remove('is-valid');
+			document.getElementById("deleteb").classList.remove('hide')
+			selage();
+        }		
+    });
+	socket.on('editedrate', data => {
+        if (data.change == 1 && data.eventid == {{evlist[0]}} && data.selected == localStorage.getItem("ageg")) {
+			document.getElementById("notrated").classList.add("hide");
+            document.getElementById("bars").classList.remove("hide");
+            document.getElementById("ovr").style.height = "" + parseFloat(data.ovr)/5*100 +"%";
+            document.getElementById("ovr").setAttribute("aria-valuenow", data.ovr);
+            document.getElementById("ovrp").innerHTML = "" + data.ovr +"/5";
+            document.getElementById("ovrsr").innerHTML = "" + data.ovr +"/5";
+            document.getElementById("ter").style.height = "" + parseFloat(data.ter)/5*100 +"%";
+            document.getElementById("ter").setAttribute("aria-valuenow", data.ter);
+            document.getElementById("terp").innerHTML ="" + data.ter +"/5";
+            document.getElementById("tersr").innerHTML ="" + data.ter +"/5";
+            document.getElementById("map").style.height = "" + parseFloat(data.map)/5*100 +"%";
+            document.getElementById("map").setAttribute("aria-valuenow", data.map);
+            document.getElementById("mapp").innerHTML ="" + data.map +"/5";
+            document.getElementById("mapsr").innerHTML ="" + data.map +"/5";
+            document.getElementById("org").style.height = "" + parseFloat(data.org)/5*100 +"%";
+            document.getElementById("org").setAttribute("aria-valuenow", data.org);
+            document.getElementById("orgp").innerHTML = "" + data.org +"/5";
+            document.getElementById("orgsr").innerHTML = "" + data.org +"/5";
+            document.getElementById("nofratings2").innerHTML = data.darab;
+		}
+		if (data.eventid == {{evlist[0]}} && data.vanecom == 1) {
+            add_comment(data.cid, data.comment, data.username, data.myovr, data.myter, data.mymap, data.myorg, data.dt, data.edit, data.user);
+        } 
+        else if (data.eventid == {{evlist[0]}} && data.vanecom == 2) {
+			document.getElementById("com".concat(data.cid)).innerHTML = data.comment;
+			document.getElementById("lab".concat(data.cid)).innerHTML = '{{ _("Last edited at ")}}' + data.dt;
+            document.getElementById("ovr".concat(data.cid)).innerHTML = data.myovr;
+            document.getElementById("ter".concat(data.cid)).innerHTML = data.myter;
+            document.getElementById("map".concat(data.cid)).innerHTML = data.mymap;
+            document.getElementById("org".concat(data.cid)).innerHTML = data.myorg;
+        } else if (data.eventid == {{evlist[0]}} && data.vanecom == 3) {
+			document.getElementById("f".concat(data.cid)).remove();
+			if (data.nuofcomments == 0) {
+				document.getElementById("nocomment").classList.remove("hide");
+			}
+		}
+		if (data.user == {{session["user"]}} && data.eventid == {{evlist[0]}}) {    
+			document.getElementById("comment").classList.remove('is-valid');
+			selage();
+        }
+
+    });
+});    
+
+{%endblock%}
 {% block body %}
 		<div class="panel panel-default felso">
 			<div class="panel-body">
@@ -76,12 +380,13 @@
 						</div>
 					</div>
 					<div class="col-sm-12 col-lg-8">
-						{% if ratings[0][0] != 0 %}
+					  <div id="ageselect" class="{% if ratings[0][0] == 0 %}hide{%endif%}">
 						<div class="row">
 							<div class="col-12 cente">	
 								<h3>{{ _("Filter the ratings") }}</h3>
 							</div>
 						</div>
+						<form id="selectage">
 						<div class="row">
 							<div class="col-0 col-md-3"></div>
 							<div class="col-7 col-md-4">		
@@ -91,204 +396,68 @@
 									<option value="2">{{ _("Elite") }} (19-34)</option>
 									<option value="3">{{ _("Master") }} (35-)</option>
 								</select>
+								<select name="eventid" class="hide">
+									<option value={{evlist[0]}}></option>
+								</select>
 							</div>
 							<div class="col-5 col-md-3">	
-								<button class="btn btn-success" onclick="filt()" type="submit">{{ _("Apply filter") }}</button>
+								<button class="btn btn-success" type="submit">{{ _("Apply filter") }}</button>
 							</div>
 							<div class="col-0 col-md-2"></div>	
 						</div>
-						{%endif%}
-						<div class="rates" id="all">
-							<div class="row">
-							{% if ratings[0][0] == 0 %}
-								<div class="col-12 text-center">{{ _("This event hasn't been rated yet. You can be the first!") }}</div></div>
-							{% else %}
-								<div class="col-xs-6 col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[0][0] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[0][0]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[0][0] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[0][0] }}/5</p>
-									<p>{{ _("Overall rating") }}</p>
-								</div>
-								<div class="col-xs-6 col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[0][1] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[0][1]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[0][1] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[0][1] }}/5</p>
-									<p>{{ _("Terrain rating") }}</p>
-								</div>
-								<div class="col-xs-6 col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[0][2] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[0][2]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[0][2] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[0][2] }}/5</p>
-									<p>{{ _("Map and course rating") }}</p>
-								</div>
-								<div class="col-xs-6 col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[0][3] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[0][3]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[0][3] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[0][3] }}/5</p>
-									<p>{{ _("Organization rating") }}</p>
-								</div>
-							</div>
-							<div class="col-12 text-center padd">{{ _("Based on %(rating)s rating(s).", rating=ratings[0][4]) }}</div>
-							{% endif %}
+						</form>
 						</div>
-						<div class="rates" id="youth">
-							<div class="row">
-							{% if ratings[1][0] == 0 %}
-								<div class="col-12 text-center">{{ _("This event hasn't been rated by this age group yet.") }}</div></div>
-							{% else %}
-								<div class="col-sm-6 col-lg-3 p">
+						<div class="rates" id="all">
+							<div id="notrated" class="col-12 text-center {% if ratings[0][0] != 0 %}hide{%endif%}">{{ _("This event hasn't been rated yet. You can be the first!") }}</div>
+							<div id ="bars" class="row {% if ratings[0][0] == 0 %}hide{%endif%}">												
+								<div class="col-xs-6 col-sm-6 col-lg-3 p">
 									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[1][0] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[1][0]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[1][0] }}/5</span>
+										<div class="progress-bar " id="ovr" role="progressbar" aria-valuenow= {{ ratings[0][0] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[0][0]/5*100 }}% ">
+											<span id="ovrsr" class="sr-only">{{ ratings[0][0] }}/5</span>
 										</div>
 									</div>
-									<p>{{ ratings[1][0] }}/5</p>
+									<p id="ovrp">{{ ratings[0][0] }}/5</p>
 									<p>{{ _("Overall rating") }}</p>
 								</div>
-								<div class="col-sm-6 col-lg-3 p">
+								<div class="col-xs-6 col-sm-6 col-lg-3 p">
 									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[1][1] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[1][1]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[1][1] }}/5</span>
+										<div class="progress-bar " id="ter" role="progressbar" aria-valuenow= {{ ratings[0][1] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[0][1]/5*100 }}% ">
+											<span id="tersr" class="sr-only">{{ ratings[0][1] }}/5</span>
 										</div>
 									</div>
-									<p>{{ ratings[1][1] }}/5</p>
+									<p id="terp">{{ ratings[0][1] }}/5</p>
 									<p>{{ _("Terrain rating") }}</p>
 								</div>
-								<div class="col-sm-6 col-lg-3 p">
+								<div class="col-xs-6 col-sm-6 col-lg-3 p">
 									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[1][2] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[1][2]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[1][2] }}/5</span>
+										<div class="progress-bar " id="map" role="progressbar" aria-valuenow= {{ ratings[0][2] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[0][2]/5*100 }}% ">
+											<span id="mapsr" class="sr-only">{{ ratings[0][2] }}/5</span>
 										</div>
 									</div>
-									<p>{{ ratings[1][2] }}/5</p>
+									<p id="mapp">{{ ratings[0][2] }}/5</p>
 									<p>{{ _("Map and course rating") }}</p>
 								</div>
-								<div class="col-sm-6 col-lg-3 p">
+								<div class="col-xs-6 col-sm-6 col-lg-3 p">
 									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[1][3] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[1][3]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[1][3] }}/5</span>
+										<div class="progress-bar " id="org" role="progressbar" aria-valuenow= {{ ratings[0][3] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[0][3]/5*100 }}% ">
+											<span id="orgsr" class="sr-only">{{ ratings[0][3] }}/5</span>
 										</div>
 									</div>
-									<p>{{ ratings[1][3] }}/5</p>
+									<p id="orgp">{{ ratings[0][3] }}/5</p>
 									<p>{{ _("Organization rating") }}</p>
 								</div>
-							</div>
-							<div class="col-12 text-center padd">{{ _("Based on %(rating)s rating(s).", rating=ratings[1][4]) }}</div>
-							{% endif %}
-							</div>
-							<div class="rates" id="elite">
-							<div class="row">
-							{% if ratings[2][0] == 0 %}
-								<div class="col-12 text-center">{{ _("This event hasn't been rated by this age group yet.") }}</div></div>
-							{% else %}
-								<div class="col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[2][0] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[2][0]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[2][0] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[2][0] }}/5</p>
-									<p>{{ _("Overall rating") }}</p>
-								</div>
-								<div class="col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[2][1] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[2][1]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[2][1] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[2][1] }}/5</p>
-									<p>{{ _("Terrain rating") }}</p>
-								</div>
-								<div class="col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[2][2] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[2][2]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[2][2] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[2][2] }}/5</p>
-									<p>{{ _("Map and course rating") }}</p>
-								</div>
-								<div class="col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ ratings[2][3] }} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[2][3]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[2][3] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[2][3] }}/5</p>
-									<p>{{ _("Organization rating") }}</p>
-								</div>
-								</div>
-							<div class="col-12 text-center padd">{{ _("Based on %(rating)s rating(s).", rating=ratings[2][4]) }}</div>
-							{% endif %}
-							</div>
-							<div class="rates" id="master">
-							<div class="row">
-							{% if ratings[3][0] == 0 %}
-								<div class="col-12 text-center">{{ _("This event hasn't been rated by this age group yet.") }}</div></div>
-							{% else %}
-								<div class="col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ratings[3][0]}} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][0]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[3][0] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[3][0] }}/5</p>
-									<p>{{ _("Overall rating") }}</p>
-								</div>
-								<div class="col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ratings[3][1]}} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][1]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[3][1] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[3][1] }}/5</p>
-									<p>{{ _("Terrain rating") }}</p>
-								</div>
-								<div class="col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow= {{ratings[3][2]}} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][2]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[3][2] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[3][2] }}/5</p>
-									<p>{{ _("Map and course rating") }}</p>
-								</div>
-								<div class="col-sm-6 col-lg-3 p">
-									<div class="progress progress-bar-vertical">
-										<div class="progress-bar " role="progressbar" aria-valuenow={{ratings[3][3]}} aria-valuemin="1" aria-valuemax="5" style="height:{{ ratings[3][3]/5*100 }}% ">
-											<span class="sr-only">{{ ratings[3][3] }}/5</span>
-										</div>
-									</div>
-									<p>{{ ratings[3][3] }}/5</p>
-									<p>{{ _("Organization rating") }}</p>
-								</div>
-								</div>
-							<div class="col-12 text-center padd">{{ _("Based on %(rating)s rating(s).", rating=ratings[3][4]) }}</div>
-							{% endif %}
-							</div>
-						
+							<div id="nofratings" class="col-12 text-center padd">{{ _("Number of ratings: ")}}<span id="nofratings2"> {{ratings[0][4]}}</span></div>
+						</div>	
 					</div>
 				</div>		
-			</div>	
+			</div>
+		</div>		
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-body rating">		
 				<h2>{{ _("Rate it!") }}</h2>
-				{% if rated == 0 %}
-					<p class="cente"> {{ _("You haven't rated this event yet. What are you waiting for?") }}</p>
-					<form action="/rate" id="ratsubmit" method="post">
+					<p id="infop" class="cente"> {{ _("You haven't rated this event yet. What are you waiting for?") }}</p>
+					<form id="{% if rated == 0 %}ratsubmit{%else%}ratchange{%endif%}">
 						<div class="form-group f">
 							<select name="eventid" class="hide">
 								<option value={{evlist[0]}}></option>
@@ -306,10 +475,10 @@
 											<i class="vertm fas fa-question-circle inl mobo zold" data-toggle="tooltip" title="{{_('The overall experience of the event. This rating doesn&#39;t have to be the average of the other three, some aspects might be more important to you than to others.') }}"></i>
 										</div>
 										<div class="col-5 col-lg-5">
-											<input type="range" name="overall_r" class="slider" min="1" max="5" id="customRange1" onchange="updateTextInput(this.value);">
+											<input id="ovrr" type="range" name="overall_r" value={% if rated == 0 %} "3" {%else%} {{myrate[0]}} {%endif%} class="slider har" min="1" max="5" id="customRange1" onchange="updateTextInput(this.value);">
 										</div>
 										<div class="col-2 col-lg-2">
-											<input class="form-control" type="text" id="textInput" value="3"  readonly>
+											<input class="form-control har" type="text" id="textInput" value={% if rated == 0 %} "3" {%else%} {{myrate[0]}} {%endif%}  readonly>
 										</div>
 									</div>
 									<div class="row">
@@ -320,10 +489,10 @@
 											<label class="vertm">{{ _("Terrain rating") }}</label>
 										</div>
 										<div class="col-5 col-lg-5">
-											<input type="range" name="terrain_r" class="slider" min="1" max="5" id="customRange2" onchange="updateTextInput2(this.value);">
+											<input id="terr" type="range" name="terrain_r" value={% if rated == 0 %} "3" {%else%} {{myrate[1]}} {%endif%} class="slider har" min="1" max="5" id="customRange2" onchange="updateTextInput2(this.value);">
 										</div>
 										<div class="col-2 col-lg-2">
-											<input class="form-control" type="text" id="textInput2" value="3"  readonly>
+											<input class="form-control har" type="text" id="textInput2" value={% if rated == 0 %} "3" {%else%} {{myrate[1]}} {%endif%}  readonly>
 										</div>
 									</div>
 									<div class="row">
@@ -334,10 +503,10 @@
 											<label class="vertm">{{ _("Map and course rating") }}</label>
 										</div>
 										<div class="col-5 col-lg-5">
-											<input type="range" name="mc_r" class="slider" min="1" max="5" id="customRange3" onchange="updateTextInput3(this.value);">
+											<input id="mapr" type="range" name="mc_r" value={% if rated == 0 %} "3" {%else%} {{myrate[2]}} {%endif%} class="slider har" min="1" max="5" id="customRange3" onchange="updateTextInput3(this.value);">
 										</div>
 										<div class="col-2 col-lg-2">
-											<input class="form-control" type="text" id="textInput3" value="3"  readonly>
+											<input class="form-control har" type="text" id="textInput3" value={% if rated == 0 %} "3" {%else%} {{myrate[2]}} {%endif%}  readonly>
 										</div>
 									</div>
 									<div class="row">
@@ -348,113 +517,23 @@
 											<label class="vertm">{{ _("Organization rating") }}</label>
 										</div>
 										<div class="col-5 col-lg-5">
-											<input type="range" name="org_r" class="slider" min="1" max="5" id="customRange4" onchange="updateTextInput4(this.value);">
+											<input id="orgr" type="range" name="org_r" value={% if rated == 0 %} "3" {%else%} {{myrate[3]}} {%endif%} class="slider har" min="1" max="5" id="customRange4" onchange="updateTextInput4(this.value);">
 										</div>
 										<div class="col-2 col-lg-2">
-											<input class="form-control" type="text" id="textInput4" value="3"  readonly>
+											<input class="form-control har" type="text" id="textInput4" value={% if rated == 0 %} "3" {%else%} {{myrate[3]}} {%endif%}  readonly>
 										</div>
 									</div>
 								</div>
 								<div class="col-sm-12 col-lg-5">
 									<label for="Textarea1">{{ _("Add a comment (optional)") }}</label>
-									<textarea class="form-control" name="comment" placeholder="{{ _('Add a comment...') }}" id="comment" rows="5"></textarea>
+									<textarea class="form-control" name="comment" placeholder="{{ _('Add a comment...') }}" id="comment" rows="5">{% if rated != 0 and comm != 0 %} {{mycomm.content}} {%endif%}</textarea>
 								</div>
 							</div>	
-							<button class="btn btn-success" onclick="ratef()" type="submit">{{ _("Submit") }}</button>
+							<button id="ratesubmit" class="btn btn-success bal" type="submit">{% if rated == 0 %}{{ _("Submit") }}{%else%}{{_("Submit changes")}}{%endif%}</button>
 						</div>	
 					</form>	
-				{% else %}
-					<p class="cente"> {{ _("You have already rated this event, but you can edit it whenever you want to!") }}</p>
-					<form action="/editrate" id="ratsubmit" method="post">
-						<div class="form-group f">
-							<select name="eventid" class="hide">
-								<option value={{evlist[0]}}></option>
-							</select>
-							<div class="row cs">
-								<div class="col-sm-12 col-lg-7">
-									<div class="row">
-										<div class="col-1 col-lg-1 lpad2">
-											<i class="vertm fas padico fa-star over"></i>
-										</div>
-										<div class="col-2 col-lg-3 lpad">
-											<label class=" inl mar">{{ _("Overall Rating") }} </label><i class="vertm fas fa-question-circle inl gep zold" data-toggle="tooltip" title="{{ _('The overall experience of the event. This rating doesn&#39;t have to be the average of the other three, some aspects might be more important to you than to others.') }}"></i>
-										</div>
-										<div class="col-1 col-lg-1 lpad">
-											<i class="vertm fas fa-question-circle inl mobo zold" data-toggle="tooltip" title="{{ _('The overall experience of the event. This rating doesn&#39;t have to be the average of the other three, some aspects might be more important to you than to others.') }}"></i>
-										</div>
-										<div class="col-5 col-lg-5">
-											<input type="range" name="overall_r" value= {{myrate[0]}} class=" slider" min="1" max="5" id="customRange5" onchange="updateTextInput5(this.value);">
-										</div>
-										<div class="col-2 col-lg-2">
-											<input class=" form-control" type="text" id="textInput5" value={{myrate[0]}}  readonly>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-1 col-lg-1 lpad2">
-											<i class="vertm fas padico fa-mountain ter"></i>
-										</div>
-										<div class="col-3 col-lg-4 lpad">
-											<label class="vertm">{{ _("Terrain rating") }}</label>
-										</div>
-										<div class="col-5 col-lg-5">
-											<input type="range" name="terrain_r" value= {{myrate[1]}} class="slider" min="1" max="5" id="customRange6" onchange="updateTextInput6(this.value);">
-										</div>
-										<div class="col-2 col-lg-2">
-											<input class="form-control" type="text" id="textInput6" value={{myrate[1]}}  readonly>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-1 col-lg-1 lpad2">
-											<i class="vertm fas padico fa-map map"></i>
-										</div>
-										<div class="col-3 col-lg-4 lpad">
-											<label class="vertm">{{ _("Map and course rating") }}</label>
-										</div>
-										<div class="col-5 col-lg-5">
-											<input type="range" name="mc_r" value= {{myrate[2]}} class="slider" min="1" max="5" id="customRange7" onchange="updateTextInput7(this.value);">
-										</div>
-										<div class="col-2 col-lg-2">
-											<input class="form-control" type="text" id="textInput7" value={{myrate[2]}}  readonly>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-1 col-lg-1 lpad2">
-											<i class="vertm fas padico fa-lightbulb oorg org"></i>
-										</div>
-										<div class="col-3 col-lg-4 lpad">
-											<label class="vertm">{{ _("Organization rating") }}</label>
-										</div>
-										<div class="col-5 col-lg-5">
-											<input type="range" name="org_r" value= {{myrate[3]}} class="slider" min="1" max="5" id="customRange8" onchange="updateTextInput8(this.value);">
-										</div>
-										<div class="col-2 col-lg-2">
-											<input class="form-control" type="text" id="textInput8" value={{myrate[3]}}  readonly>
-										</div>
-									</div>
-								</div>
-								{% if comm == 0 %}	
-									<div class="col-sm-12 col-lg-5">
-										<label for="Textarea1">{{ _("Add a comment (optional)") }}</label>
-										<textarea class="form-control" name="comment" placeholder='{{ _("Add a comment...") }}' id="comment" rows="5"></textarea>
-									</div>
-								{% else %}
-									<div class="col-sm-12 col-lg-5">
-										<label for="Textarea1"></label>{{ _("Add a comment (optional)") }}</label>
-										<textarea class="form-control" name="comment" placeholder='{{ _("Add a comment...") }}' id="comment" rows="5">{{mycomm.content}}</textarea>
-										<div class="invalid-feedback">
-											{{ _("Comment mustn't be longer than 1000 characters.") }}
-										</div>	
-									</div>
-								{% endif %}	
-							</div>	
-							<button class="btn btn-success bal" onclick="ratef()" type="submit">{{ _("Submit changes") }}</button>
-						</div>	
-					</form>
-					<form action="/deleter" method="post">
-						<select name="eventid" class="hide">
-							<option value={{evlist[0]}}></option>
-						</select>
-						<button class="btn btn-danger jobb" type="button" data-toggle="modal" data-target="#delmodal">{{ _("Remove rating") }}</button>
+					  <form id="delterate">
+						<button id="deleteb" class="btn btn-danger jobb {% if rated == 0 %}hide {%endif%}" type="button" data-toggle="modal" data-target="#delmodal">{{ _("Remove rating") }}</button>
 						<div class="modal fade" id="delmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 							<div class="modal-dialog modal-dialog-centered" role="document">
 							  <div class="modal-content">
@@ -469,24 +548,22 @@
 								</div>
 								<div class="modal-footer">
 								  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Cancel") }}</button>
-								  <button class="btn btn-danger" type="submit">{{ _("Remove rating") }}</button>
+								  <button id="deleteee" class="btn btn-danger" data-dismiss="modal" type="submit">{{ _("Remove rating") }}</button>
 								</div>
 							  </div>
 							</div>
 						</div>	
-					</form>
+					  </form>
 					<div class="clearfix"></div>		
-				{% endif %}
 				</div>
 			</div>
 		<div class="panel panel-default">
-			<div class="panel-body rating comments">		
-				<h2>{{ _("Comments") }}</h2>
-				{% if comments|length == 0 %}
-					<p class="italic">{{ _("There are no comments for this event.") }}</p>
-				{% else %}	
+			<div id="comments" class="panel-body rating comments">		
+				<h2>{{ _("Comments") }}</h2>				
+				<p id="nocomment" class="italic {% if comments|length != 0 %} hide {%endif%}">{{ _("There are no comments for this event.") }}</p>
+				{% if comments|length != 0 %}	
 					{% for n in range(comments|length) %}	
-						<div class="row comm">
+						<div id="{{'f' ~ comments[n][0]}}" class="row comm">
 							<div class="col-1 vote">
 								<div class="row v">
 									<div class="col r">
@@ -505,12 +582,12 @@
 								</div>		
 							</div>
 							<div class="col-10">
-								<label class="small text-secondary">{{comments[n][1]}}</label><label class="small text-secondary">&nbsp;{{comments[n][7]}}<i class="fas fa-star text-secondary" title='{{ _("Overall rating") }}'></i>&nbsp;{{comments[n][8]}}<i class="fas fa-mountain text-secondary" title='{{ _("Terrain rating") }}'>&nbsp;</i>{{comments[n][9]}}<i class="fas fa-map text-secondary" title='{{ _("Map and course rating") }}'></i>&nbsp;{{comments[n][10]}}<i class="fas fa-lightbulb text-secondary" title='{{ _("Organization rating") }}'></i></label>
-								<p> {{ comments[n][2] }} </p> {%if session["user"] == 2 %} <a href={{"/commd/" + comments[n][0]|string}} onclick="return commd()">Delete</a> {%endif%}
+								<label class="small text-secondary">{{comments[n][1]}}</label><label class="small text-secondary">&nbsp;<span id="{{'ovr' ~ comments[n][0]}}">{{comments[n][7]}}</span><i class="fas fa-star text-secondary" title='{{ _("Overall rating") }}'></i>&nbsp;<span id="{{'ter' ~ comments[n][0]}}">{{comments[n][8]}}</span><i class="fas fa-mountain text-secondary" title='{{ _("Terrain rating") }}'>&nbsp;</i><span id="{{'map' ~ comments[n][0]}}">{{comments[n][9]}}</span><i class="fas fa-map text-secondary" title='{{ _("Map and course rating") }}'></i>&nbsp;<span id="{{'org' ~ comments[n][0]}}">{{comments[n][10]}}</span><i class="fas fa-lightbulb text-secondary" title='{{ _("Organization rating") }}'></i></label>
+								<p id="{{'com' ~ comments[n][0]}}"> {{ comments[n][2] }} </p> {%if session["user"] == 2 %} <a href={{"/commd/" + comments[n][0]|string}} onclick="return commd()">Delete</a> {%endif%}
 								{% if comments[n][4] == 0 %}
-									<label class="small text-secondary"> {{ _("Posted at %(time)s UTC", time=comments[n][3]) }} </label>
+									<label id="{{'lab' ~ comments[n][0]}}" class="small text-secondary"> {{ _("Posted at %(time)s UTC", time=comments[n][3]) }} </label>
 								{% else %}
-									<label class="small text-secondary">{{ _("Last edited at %(time)s UTC", time=comments[n][3]) }}</label>
+									<label id="{{'lab' ~ comments[n][0]}}" class="small text-secondary">{{ _("Last edited at %(time)s UTC", time=comments[n][3]) }}</label>
 								{% endif %}	
 							</div>
 						</div>
