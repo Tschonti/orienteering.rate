@@ -10,9 +10,9 @@ class Config(object):
 	DEBUG = False
 	TESTING = False
 	CSRF_ENABLED = True
-	SECRET_KEY = 'b\x94\xbc\xb3(\x0f\xd4rPp\xffY\xf5\xe2\xb25\xd5'
+	SECRET_KEY = #hidden
 	SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
-	SECURITY_PASSWORD_SALT = 'Jah_BrUH'
+	SECURITY_PASSWORD_SALT = #hidden
 	BCRYPT_LOG_ROUNDS = 13
 	WTF_CSRF_ENABLED = True
 	DEBUG_TB_ENABLED = False
