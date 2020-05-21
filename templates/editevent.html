@@ -8,6 +8,7 @@
 			<div class="panel-body">
 			<h1> {{ _("Edit event") }}</h1>
 			<form id="newform" action="/editnew" method="post">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 					<div class="form-group">
 						<div class="row">
 							<div class="col">
@@ -347,6 +348,7 @@
 					<button class="btn btn-success btn-block" onclick="newf()" type="submit">{{ _("Submit changes") }}</button>
 			</form>
 			<form id="myform" action="/deleteev" method="post">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 				<select name="eventid" class="hide">
 					<option value={{eve.id}}></option>
 				</select>

@@ -262,6 +262,11 @@ body {
   }
   .cs label {
 	font-size: small;
+  }
+}
+@media only screen and (max-width: 991px) { 
+  .react {
+	  display: none;
   }	
 }
 @media only screen and (max-width: 576px) {
@@ -363,4 +368,11 @@ html, body {
 }	
 .paddd {
 	padding: 0.5rem;
+}
+.react {
+	padding-left: 0px;
+}
+.welc {
+	text-align: justify;
+  	text-justify: inter-word;
 }

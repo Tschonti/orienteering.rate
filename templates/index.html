@@ -20,10 +20,17 @@
 {% block body %} 
 	<div class="panel panel-default felso">
 		<div class="panel-body">
-			<h1>Orienteering.rate</h1>
-			<p> {{ _("Welcome to Orienteering.rate! The goal of this website is to give valuable feedback to the organisers of orienteering events. 
-			Once you've created an account and logged in, you'll be able to rate events that others have created, and even add a comment to explain your rating. 
-			What's more, you can also create events that other people can rate. Please only rate events if you've actually participated in them and keep it civil in the comments.") }}</p>
+			<div class="row">
+			  <div class="col-lg-10">	
+				<h1>Orienteering.rate</h1>
+				<p class="welc"> {{ _("Welcome to Orienteering.rate! The goal of this website is to give valuable feedback to the organisers of orienteering events. 
+				Once you've created an account and logged in, you'll be able to rate events that others have created, and even add a comment to explain your rating. 
+				What's more, you can also create events that other people can rate. Please only rate events if you've actually participated in them and keep it civil in the comments.") }}</p>
+			  </div>
+			  <div class="col-lg-2 react">
+				<img src="/static/ures.png" alt="Orienteering react" height="150px">
+			  </div>		
+			</div>		
 		</div>
 	</div>
 	<div class="row">

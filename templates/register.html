@@ -12,6 +12,7 @@
 					<div class="col-sm-12 col-lg-4">
 						<h1> {{ _("Register") }} </h1>
 						<form action="/register" id="registerform" method="post" novalidate>
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 							<div class="form-group">
 								<input autocomplete="off" autofocus class="form-control" id="valUname" name="username" placeholder='{{ _("Username") }}' type="text" oninput="changef(this)" required>
 								<div class="valid-feedback">

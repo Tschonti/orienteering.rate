@@ -20,6 +20,7 @@ from operator import itemgetter
 import requests
 import time
 from flask_socketio import SocketIO, emit
+from flask_wtf.csrf import CSRFProtect, CSRFError
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -54,6 +55,7 @@ db = SQLAlchemy(app)
 mail = Mail(app)
 babel = Babel(app)
 socketio = SocketIO(app)
+csrf = CSRFProtect(app)
 
 if __name__ == '__main__':
     socketio.run(app)
@@ -528,7 +530,8 @@ def forgot():
 		return render_template("error.html", err=_("invalid email adress (max length: 80)"))
 	us = Usersn.query.filter_by(email=email).first()
 	if not us:
-		return render_template("error.html", err=_("unused email adress"))
+		flash(_("The email has been sent."), "success")
+		return redirect("/login")
 	token = generate_confirmation_token(email)
 	reset_url = url_for('reset', token=token, _external=True)
 	html = render_template('resetemail.html', reset_url=reset_url, usn=us.username)
@@ -1195,13 +1198,6 @@ def emcheck():
 			return json.dumps({'status':'OK', 'aval':False})
 	return json.dumps({'status':'OK', 'aval':True})
 	
-@app.route("/emcheck2", methods=["POST"])
-def emcheck2():
-	us = Usersn.query.filter_by(email=request.form.get("email").strip()).first()
-	if not us:
-		return json.dumps({'status':'OK', 'exist':False})
-	return json.dumps({'status':'OK', 'exist':True})
-	
 @app.route("/pwcheck", methods=["POST"])
 def pwcheck():
 	us = Usersn.query.filter_by(username=request.form.get("username").strip()).first()
@@ -1275,3 +1271,7 @@ def page_not_found(e):
 @app.errorhandler(500)
 def servererror(e):
 	return render_template('500.html'), 500
+
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return render_template('error.html', err=e.description), 400

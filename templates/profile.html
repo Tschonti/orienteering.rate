@@ -21,6 +21,7 @@ document.getElementById('uncheck').onchange = function() {
 					<div class="col-sm-12 col-lg-4">
 						<h1> {{ _("User profile") }} </h1>
 						<form action="/profile" id="editp" method="post" novalidate>
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 							<div class="form-group">
 								<input class="form-check-input" type="checkbox" value="1" id="uncheck" name="uncheck">
 								  <label class="form-check-label kicsil" for="uncheck">
@@ -91,6 +92,7 @@ document.getElementById('uncheck').onchange = function() {
 							<button id="butt" name="butto" class="btn btn-success btn-block" onclick="editprofile()" type="submit">{{ _("Submit changes") }}</button>
 						</form>
 						<form id="myform" action="/deleteacc" method="post">
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 							<button class="btn btn-danger btn-block" type="button" data-toggle="modal" data-target="#delmodal">{{ _("Delete account") }}</button>
 							<div class="modal fade" id="delmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 								<div class="modal-dialog modal-dialog-centered" role="document">

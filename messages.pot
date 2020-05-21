@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-23 13:23+0200\n"
+"POT-Creation-Date: 2020-05-01 17:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -345,8 +345,8 @@ msgstr ""
 msgid "End date"
 msgstr ""
 
-#: templates/editevent.html:54 templates/events.html:17 templates/index.html:93
-#: templates/new.html:55
+#: templates/editevent.html:54 templates/events.html:17
+#: templates/index.html:100 templates/new.html:55
 msgid "Country"
 msgstr ""
 
@@ -359,7 +359,7 @@ msgid "Please provide a valid country."
 msgstr ""
 
 #: templates/editevent.html:308 templates/event.html:327
-#: templates/events.html:18 templates/index.html:126 templates/new.html:309
+#: templates/events.html:18 templates/index.html:133 templates/new.html:309
 msgid "Location"
 msgstr ""
 
@@ -368,7 +368,7 @@ msgid "Please provide a valid location. (3-255 characters)"
 msgstr ""
 
 #: templates/editevent.html:319 templates/event.html:330
-#: templates/events.html:19 templates/index.html:128 templates/new.html:320
+#: templates/events.html:19 templates/index.html:135 templates/new.html:320
 #: templates/ratings.html:15
 msgid "Classification"
 msgstr ""
@@ -543,8 +543,8 @@ msgstr ""
 msgid "Filter the ratings"
 msgstr ""
 
-#: templates/event.html:394 templates/index.html:86 templates/index.html:95
-#: templates/index.html:104
+#: templates/event.html:394 templates/index.html:93 templates/index.html:102
+#: templates/index.html:111
 msgid "All"
 msgstr ""
 
@@ -563,7 +563,7 @@ msgstr ""
 msgid "Master"
 msgstr ""
 
-#: templates/event.html:404 templates/index.html:111
+#: templates/event.html:404 templates/index.html:118
 msgid "Apply filter"
 msgstr ""
 
@@ -571,7 +571,7 @@ msgstr ""
 msgid "Number of ratings: "
 msgstr ""
 
-#: templates/event.html:458 templates/index.html:144
+#: templates/event.html:458 templates/index.html:151
 msgid "Rate it!"
 msgstr ""
 
@@ -624,8 +624,8 @@ msgstr ""
 msgid "My events"
 msgstr ""
 
-#: templates/events.html:14 templates/index.html:37 templates/index.html:60
-#: templates/index.html:124 templates/ratings.html:14
+#: templates/events.html:14 templates/index.html:44 templates/index.html:67
+#: templates/index.html:131 templates/ratings.html:14
 msgid "Event"
 msgstr ""
 
@@ -660,59 +660,59 @@ msgstr ""
 msgid "Send email"
 msgstr ""
 
-#: templates/index.html:24
+#: templates/index.html:26
 msgid ""
 "Welcome to Orienteering.rate! The goal of this website is to give "
 "valuable feedback to the organisers of orienteering events. \n"
-"\t\t\tOnce you've created an account and logged in, you'll be able to "
+"\t\t\t\tOnce you've created an account and logged in, you'll be able to "
 "rate events that others have created, and even add a comment to explain "
 "your rating. \n"
-"\t\t\tWhat's more, you can also create events that other people can rate."
-" Please only rate events if you've actually participated in them and keep"
-" it civil in the comments."
+"\t\t\t\tWhat's more, you can also create events that other people can "
+"rate. Please only rate events if you've actually participated in them and"
+" keep it civil in the comments."
 msgstr ""
 
-#: templates/index.html:33
+#: templates/index.html:40
 msgid "Top rated events"
 msgstr ""
 
-#: templates/index.html:38 templates/index.html:127
+#: templates/index.html:45 templates/index.html:134
 msgid "Average rating"
 msgstr ""
 
-#: templates/index.html:56
+#: templates/index.html:63
 msgid "Most recent events"
 msgstr ""
 
-#: templates/index.html:61 templates/index.html:125
+#: templates/index.html:68 templates/index.html:132
 msgid "Date"
 msgstr ""
 
-#: templates/index.html:79
+#: templates/index.html:86
 msgid "All events"
 msgstr ""
 
-#: templates/index.html:80
+#: templates/index.html:87
 msgid "Filter the events and ratings!"
 msgstr ""
 
-#: templates/index.html:84
+#: templates/index.html:91
 msgid "Event type"
 msgstr ""
 
-#: templates/index.html:102
+#: templates/index.html:109
 msgid "Age group of raters"
 msgstr ""
 
-#: templates/index.html:117
+#: templates/index.html:124
 msgid "Clear filter"
 msgstr ""
 
-#: templates/index.html:129
+#: templates/index.html:136
 msgid "My rating"
 msgstr ""
 
-#: templates/index.html:142
+#: templates/index.html:149
 msgid "Log in to rate it!"
 msgstr ""
 

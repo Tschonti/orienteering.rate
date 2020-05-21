@@ -348,6 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
 								</div>
 							</div>
 							<form action="/results" id="getresults" method="post">
+								<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 							<div class="row">								
 								
 								<div class="col-7">		

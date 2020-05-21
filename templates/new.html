@@ -8,6 +8,7 @@
 			<div class="panel-body">
 				<h1> {{ _("New Event") }} </h1>
 				<form action="/new" id="newform" method="post" novalidate>
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 					<div class="form-group">
 						<p id="en"></p>
 						<div class="row">

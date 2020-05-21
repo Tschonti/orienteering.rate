@@ -2,12 +2,13 @@ Flask
 Flask-Session
 Flask-Mail
 Flask-Babel
+Flask-SocketIO
+Flask-WTF
+flask_sqlalchemy
+flask_script
 requests
 gunicorn
 psycopg2-binary
 dj-database-url
-flask_sqlalchemy
-flask_script
 config
-Flask-SocketIO
 eventlet

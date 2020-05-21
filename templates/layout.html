@@ -20,7 +20,17 @@
 		<title>{% block title %}{%endblock%}</title>
 		{% block temp %}{%endblock%}
 		<script type="text/javascript">
-			{% block js%}{%endblock%}			
+			{% block js%}{%endblock%}
+			var csrf_token = "{{ csrf_token() }}";
+
+			$.ajaxSetup({
+				beforeSend: function(xhr, settings) {
+					if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+						xhr.setRequestHeader("X-CSRFToken", csrf_token);
+					}
+				}
+			});	
+
 			$(document).ready(function() {
 				{% block checkbox%} {%endblock%}   
 				$('[data-toggle="tooltip"]').tooltip();
@@ -457,48 +467,43 @@
 			}
 			}
 			function forgotf() {
-			event.preventDefault();
-			var em = document.getElementById("email");
-			var emval = $.trim(em.value);
-			var at = 0;
-			var dot = 0;
-			var er = 0;
-			for (var i = 0; i < emval.length; i++) {
-			  if (emval.charAt(i)== '@') {
-				at++;
-			  } else if (emval.charAt(i)== '.') {
-				dot++;
-			  }
-			}
-			if (at != 1 || dot < 1 || emval.length > 80) {
-				em.classList.remove('is-valid');
-				em.classList.add('is-invalid');
-				er = er +1;
-			} else {
-				$.ajax({
-					url: '/emcheck2',
-					data: $('#forgotform').serialize(),
-					type: 'POST',
-					success: function(response){
-						var resp=JSON.parse(response);
-						if (resp.exist) {
-							em.classList.add('is-valid');
-							em.classList.remove('is-invalid');
-							if (er == 0) {
-								document.getElementById("forgotform").submit();			
-							}		
-						} else {
-							em.classList.remove('is-valid');
-							em.classList.add('is-invalid');
-							er = er + 1;
-						}
-					},
-					error: function(error){
-						console.log(error);
+				event.preventDefault();
+				var em = document.getElementById("email");
+				var emval = $.trim(em.value);
+				var at = 0;
+				var dot = 0;
+				for (var i = 0; i < emval.length; i++) {
+					if (emval.charAt(i)== '@') {
+						at++;
+					} else if (emval.charAt(i)== '.') {
+						dot++;
 					}
-				});	
-			}
-			}
+				}
+				if (at != 1 || dot < 1 || emval.length > 80) {
+					em.classList.remove('is-valid');
+					em.classList.add('is-invalid');
+				} else {
+					$.ajax({
+						url: '/emcheck',
+						data: $('#forgotform').serialize(),
+						type: 'POST',
+						success: function(response){
+							var resp=JSON.parse(response);
+							if (resp.aval == false) {
+									em.classList.add('is-valid');
+									em.classList.remove('is-invalid');
+									document.getElementById("forgotform").submit();	
+								} else {
+									em.classList.remove('is-valid');
+									em.classList.add('is-invalid');
+								}
+						},
+						error: function(error){
+							console.log(error);
+						}
+					});
+				}
+			}		
 			function resetf() {
 			event.preventDefault();
 			var pw =document.getElementById("valPw");

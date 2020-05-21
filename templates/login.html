@@ -12,6 +12,7 @@
 					<div class="col-sm-12 col-lg-4">
 						<h1> {{ _("Log In ") }}</h1>
 						<form action="/login" method="post" id="loginform" novalidate>
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 							<div class="form-group">
 								<input autocomplete="off" autofocus class="form-control" id="uname" name="username" placeholder='{{ _("Username") }}' type="text" oninput="changef(this)" required>
 								<div class="valid-feedback">
