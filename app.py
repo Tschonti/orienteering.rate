@@ -142,6 +142,11 @@ class Commentrate(db.Model):
 	rating = db.Column(db.Integer, nullable=False)
 	def __repr__(self):
 		return '<%r>' % self.rating
+
+class Util(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(80), nullable=False)
+	data = db.Column(db.DateTime, nullable=False)
 		
 db.create_all()
 
@@ -155,52 +160,49 @@ def conf_required():
 @app.route("/importapi", methods=['GET'])
 @login_required
 def importapi():
-	if session["user"] != 2:
-		return render_template("error.html", err=_("403 Forbidden. You're not allowed toview this page.")), 403
+	if conf_required() == 0:
+		return redirect("/confirmed")
 	#res = requests.get("https://eventor.orienteering.org/api/events", params={"fromDate": "2020-01-01", "toDate": '2020-03-31'}, headers={"ApiKey": "378a90e9017641ccbd37792431f6bc4b"})
-	""" res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getcompetitions"})
-	if res.status_code != 200:
-		return render_template("error.html", err=res.status_code)
-	data = res.json()
-	#return render_template("results.html", data=data)
-	#return res.text
-	for comp in data["competitions"]:
-		try:
-			comp["multidaystage"]
-		except KeyError:
-			try:
-				datedata = datetime.datetime.strptime(comp["date"], '%Y-%m-%d')
-			except:
-				continue
-			dt=datetime.date(datedata.year, datedata.month, datedata.day)
-			#if dt < datetime.date(2020, 3, 15) and dt > datetime.date(2018, 12, 31):
-				#db.session.add(Eventn(id=comp["id"], name=comp["name"], org=comp["organizer"], usersn_id=51, start_date=comp["date"], 
-				#end_date=comp["date"], location="Unknown", classifn_id=6, link="#", countryn_id=13))
-			db.session.commit()
-	flash("import successful!")
-	return redirect("/") 		
-	evnt = Eventn.query.filter(Eventn.id > 10000)
-	for n in evnt:
-		runners = 0
-		res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclasses", "comp": str(n.id)})
+	
+	lastdate = Util.query.first()
+	reallastdate = datetime.date(lastdate.data.year, lastdate.data.month, lastdate.data.day)
+	if datetime.date.today() > reallastdate:
+		res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getcompetitions"})
 		if res.status_code != 200:
 			return render_template("error.html", err=res.status_code)
-		datac = res.json()
-		for c in datac["classes"]:
-			res = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclassresults", "comp": str(n.id), "class": c["className"]})
-			if res.status_code != 200:
-				return render_template("error.html", err=res.status_code)
-			datar = res.json()
-			runners += len(datar["results"])
-			if runners > 20:
-				break
-			time.sleep(1)
-		if runners < 21:
-			Eventn.query.filter_by(id=n.id).delete()
-		time.sleep(2)
-	db.session.commit()			
-	return redirect("/")"""
-	return redirect("/")	
+		data = res.json()
+		for comp in data["competitions"]:
+			try:
+				comp["multidaystage"]
+			except KeyError:
+				try:
+					datedata = datetime.datetime.strptime(comp["date"], '%Y-%m-%d')
+				except:
+					continue
+				dt=datetime.date(datedata.year, datedata.month, datedata.day)
+				if dt >= reallastdate and dt < datetime.date.today():
+					event = Eventn.query.filter_by(id = comp["id"]).first()
+					if event is None:
+						runners = 0
+						res2 = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclasses", "comp": str(comp["id"])})
+						if res2.status_code != 200:
+							return render_template("error.html", err=res2.status_code)
+						datac = res2.json()
+						for c in datac["classes"]:
+							res3 = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclassresults", "comp": str(comp["id"]), "class": c["className"]})
+							if res3.status_code != 200:
+								return render_template("error.html", err=res3.status_code)
+							datar = res3.json()
+							runners += len(datar["results"])
+							if runners > 20:
+								break
+						if runners > 20:
+							db.session.add(Eventn(id=comp["id"], name=comp["name"], org=comp["organizer"], usersn_id=51, start_date=comp["date"], 
+								end_date=comp["date"], location="Unknown", classifn_id=6, link="#", countryn_id=13))			
+							db.session.commit()
+	lastdate.data = datetime.date.today()
+	db.session.commit()
+	return redirect("/")		
 	
 @babel.localeselector
 def get_locale():
@@ -311,11 +313,15 @@ def index():
 	countries = Countryn.query.order_by(Countryn.value).all()
 	classes = Classifn.query.all()
 	ages = Agen.query.all()
+
+	lastdate = Util.query.first()
+	reallastdate = datetime.date(lastdate.data.year, lastdate.data.month, lastdate.data.day).strftime("%d/%m/%Y")
+
 	if (classif == 0 or classif is None) and (age == 0 or age is None) and (country == 0 or country is None):
 		if fil is None or fil == 0:
-			return render_template("index.html", evlist=evlist, filt=filt, countries= countries, classes=classes, ages=ages, topev = topev, recev = recev, requ='get')
+			return render_template("index.html", lastdate=reallastdate, evlist=evlist, filt=filt, countries= countries, classes=classes, ages=ages, topev = topev, recev = recev, requ='get')
 		else:
-			return render_template("index.html", evlist=evlist, filt=filt, countries= countries, classes=classes, ages=ages, topev = topev, recev = recev, requ='fil')			
+			return render_template("index.html", lastdate=reallastdate, evlist=evlist, filt=filt, countries= countries, classes=classes, ages=ages, topev = topev, recev = recev, requ='fil')			
 	def fillsql(comman):
 		if (classif == 0 or classif is None) and (age == 0 or age is None):
 			resu = db.session.execute(comman.format(ageid= ">0", classifid= ">0", countryid="=" + str(country)))
@@ -384,7 +390,7 @@ def index():
 		temp.append(0)
 		evlist.append(temp)
 	filt = [classif, country, age]
-	return render_template("index.html", evlist=evlist, filt=filt, countries= countries, classes=classes, ages=ages, topev = topev, recev = recev, requ='fil')			
+	return render_template("index.html", lastdate=reallastdate, evlist=evlist, filt=filt, countries= countries, classes=classes, ages=ages, topev = topev, recev = recev, requ='fil')			
 	
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -1006,7 +1012,8 @@ def editnew():
 		db.session.commit()
 		country = Countryn.query.filter_by(value=request.form.get("country")).first()
 	eevent = Eventn.query.filter_by(id = request.form.get("eventid")).first()
-	eevent.name = request.form.get("name")
+	if session["user"] == 2 and eevent.usersn_id == session["user"]:
+		eevent.name = request.form.get("name")
 	eevent.start_date = request.form.get("start_date")
 	eevent.end_date = request.form.get("end_date")
 	eevent.countryn_id =country.id

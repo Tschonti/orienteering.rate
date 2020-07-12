@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
 									<select name="class" class="form-control" id="resselect" onchange="changef(this)" required>
 										<option value="0" disabled selected>{{ _("Select class") }}</option>
 										{% for i in classlist %}
-											<option value={{i}}>{{i}}</option>
+											<option value="{{i}}">{{i}}</option>
 										{%endfor%}
 									</select>
 									<div class="invalid-feedback">

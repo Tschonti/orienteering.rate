@@ -60,7 +60,41 @@
 		<div class="col-sm-12 col-lg-6">
 			<div class="panel panel-default">
 				<div class="panel-body">		
-					<h2>{{_("Most recent events")}}</h2>
+					<h2 class=>{{_("Most recent events")}} 
+						<span class="float-right">
+							<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#importModal">
+								{{_("Import more events")}}
+							  </button>
+						</span>
+
+
+					</h2> 
+					  <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalTitle" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+						  <div class="modal-content">
+							<div class="modal-header">
+							  <h5 class="modal-title" id="importModalTitle">{{_("Import more events")}}</h5>
+							  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							  </button>
+							</div>
+							<div class="modal-body text-justify">
+							  {{_("Manually adding events in the Add new event tab isn\'t the only way to expand our database. Orienteering.rate is also 
+							  capable of importing events from a much bigger database - <a href='https://liveresultat.orientering.se/?lang=en' target='_blank'>
+							Liveresultat.orienteering</a>. Their database might not have every data that we require, but it has something more important - results. 
+							That's right! On the pages of events that have been imported from Liveresultat, you can view the results of each class without leaving Orienteering.rate.
+							As for the missing data, these events can be editted by anyone on this site, so you can help this site by adding a info to these events. However, importing events 
+							can be a bit slow, especially if it's not done regularly, so recent events will only be imported after manually clicking the button below. This will import all appropriate events 
+							since the last import, that are already finished and have more than 20 results.")}}
+							</div>
+							<div class="modal-footer">
+								<h6 class="tizenot"s>{{_('Date of last import')}}: {{lastdate}}</h5>
+							  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{_("Cancel")}}</button>
+							  <a href="/importapi"><button type="button" class="btn btn-success">{{_("Import")}}</button></a>
+							</div>
+						  </div>
+						</div>
+					  </div>
 					<table class="table table-hover cent">
 						<thead>
 						  <tr>
