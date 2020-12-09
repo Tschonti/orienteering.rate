@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" >
 
     <head>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,6 +17,13 @@
 		<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link href="/static/style.css" rel="stylesheet">
+
+		<meta property="og:title" content="Orienteering.rate" />
+		<meta property="og:type" content="website" />
+		<meta property="og:description" content="A website that allows you to give valuable feedback to orienteering event origanisers." />    
+		<meta property="og:url" content="http://rate-o.herokuapp.com/" />
+		<meta property="og:image" content="https://rate-o.herokuapp.com/static/ures.png"/>
+
 		<title>{% block title %}{%endblock%}</title>
 		{% block temp %}{%endblock%}
 		<script type="text/javascript">
@@ -312,6 +319,30 @@
 							console.log(error);
 						}
 				});
+			}
+			function webf() {
+				event.preventDefault();
+				var id = document.getElementById("valID");
+				if (id.value.startsWith("http://adatbank.mtfsz.hu/esemeny/show/esemeny_id/") || id.value.startsWith("http://adatbank.mtfsz.hu/en/esemeny/show/esemeny_id/")) {
+					id.classList.remove('is-invalid');
+					id.classList.add('is-valid');
+					document.getElementById("websform").submit();
+				} else {
+					id.classList.remove('is-valid');
+					id.classList.add('is-invalid');
+				}
+			}
+			function apif() {
+				event.preventDefault();
+				var id = document.getElementById("valApi");
+				if (id.value.startsWith("https://liveresultat.orientering.se/")) {
+					id.classList.remove('is-invalid');
+					id.classList.add('is-valid');
+					document.getElementById("apiform").submit();
+				} else {
+					id.classList.remove('is-valid');
+					id.classList.add('is-invalid');
+				}
 			}
 			function newf() {
 			event.preventDefault();

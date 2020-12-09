@@ -12,3 +12,5 @@ psycopg2-binary
 dj-database-url
 config
 eventlet
+BeautifulSoup4
+lxml

@@ -21,7 +21,9 @@ import requests
 import time
 from flask_socketio import SocketIO, emit
 from flask_wtf.csrf import CSRFProtect, CSRFError
+from bs4 import BeautifulSoup
 
+# Configure database
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
@@ -49,6 +51,7 @@ def after_request(response):
 
 #Session(app)
 
+# Initialize apps and framworks
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -60,6 +63,9 @@ csrf = CSRFProtect(app)
 if __name__ == '__main__':
     socketio.run(app)
 
+### Tables of the database ###
+
+# Table for users, connected to the Age table
 class Usersn(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(80), unique=True, nullable=False)
@@ -71,13 +77,15 @@ class Usersn(db.Model):
 	agen = db.relationship('Agen', backref=db.backref('postss', lazy=True))
 	def __repr__(self):
 		return '<%r>' % self.username
-		
+
+# Table for the values of Age groups (Youth, Elite, Master)		
 class Agen(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	value = db.Column(db.String(80), unique=True, nullable=False)
 	def __repr__(self):
 		return '<%r>' % self.value
-		
+
+# Table that contains every rating. Connected to the Event and User table.		
 class Raten(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	eventn_id = db.Column(db.Integer, db.ForeignKey('eventn.id'), nullable=False)
@@ -91,7 +99,8 @@ class Raten(db.Model):
 	date_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 	def __repr__(self):
 		return '<%r>' % self.overall_r
-		
+
+# Table that contains every event. Connected to the Classification, Country and User table.	
 class Eventn(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	usersn_id = db.Column(db.Integer, db.ForeignKey('usersn.id'), nullable=False)
@@ -108,19 +117,22 @@ class Eventn(db.Model):
 	countryn = db.relationship('Countryn', backref=db.backref('postss', lazy=True))
 	def __repr__(self):
 		return '<%r>' % self.name
-		
+
+# Table for the values of Classifications (Regional, National, National champs, International and IOF events)		
 class Classifn(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	value = db.Column(db.String(80), unique=True, nullable=False)
 	def __repr__(self):
 		return '<%r>' % self.value
-		
+
+# Table for the values of countries (only contains the countries that have at least one event associated with them.)			
 class Countryn(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	value = db.Column(db.String(80), unique=True, nullable=False)
 	def __repr__(self):
 		return '<%r>' % self.value
 
+# Table that contains every comment. Connected to the User and Event table.
 class Comment(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	usersn_id = db.Column(db.Integer, db.ForeignKey('usersn.id'), nullable=False)
@@ -133,6 +145,7 @@ class Comment(db.Model):
 	def __repr__(self):
 		return '<%r>' % self.content
 
+# Table that contains every rating of comments. Connected to the User and Comment table. 
 class Commentrate(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=False)
@@ -143,6 +156,7 @@ class Commentrate(db.Model):
 	def __repr__(self):
 		return '<%r>' % self.rating
 
+# Table for other, misc. data. For example: last date of api import
 class Util(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(80), nullable=False)
@@ -150,6 +164,7 @@ class Util(db.Model):
 		
 db.create_all()
 
+# Function that checks whether the user's account is confirmed via email.
 def conf_required():
 	us = Usersn.query.filter_by(id=session["user"]).first()
 	if us.confirmed == 0:
@@ -157,9 +172,13 @@ def conf_required():
 	else:
 		return 1
 
+# A route that imports suitable events from Liveresultat's database through their public API.
+# Currently not part of the project
 @app.route("/importapi", methods=['GET'])
 @login_required
 def importapi():
+	return redirect("/")
+	"""
 	if conf_required() == 0:
 		return redirect("/confirmed")
 	#res = requests.get("https://eventor.orienteering.org/api/events", params={"fromDate": "2020-01-01", "toDate": '2020-03-31'}, headers={"ApiKey": "378a90e9017641ccbd37792431f6bc4b"})
@@ -198,12 +217,177 @@ def importapi():
 								break
 						if runners > 20:
 							db.session.add(Eventn(id=comp["id"], name=comp["name"], org=comp["organizer"], usersn_id=51, start_date=comp["date"], 
-								end_date=comp["date"], location="Unknown", classifn_id=6, link="#", countryn_id=13))			
+								end_date=comp["date"], location="Unknown", classifn_id=6, link="#", countryn_id=28))			
 							db.session.commit()
 	lastdate.data = datetime.date.today()
 	db.session.commit()
 	return redirect("/")		
+ 	"""
+
+@app.route("/importoneapi", methods=['POST'])
+@login_required
+def importoneapi():
+	link = request.form.get("id")
+	try:
+		index = link.index("comp=") + len("comp=")
+		eventid = int(link[index:index+5])
+	except:
+		flash(_('Invalid event link!'), "danger")
+		return redirect("/")
+
+	resp = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getcompetitioninfo", "comp": eventid})
+	if resp.status_code != 200:
+		flash(_('Invalid event link!'), "danger")
+		return redirect("/")
+	comp = resp.json()
+	try:
+		comp["multidaystage"]
+	except KeyError:
+		try:
+			datedata = datetime.datetime.strptime(comp["date"], '%Y-%m-%d')
+		except:
+			flash(_('Invalid event!'), "danger")
+			return redirect("/")
+		dt=datetime.date(datedata.year, datedata.month, datedata.day)
+		if dt < datetime.date.today():
+			event = Eventn.query.filter_by(id = comp["id"]).first()
+			if event is None:
+				runners = 0
+				res2 = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclasses", "comp": str(comp["id"])})
+				if res2.status_code != 200:
+					flash(_('Invalid event!'), "danger")
+					return redirect("/")
+				datac = res2.json()
+				for c in datac["classes"]:
+					res3 = requests.get("https://liveresultat.orientering.se/api.php", params={"method": "getclassresults", "comp": str(comp["id"]), "class": c["className"]})
+					if res3.status_code != 200:
+						flash(_('Not enough results to treat this as a real event.'), "danger")
+						return redirect("/")
+					datar = res3.json()
+					runners += len(datar["results"])
+					if runners > 20:
+						break
+				if runners > 20:
+					db.session.add(Eventn(id=comp["id"], name=comp["name"], org=comp["organizer"], usersn_id=51, start_date=comp["date"], 
+						end_date=comp["date"], location="Unknown", classifn_id=6, link="#", countryn_id=28))			
+					db.session.commit()
+					return redirect("/event/" + str(eventid))
+				else:
+					flash(_('Not enough results to treat this as a real event.'), "danger")
+					return redirect("/")
+			else:
+				flash(_("Event already in the database"), "success")
+				return redirect("/event/" + str(eventid))
+	flash(_('Invalid event link!'), "danger")
+	return redirect("/")
 	
+
+# Route to delete all events imported from Liveresultat
+# Currently not in the project
+"""
+@app.route("/deleteapi", methods=['GET'])
+@login_required
+def deleteapi():
+	if session["user"] != 2:
+		return redirect("/")
+	cc = 0
+	for n in range(13862, 17602):
+		#eventc = Eventn.query.filter_by(id=n).first()
+		#if eventc is not None:
+		try:
+			Eventn.query.filter_by(id=n).delete()
+			cc += 1
+			db.session.commit()
+		except:
+			continue
+	flash(str(cc), "success")
+	return redirect("/")
+"""
+
+# A route reached by submitting the second form on /new. It extracts the neccessary information to store an event in the database from the HTML
+# of the event's page on MTFSZ Adatbank, the link to which is provided by the user.
+@app.route("/webscrape/", methods=['POST'])
+@login_required
+def webscrape():
+	if conf_required() == 0:
+		return redirect("/confirmed")
+	eventlink = request.form.get("id")
+	if eventlink.endswith("/"):
+		temp = eventlink[-5:]
+		eventid = temp[:4]
+	else:
+		eventid = eventlink[-4:]
+	
+	try:
+		int(eventid)
+	except:
+		flash(_('Invalid event link!'), "danger")
+		return redirect("/")
+	session2 = requests.Session()
+	session2.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
+	resp = session2.get('http://adatbank.mtfsz.hu/esemeny/show/esemeny_id/' + str(eventid))
+	source = resp.text
+
+	if resp.status_code != 200:
+		flash(_('Invalid event link!'), "danger")
+		return redirect("/")
+
+	eventc = Eventn.query.filter_by(id=eventid).first()
+	if eventc is not None:
+		flash(_("Event already in the database"), "success")
+		return redirect("/event/" + str(eventid))
+	
+	soup = BeautifulSoup(source, 'lxml')
+
+	content = soup.find("div", {"id": "content"}).contents
+	
+	fotabla = content[1].contents[7].contents[1].contents[2].contents[3].find_all("tr")
+
+	alsotabla = content[1].contents[7].contents[1].contents[5].contents[3].find_all("tr")
+
+	orszagos = 0
+	for row in alsotabla:
+		if len(row.contents) > 5:
+			imgs = row.contents[5].find_all("img")
+			if imgs[2]['alt'] == "Országos" or imgs[2]['alt'] == "Kiemelt":
+				orszagos += 1	
+
+	adatok = {"Név:": "Ismeretlen", "Dátum:": "Ismeretlen", "Helyszín:": "Ismeretlen", "Státusz:": "Ismeretlen", "Rendező szervezetek:": "Ismeretlen"}
+
+	for r in fotabla:
+		try:
+			if r.contents[1].text.strip() == "Rendező szervezetek:":
+				adatok[r.contents[1].text.strip()] = r.contents[3].text.strip()
+			elif adatok[r.contents[0].text.strip()] == "Ismeretlen":
+				adatok[r.contents[0].text.strip()] = r.contents[1].text.strip()			
+		except:
+			continue
+	
+	datum = adatok["Dátum:"].split("-")
+
+	if adatok["Név:"].endswith(" OB"):
+		classif = 3
+	elif orszagos > 0:
+		classif = 2
+	else:
+		classif = 1
+
+	if adatok["Státusz:"] == "Ellenőrzött eredmény" or adatok["Státusz:"] == "Lezajlott" or adatok["Státusz:"] == "Jegyzőkönyv beadva":
+		if len(datum) == 1:
+			strt = datetime.datetime.strptime(datum[0], '%Y.%m.%d.')
+			end = datetime.datetime.strptime(datum[0], '%Y.%m.%d.')
+		elif len(datum[1]) == 3:
+			strt = datetime.datetime.strptime(datum[0], '%Y.%m.%d')
+			end = datetime.datetime.strptime(datum[0][:8] + datum[1], '%Y.%m.%d.')
+		else:
+			strt = datetime.datetime.strptime(datum[0], '%Y.%m.%d')
+			end = datetime.datetime.strptime(datum[0][:5] + datum[1], '%Y.%m.%d.')
+		db.session.add(Eventn(id=int(eventid), name=adatok["Név:"], usersn_id=68, start_date=strt, 
+							end_date=end, org=adatok["Rendező szervezetek:"], location=adatok["Helyszín:"], classifn_id=classif, link='http://adatbank.mtfsz.hu/esemeny/show/esemeny_id/' + str(eventid), countryn_id=1))			
+		db.session.commit()
+		return redirect("/event/" + str(eventid))
+	return redirect("/")
+
 @babel.localeselector
 def get_locale():
 	if not request.cookies.get('lang'):
@@ -448,7 +632,7 @@ def register():
 		confirm_url = url_for('confirm_email', token=token, _external=True)
 		html = render_template('activate.html', confirm_url=confirm_url, usn=uname)
 		subject = _("Orienteering.rate email confirmation")
-		send_email(email, subject, html)
+		send_email(email, subject, html) ##
 		db.session.add(Usersn(username=uname, email=email, pw_hash=generate_password_hash(request.form.get("password")), confirmed = False, agen_id = request.form.get("age")))
 		db.session.commit()
 		us = Usersn.query.filter_by(username=uname).first()
@@ -1038,7 +1222,7 @@ def deleteev():
 		Commentrate.query.filter_by(comment_id = j.id).delete()
 		Comment.query.filter_by(eventn_id = evnt.id).delete()
 	Eventn.query.filter_by(id=request.form.get("eventid")).delete()
-	if len(c) == 1:
+	if len(c) == 1 and evnt.countryn_id != 28:
 		Countryn.query.filter_by(id = evnt.countryn_id).delete()
 	db.session.commit()
 	return redirect("/events")

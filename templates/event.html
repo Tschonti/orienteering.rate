@@ -337,6 +337,8 @@ document.addEventListener('DOMContentLoaded', () => {
 							<div class="row e also">
 								{% if evlist[0]> 10000 %}
 									<p>{{_("This event has been imported from Liveresults API and needs more info")}}</p> <a href= {{"/editevent/" + evlist[0]|string }}>{{_("Edit the event to add more data!")}}</a>
+								{% elif evlist[1] == "MTFSZ Adatbank" %}
+									<p>{{ _("Imported from MTFSZ Adatbank") }}</p>																	
 								{% else %}
 									<p>{{ _("Created by") }}: {{ evlist[1] }} </p>
 								{% endif %}
@@ -372,12 +374,12 @@ document.addEventListener('DOMContentLoaded', () => {
 							</div>
 							</form>
 							{%else%}
-							<div class="row">
+							<!--<div class="row">
 								<div class="col-12">	
 									<p>{{_("Results are not available for this event.")}}</p>
 								</div>
-							</div>
-							{% endif%}	
+							</div>	-->
+							{% endif%}
 						</div>
 					</div>
 					<div class="col-sm-12 col-lg-8">
@@ -457,7 +459,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		<div class="panel panel-default">
 			<div class="panel-body rating">		
 				<h2>{{ _("Rate it!") }}</h2>
-					<p id="infop" class="cente"> {{ _("You haven't rated this event yet. What are you waiting for?") }}</p>
+					{% if rated == 0 %}
+						<p id="infop" class="cente"> {{ _("You haven't rated this event yet. What are you waiting for?") }}</p>
+					{% else %}
+						<p id="infop" class="cente"> {{ _("You have already rated this event, but you can edit it whenever you want to!") }}</p>
+					{% endif %}
 					<form id="{% if rated == 0 %}ratsubmit{%else%}ratchange{%endif%}">
 						<div class="form-group f">
 							<select name="eventid" class="hide">
@@ -476,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
 											<i class="vertm fas fa-question-circle inl mobo zold" data-toggle="tooltip" title="{{_('The overall experience of the event. This rating doesn&#39;t have to be the average of the other three, some aspects might be more important to you than to others.') }}"></i>
 										</div>
 										<div class="col-5 col-lg-5">
-											<input id="ovrr" type="range" name="overall_r" value={% if rated == 0 %} "3" {%else%} {{myrate[0]}} {%endif%} class="slider har" min="1" max="5" id="customRange1" onchange="updateTextInput(this.value);">
+											<input id="ovrr" type="range" name="overall_r" value={% if rated == 0 %} "3" {%else%} {{myrate[0]}} {%endif%} class="slider har" min="1" max="5" id="customRange1" oninput="updateTextInput(this.value);">
 										</div>
 										<div class="col-2 col-lg-2">
 											<input class="form-control har" type="text" id="textInput" value={% if rated == 0 %} "3" {%else%} {{myrate[0]}} {%endif%}  readonly>
@@ -490,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
 											<label class="vertm">{{ _("Terrain rating") }}</label>
 										</div>
 										<div class="col-5 col-lg-5">
-											<input id="terr" type="range" name="terrain_r" value={% if rated == 0 %} "3" {%else%} {{myrate[1]}} {%endif%} class="slider har" min="1" max="5" id="customRange2" onchange="updateTextInput2(this.value);">
+											<input id="terr" type="range" name="terrain_r" value={% if rated == 0 %} "3" {%else%} {{myrate[1]}} {%endif%} class="slider har" min="1" max="5" id="customRange2" oninput="updateTextInput2(this.value);">
 										</div>
 										<div class="col-2 col-lg-2">
 											<input class="form-control har" type="text" id="textInput2" value={% if rated == 0 %} "3" {%else%} {{myrate[1]}} {%endif%}  readonly>
@@ -504,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
 											<label class="vertm">{{ _("Map and course rating") }}</label>
 										</div>
 										<div class="col-5 col-lg-5">
-											<input id="mapr" type="range" name="mc_r" value={% if rated == 0 %} "3" {%else%} {{myrate[2]}} {%endif%} class="slider har" min="1" max="5" id="customRange3" onchange="updateTextInput3(this.value);">
+											<input id="mapr" type="range" name="mc_r" value={% if rated == 0 %} "3" {%else%} {{myrate[2]}} {%endif%} class="slider har" min="1" max="5" id="customRange3" oninput="updateTextInput3(this.value);">
 										</div>
 										<div class="col-2 col-lg-2">
 											<input class="form-control har" type="text" id="textInput3" value={% if rated == 0 %} "3" {%else%} {{myrate[2]}} {%endif%}  readonly>
@@ -518,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
 											<label class="vertm">{{ _("Organization rating") }}</label>
 										</div>
 										<div class="col-5 col-lg-5">
-											<input id="orgr" type="range" name="org_r" value={% if rated == 0 %} "3" {%else%} {{myrate[3]}} {%endif%} class="slider har" min="1" max="5" id="customRange4" onchange="updateTextInput4(this.value);">
+											<input id="orgr" type="range" name="org_r" value={% if rated == 0 %} "3" {%else%} {{myrate[3]}} {%endif%} class="slider har" min="1" max="5" id="customRange4" oninput="updateTextInput4(this.value);">
 										</div>
 										<div class="col-2 col-lg-2">
 											<input class="form-control har" type="text" id="textInput4" value={% if rated == 0 %} "3" {%else%} {{myrate[3]}} {%endif%}  readonly>

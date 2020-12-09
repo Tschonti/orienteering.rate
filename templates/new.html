@@ -6,7 +6,7 @@
 {% block body %}
 		<div class="panel panel-default felso">
 			<div class="panel-body">
-				<h1> {{ _("New Event") }} </h1>
+				<h1> {{ _("Add new event manually") }} </h1>
 				<form action="/new" id="newform" method="post" novalidate>
 					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 					<div class="form-group">
@@ -344,6 +344,46 @@
 					</div>
 					<button class="btn btn-success btn-block" onclick="newf()"  type="submit">{{ _("Submit") }}</button>
 				</form>
+				<h3 class="cente mbt">{{ _("- OR -") }}</h3>
+				<h1 class="egyrem"> {{ _('Import an event...') }} </h1>
+				<div class="row">
+					<div class="col-lg-6">
+						<h3>{{_('from <a href="http://adatbank.mtfsz.hu/en/esemeny/lista" target="_blank">MTFSZ Adatbank</a>') }}</h3>
+						<form action="/webscrape" id="websform" method="post" novalidate>
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+							<div class="form-group">
+								<label for="valID">{{ _("MTFSZ Adatbank link") }}</label>
+								<i class="vertm fas fa-question-circle inl zold" data-toggle="tooltip" title="{{_('The event has to be marked as finished (or similar) in the MTFSZ Adatbank. You can&#39;t import non-finished events!') }}"></i>
+								<input id="valID" autocomplete="off" autofocus class="form-control" name="id" placeholder='http://adatbank.mtfsz.hu/esemeny/show/esemeny_id/XXXX' type="link" oninput="changef(this)" required>
+								<div class="valid-feedback">
+									{{ _("Looks good!") }}
+								</div>
+								<div class="invalid-feedback">
+									{{ _("Please provide a valid link to MTFSZ Adatbank. (http://adatbank.mtfsz.hu/esemeny/show/esemeny_id/XXXX)") }}
+								</div>
+							</div>
+							<button class="btn btn-success btn-block" onclick="webf()"  type="submit">{{ _("Submit") }}</button>	
+						</form>
+					</div>
+					<div class="col-lg-6">
+						<h3>{{_('or from <a href="https://liveresultat.orientering.se/index.php?lang=en" target="_blank">Liveresultat.orienteering</a>') }}</h3>
+						<form action="/importoneapi" id="apiform" method="post" novalidate>
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+							<div class="form-group">
+								<label for="valApi">{{ _("Liveresultat.orienteering link") }}</label>
+								<i class="vertm fas fa-question-circle inl zold" data-toggle="tooltip" title="{{_('We can only import non-multiday events from Liveresultat that have more than 20 results. Their eventpage will need additional editing because Liveresultat&#39;s database is missing some crucial info needed for our site.') }}"></i>
+								<input id="valApi" autocomplete="off" autofocus class="form-control" name="id" placeholder='https://liveresultat.orientering.se/followfull.php?lang=en&comp=XXXXX' type="link" oninput="changef(this)" required>
+								<div class="valid-feedback">
+									{{ _("Looks good!") }}
+								</div>
+								<div class="invalid-feedback">
+									{{ _("Please provide a valid link to Liveresultat.orienteering. (https://liveresultat.orientering.se/followfull.php?lang=en&comp=XXXXX)") }}
+								</div>
+							</div>
+							<button class="btn btn-success btn-block" onclick="apif()"  type="submit">{{ _("Submit") }}</button>	
+						</form>
+					</div>
+				</div>
 			</div>
 		</div>	
 {% endblock %}
