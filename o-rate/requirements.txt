@@ -3,7 +3,7 @@ Flask-Session
 Flask-Mail
 Flask-Babel
 requests
-gunicorn
+https://github.com/benoitc/gunicorn/archive/refs/heads/master.zip#egg=gunicorn==20.1.0
 psycopg2-binary
 dj-database-url
 flask_sqlalchemy
