@@ -4,7 +4,7 @@ Flask-Mail
 Flask-Babel
 Flask-SocketIO
 Flask-WTF
-flask_sqlalchemy
+flask_sqlalchemy==2.4.4
 flask_script
 requests
 https://github.com/benoitc/gunicorn/archive/ff58e0c6da83d5520916bc4cc109a529258d76e1.zip#egg=gunicorn==20.1.0
