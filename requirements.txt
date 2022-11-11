@@ -21,7 +21,7 @@ greenlet==0.4.16
 https://github.com/benoitc/gunicorn/archive/ff58e0c6da83d5520916bc4cc109a529258d76e1.zip#egg=gunicorn==20.1.0
 idna==2.10
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 lxml==4.5.2
 markupsafe==1.1.1
 monotonic==1.5
