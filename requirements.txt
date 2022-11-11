@@ -10,6 +10,7 @@ Jinja2==2.11.2
 requests==2.24.0
 https://github.com/benoitc/gunicorn/archive/ff58e0c6da83d5520916bc4cc109a529258d76e1.zip#egg=gunicorn==20.1.0
 psycopg2-binary==2.8.6
+markupsafe==2.0.1
 dj-database-url==0.5.0
 config==0.5.0.post0
 eventlet==0.27.0
