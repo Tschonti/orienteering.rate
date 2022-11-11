@@ -25,7 +25,7 @@ Jinja2==2.11.2
 lxml==4.5.2
 markupsafe==1.1.1
 monotonic==1.5
-pip==20.1.1
+pip==21.1
 psycopg2-binary==2.8.6
 python-engineio==3.13.2
 python-socketio==4.6.0
