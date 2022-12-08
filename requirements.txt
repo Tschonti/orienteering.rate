@@ -1,4 +1,4 @@
-Babel==2.8.0
+Babel==2.9.1
 BeautifulSoup4==4.9.1
 blinker==1.4
 cachelib==0.1.1
