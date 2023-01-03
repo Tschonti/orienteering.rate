@@ -1,5 +1,5 @@
 # Orienteering.rate
-Welcome to my Final Project, Orienteering.rate! (https://rate-o.herokuapp.com/)
+Welcome to my Final Project, Orienteering.rate! (https://rate-o.azurewebsites.net/)
 
 If you're not familiar with orienteering, I suggest you to take a quick look at [it's Wikipedia page](https://en.wikipedia.org/wiki/Orienteering) to understand what this is all about.
 
@@ -24,6 +24,7 @@ If you look at the event page of an event that has been imported, you'll be able
 
 The webapp was built using Flask (Python), PostgreSQL, Bootstrap, jQuery, Handlebars and Javascipt. It's hosted on a free dyno at Heroku, so first time load can take a few extra seconds.
 
-Visit the website at https://rate-o.herokuapp.com/
+Visit the website at https://rate-o.azurewebsites.net/
+Some parts of the app have stopped working since moving to Azure. I no longer develop this project, so these issues haven't been fixed.
 
 Sámuel Fekete, 2019-2020.
